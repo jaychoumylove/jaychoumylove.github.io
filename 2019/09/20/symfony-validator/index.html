@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="generator" content="Hexo 3.9.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.3.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.3.0" color="#222">
+  <meta name="google-site-verification" content="google381a53d35b8b50db.html">
+  <meta name="msvalidate.01" content="true">
+  <meta name="baidu-site-verification" content="F4UoV99kc0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.3.0',
+    exturl: true,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    save_scroll: false,
+    copycode: {"enable":true,"show_result":true,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":true},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="目标： 上篇文章我们成功构建了异常处理，下面我们来构建自己的验证器   在官方文档:validator中，验证器常常以注解的方式使用，我们构建的restful架构使用自定义验证器。">
+<meta name="keywords" content="restful,symfony">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用symfony构建restful应用 - 验证器">
+<meta property="og:url" content="https://jaychoumylove.github.io/2019/09/20/symfony-validator/index.html">
+<meta property="og:site_name" content="Danself">
+<meta property="og:description" content="目标： 上篇文章我们成功构建了异常处理，下面我们来构建自己的验证器   在官方文档:validator中，验证器常常以注解的方式使用，我们构建的restful架构使用自定义验证器。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-09T06:07:06.373Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用symfony构建restful应用 - 验证器">
+<meta name="twitter:description" content="目标： 上篇文章我们成功构建了异常处理，下面我们来构建自己的验证器   在官方文档:validator中，验证器常常以注解的方式使用，我们构建的restful架构使用自定义验证器。">
+  <link rel="canonical" href="https://jaychoumylove.github.io/2019/09/20/symfony-validator/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>使用symfony构建restful应用 - 验证器 | Danself</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  <div class="container sidebar-position-left">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Danself</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">Life is too short, so you feel, enjoy, and make yourself comfortable.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-song">
+      
+    
+
+    <a href="/song/index.html" rel="section"><i class="menu-item-icon fa fa-fw fa-music"></i> <br>音乐</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a href="javascript:;" class="popup-trigger">
+        
+          <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+      </li>
+    
+  </ul>
+
+</nav>
+  <div class="site-search">
+    
+  <div class="popup search-popup">
+  <div class="search-header">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <div class="search-input-wrapper">
+      <input autocomplete="off" autocorrect="off" autocapitalize="none"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="search-input">
+    </div>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+  <div id="search-result"></div>
+</div>
+
+
+  </div>
+</div>
+    </header>
+
+    
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL2pheWNob3VteWxvdmU=" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://jaychoumylove.github.io/2019/09/20/symfony-validator/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Cai xian">
+      <meta itemprop="description" content="A super nice guy!">
+      <meta itemprop="image" content="/images/avatar@kikyo.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Danself">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">使用symfony构建restful应用 - 验证器
+
+          
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-20 19:02:00" itemprop="dateCreated datePublished" datetime="2019-09-20T19:02:00+08:00">2019-09-20</time>
+            </span>
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-09 14:07:06" itemprop="dateModified" datetime="2019-11-09T14:07:06+08:00">2019-11-09</time>
+              </span>
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/PHP/" itemprop="url" rel="index"><span itemprop="name">PHP</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            <span class="post-meta-item" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+        
+      
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2019/09/20/symfony-validator/#comments" itemprop="discussionUrl"><span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/09/20/symfony-validator/" itemprop="commentCount"></span></a>
+  </span>
+  
+  
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">本文字数：</span>
+              
+              <span>10k</span>
+            </span>
+          
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              
+              <span>9 分钟</span>
+            </span>
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h4 id="目标："><a href="#目标：" class="headerlink" title="目标："></a>目标：</h4><blockquote>
+<p>上篇文章我们成功构建了异常处理，下面我们来构建自己的验证器</p>
+</blockquote>
+<blockquote>
+<p>在<span class="exturl" data-url="aHR0cHM6Ly9zeW1mb255LmNvbS9kb2MvY3VycmVudC9jb21wb25lbnRzL3ZhbGlkYXRvci5odG1s" title="官方文档:validator">官方文档:validator<i class="fa fa-external-link"></i></span>中，验证器常常以注解的方式使用，我们构建的<code>restful</code>架构使用自定义验证器。</p>
+</blockquote>
+<a id="more"></a>
+
+<h4 id="验证器的简单使用"><a href="#验证器的简单使用" class="headerlink" title="验证器的简单使用"></a>验证器的简单使用</h4><p>安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require symfony/validator</span><br></pre></td></tr></table></figure>
+
+<p>我们可以在控制器中使用简单的验证器来验证数据，像这样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">// src/controll/Word</span><br><span class="line">namespace App\Controller;</span><br><span class="line"></span><br><span class="line">use Symfony\Component\HttpFoundation\Response;</span><br><span class="line">use Symfony\Component\Routing\Annotation\Route;</span><br><span class="line">use Symfony\Component\Validator\Validation;</span><br><span class="line">use Symfony\Component\Validator\Constraints as Assert;</span><br><span class="line">use App\Exception\Parameter;</span><br><span class="line">use App\Exception\Success;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @Route(&quot;/hello&quot;)</span><br><span class="line"> */</span><br><span class="line">class Word</span><br><span class="line">&#123;</span><br><span class="line">    /**</span><br><span class="line">     * @Route(&quot;/word&quot;,methods=&#123;&quot;GET&quot;&#125;)</span><br><span class="line">     */</span><br><span class="line">    public function index()</span><br><span class="line">    &#123;</span><br><span class="line">        $validator = Validation::createValidator();</span><br><span class="line">        $violations = $validator-&gt;validate([</span><br><span class="line">            &apos;num&apos; =&gt; 12</span><br><span class="line">        ], new Assert\Collection([</span><br><span class="line">            &apos;num&apos; =&gt; new Assert\GreaterThan([</span><br><span class="line">                &apos;value&apos; =&gt; 10,</span><br><span class="line">            ])</span><br><span class="line">        ]))</span><br><span class="line">        if (0 !== count($violations)) &#123;</span><br><span class="line">            foreach ($res as $item) &#123;</span><br><span class="line">                $prefix = empty($message) ? &apos;&apos;: &apos;;&apos;;</span><br><span class="line">                $message .= $prefix . $item-&gt;getMessage();</span><br><span class="line">            &#125;</span><br><span class="line">            throw new Parameter([&apos;message&apos; =&gt; $message]);</span><br><span class="line">        &#125;</span><br><span class="line">        throw new Success();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如上，</p>
+<ul>
+<li>如果验证通过就会抛出<code>Success</code>，表示请求成功且数据验证通过。</li>
+<li>如果验证失败就会抛出<code>Parameter</code>，提示用户数据验证失败。</li>
+</ul>
+<h4 id="自定义验证器"><a href="#自定义验证器" class="headerlink" title="自定义验证器"></a>自定义验证器</h4><p>上面我们已经能够成功使用验证器了，但是距离我们的预期太远了。如果多几个数据，多几个约束，光是一个数据的校验就几十行代码，可读性极差，不能重用，日后维护也很困难</p>
+<p><strong><em>我们需要构建自己的验证器</em></strong>。<code>App\Validator\Base</code>代码实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">namespace App\Validator;</span><br><span class="line"></span><br><span class="line">use App\Exception\Parameter;</span><br><span class="line">use Symfony\Component\Validator\Constraints\Collection;</span><br><span class="line">use Symfony\Component\Validator\Validation;</span><br><span class="line">use Symfony\Component\Validator\Validator\ValidatorInterface;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Class Base</span><br><span class="line"> * @package App\Validator</span><br><span class="line"> */</span><br><span class="line">class Base</span><br><span class="line">&#123;</span><br><span class="line">    /**</span><br><span class="line">     * @var Collection</span><br><span class="line">     */</span><br><span class="line">    protected $collection;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * @var ValidatorInterface</span><br><span class="line">     */</span><br><span class="line">    protected static $validator;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Base constructor.</span><br><span class="line">     */</span><br><span class="line">    public function __construct () &#123;</span><br><span class="line">        if (empty(self::getValidator() instanceof ValidatorInterface)) &#123;</span><br><span class="line">            self::setValidator();</span><br><span class="line">        &#125;</span><br><span class="line">        static::setCollection();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * @param array $input</span><br><span class="line">     * @throws \Exception</span><br><span class="line">     */</span><br><span class="line">    public function check (array $input)</span><br><span class="line">    &#123;</span><br><span class="line">        $violations = self::getValidator()-&gt;validate($input, self::getCollection());</span><br><span class="line">        $message = &apos;&apos;;</span><br><span class="line">        foreach ($violations as $$violation) &#123;</span><br><span class="line">            $prefix = empty($message) ? &apos;&apos;: &apos;;&apos;;</span><br><span class="line">            $message .= $prefix . $$violation-&gt;getMessage();</span><br><span class="line">        &#125;</span><br><span class="line">        if ($message) throw new Parameter([&apos;message&apos; =&gt; $message]);</span><br><span class="line">    &#125;</span><br><span class="line">    ...getter or setter</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码中，我们构建了自己的验证器基类。<br>只要验证不通过，就会抛出参数异常的错误(<code>Parameter</code>)；<br>子类只需要实现<code>setCollection</code>定义约束就可以使用了。</p>
+<h4 id="自定义验证器的使用"><a href="#自定义验证器的使用" class="headerlink" title="自定义验证器的使用"></a>自定义验证器的使用</h4><p>我们来构建一个子类<code>App\Validator\Example</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">namespace App\Validator;</span><br><span class="line"></span><br><span class="line">use Symfony\Component\Validator\Constraints as Assert;</span><br><span class="line"></span><br><span class="line">class Example extends Base</span><br><span class="line">&#123;</span><br><span class="line">    public function setCollection ()</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;collection = new Assert\Collection([</span><br><span class="line">            &apos;num&apos; =&gt; new Assert\GreaterThan([</span><br><span class="line">                &apos;value&apos; =&gt; 10,</span><br><span class="line">            ])</span><br><span class="line">        ]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>让我们在控制器中使用它:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">// src/controll/Word</span><br><span class="line">namespace App\Controller;</span><br><span class="line"></span><br><span class="line">use Symfony\Component\HttpFoundation\Response;</span><br><span class="line">use Symfony\Component\Routing\Annotation\Route;</span><br><span class="line">use App\Validator\Example;</span><br><span class="line">use App\Exception\Success;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @Route(&quot;/hello&quot;)</span><br><span class="line"> */</span><br><span class="line">class Word</span><br><span class="line">&#123;</span><br><span class="line">    /**</span><br><span class="line">     * @Route(&quot;/word&quot;,methods=&#123;&quot;GET&quot;&#125;)</span><br><span class="line">     */</span><br><span class="line">    public function index()</span><br><span class="line">    &#123;</span><br><span class="line">        $data = [&apos;num&apos; =&gt; 12];</span><br><span class="line">        (new Example())-&gt;check($data);</span><br><span class="line">        throw new Success();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>从数行代码变为一行代码，是不是简洁多了？</p>
+<h4 id="定义规则"><a href="#定义规则" class="headerlink" title="定义规则"></a>定义规则</h4><blockquote>
+<p>上面我们虽然实现了自定义验证器。但是用的规则还是<code>symfony/validation</code>里面的，当需要验证特殊字段的时候(比如验证手机号码)，我们还是需要自己定义的规则。</p>
+</blockquote>
+<p>下面我们就来实现一下验证手机号码的规则。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php bin/console make:validator Mobile</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码中，我们使用<code>makebundle</code>帮我们自动生成了<code>App\Validator\Mobile</code>和<code>App\Validator\MobileValidator</code>，如果你没有安装<code>makebundle</code>的话，执行以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require symfony/maker-bundle --dev</span><br></pre></td></tr></table></figure>
+
+<p>下面我们来实现<code>App\Validator\Mobile</code>和<code>App\Validator\MobileValidator</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">namespace App\Validator;</span><br><span class="line"></span><br><span class="line">use Symfony\Component\Validator\Constraint;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @Annotation</span><br><span class="line"> */</span><br><span class="line">class Mobile extends Constraint</span><br><span class="line">&#123;</span><br><span class="line">    public $message = &apos;电话号码错误&apos;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>创建<code>App\Rule\MobileValidator.php</code>文件，定义我们的规则：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">namespace App\Validator;</span><br><span class="line"></span><br><span class="line">use Symfony\Component\Validator\Constraint;</span><br><span class="line">use Symfony\Component\Validator\ConstraintValidator;</span><br><span class="line"></span><br><span class="line">class MobileValidator extends ConstraintValidator</span><br><span class="line">&#123;</span><br><span class="line">    public function validate($value, Constraint $constraint)</span><br><span class="line">    &#123;</span><br><span class="line">        /* @var $constraint \App\Validator\Mobile */</span><br><span class="line"></span><br><span class="line">        $rule = &apos;^1(3|4|5|7|8)[0-9]\d&#123;8&#125;$^&apos;;</span><br><span class="line">        $res = preg_match($rule, $value);</span><br><span class="line">        if (empty($res)) &#123;</span><br><span class="line">            $this-&gt;context</span><br><span class="line">                -&gt;buildViolation($constraint-&gt;message)</span><br><span class="line">                -&gt;setParameter(&apos;&#123;&#123; value &#125;&#125;&apos;, $value)</span><br><span class="line">                -&gt;addViolation();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，我们用了一个简单的正则表达式来验证电话号码，失败后丢入错误的上下文中。</p>
+<h4 id="使用定义规则"><a href="#使用定义规则" class="headerlink" title="使用定义规则"></a>使用定义规则</h4><p>我们已经有了自己定义的规则，我们怎么来使用它呢？</p>
+<p>更新我们的<code>App\Validator\Example</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">namespace App\Validator;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">use App\Validator\Mobile;</span><br><span class="line">use Symfony\Component\Validator\Constraints as Assert;</span><br><span class="line"></span><br><span class="line">class Example extends Base</span><br><span class="line">&#123;</span><br><span class="line">    public function setCollection ()</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;collection = new Assert\Collection([</span><br><span class="line">            &apos;num&apos; =&gt; new Assert\GreaterThan([</span><br><span class="line">                &apos;value&apos; =&gt; 10,</span><br><span class="line">            ]),</span><br><span class="line">            &apos;mobile&apos; =&gt; new Mobile()</span><br><span class="line">        ]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后我们在控制器中使用它：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">// src/controll/Word</span><br><span class="line">namespace App\Controller;</span><br><span class="line"></span><br><span class="line">use Symfony\Component\HttpFoundation\Response;</span><br><span class="line">use Symfony\Component\Routing\Annotation\Route;</span><br><span class="line">use App\Validator\Example;</span><br><span class="line">use App\Exception\Success;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @Route(&quot;/hello&quot;)</span><br><span class="line"> */</span><br><span class="line">class Word</span><br><span class="line">&#123;</span><br><span class="line">    /**</span><br><span class="line">     * @Route(&quot;/word&quot;,methods=&#123;&quot;GET&quot;&#125;)</span><br><span class="line">     */</span><br><span class="line">    public function index()</span><br><span class="line">    &#123;</span><br><span class="line">        $data = [</span><br><span class="line">            &apos;num&apos; =&gt; 12.</span><br><span class="line">            &apos;mobile&apos; =&gt; &apos;12345678920&apos;</span><br><span class="line">        ];</span><br><span class="line">        (new Example())-&gt;check($data);</span><br><span class="line">        throw new Success();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到我们几乎没有改动控制器的代码，只是更新了验证的数据而已。</p>
+<h4 id="扩展-验证器与规则分层"><a href="#扩展-验证器与规则分层" class="headerlink" title="扩展 - 验证器与规则分层"></a>扩展 - 验证器与规则分层</h4><p>到这里我们基本实现了自己的数据校验层，细心的同学可能发现了，我们的定义的规则和验证器都放在了<code>App\Validator</code>下，其实这也没什么，但是以后验证层多起来，找文件非常困难，更何况还有可能有重名文件存在。</p>
+<p><strong><em>我们希望验证器和我们定义的规则分开，规则都放在<code>App\Rule</code>下</em></strong></p>
+<p>上面我们通过<code>makebundle</code>创建了我们的规则。同理我们可以创建自己的<code>make</code>命令，不需要动其中的逻辑，只要简单的修改创建命令和创建规则的文件夹就行了。<em>这里只是简单的实现，如果想深入的话，还请参阅源码</em></p>
+<p>创建<code>App\Make\Rule</code>，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">namespace App\Make;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">use Symfony\Bundle\MakerBundle\ConsoleStyle;</span><br><span class="line">use Symfony\Bundle\MakerBundle\DependencyBuilder;</span><br><span class="line">use Symfony\Bundle\MakerBundle\Generator;</span><br><span class="line">use Symfony\Bundle\MakerBundle\InputConfiguration;</span><br><span class="line">use Symfony\Bundle\MakerBundle\Maker\AbstractMaker;</span><br><span class="line">use Symfony\Bundle\MakerBundle\Str;</span><br><span class="line">use Symfony\Component\Console\Command\Command;</span><br><span class="line">use Symfony\Component\Console\Input\InputArgument;</span><br><span class="line">use Symfony\Component\Console\Input\InputInterface;</span><br><span class="line">use Symfony\Component\Validator\Validation;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Class Rule</span><br><span class="line"> * @package App\Make</span><br><span class="line"> */</span><br><span class="line">class Rule extends AbstractMaker</span><br><span class="line">&#123;</span><br><span class="line">    /**</span><br><span class="line">     * @return string</span><br><span class="line">     */</span><br><span class="line">    public static function getCommandName (): string</span><br><span class="line">    &#123;</span><br><span class="line">        return &apos;make:rule&apos;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * @param Command            $command</span><br><span class="line">     * @param InputConfiguration $inputConfig</span><br><span class="line">     */</span><br><span class="line">    public function configureCommand (Command $command, InputConfiguration $inputConfig)</span><br><span class="line">    &#123;</span><br><span class="line">        $command</span><br><span class="line">            -&gt;setDescription(&apos;Creates a new validator and constraint class&apos;)</span><br><span class="line">            -&gt;addArgument(&apos;name&apos;, InputArgument::OPTIONAL, &apos;The name of the validator class (e.g. &lt;fg=yellow&gt;EnabledValidator&lt;/&gt;)&apos;)</span><br><span class="line">            -&gt;setHelp(file_get_contents(__DIR__.&apos;/../../vendor/symfony/maker-bundle/src/Resources/help/MakeValidator.txt&apos;));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * @param InputInterface $input</span><br><span class="line">     * @param ConsoleStyle   $io</span><br><span class="line">     * @param Generator      $generator</span><br><span class="line">     * @throws \Exception</span><br><span class="line">     */</span><br><span class="line">    public function generate (InputInterface $input, ConsoleStyle $io, Generator $generator)</span><br><span class="line">    &#123;</span><br><span class="line">        $validatorClassNameDetails = $generator-&gt;createClassNameDetails(</span><br><span class="line">            $input-&gt;getArgument(&apos;name&apos;),</span><br><span class="line">            &apos;Rule\\&apos;,</span><br><span class="line">            &apos;Validator&apos;</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        $constraintFullClassName = Str::removeSuffix($validatorClassNameDetails-&gt;getFullName(), &apos;Validator&apos;);</span><br><span class="line"></span><br><span class="line">        $generator-&gt;generateClass(</span><br><span class="line">            $validatorClassNameDetails-&gt;getFullName(),</span><br><span class="line">            &apos;validator/Validator.tpl.php&apos;,</span><br><span class="line">            [</span><br><span class="line">                &apos;constraint_class_name&apos; =&gt; $constraintFullClassName,</span><br><span class="line">            ]</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        $generator-&gt;generateClass(</span><br><span class="line">            $constraintFullClassName,</span><br><span class="line">            &apos;validator/Constraint.tpl.php&apos;,</span><br><span class="line">            []</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        $generator-&gt;writeChanges();</span><br><span class="line"></span><br><span class="line">        $this-&gt;writeSuccessMessage($io);</span><br><span class="line"></span><br><span class="line">        $io-&gt;text([</span><br><span class="line">            &apos;Next: Open your new constraint &amp; validators and add your logic.&apos;,</span><br><span class="line">            &apos;Find the documentation at &lt;fg=yellow&gt;http://symfony.com/doc/current/validation/custom_constraint.html&lt;/&gt;&apos;,</span><br><span class="line">        ]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * @param DependencyBuilder $dependencies</span><br><span class="line">     */</span><br><span class="line">    public function configureDependencies (DependencyBuilder $dependencies)</span><br><span class="line">    &#123;</span><br><span class="line">        $dependencies-&gt;addClassDependency(</span><br><span class="line">            Validation::class,</span><br><span class="line">            &apos;validator&apos;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样，我们就可以通过自己的命令创建规则了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php bin/console make:rule [rulename]</span><br></pre></td></tr></table></figure>
+
+<p>以后创建的规则都定义在<code>App\Rule</code>下，不用担心验证器和规则重名的问题。</p>
+<p>由此，我们构建了自己的数据校验层，它十分简洁，分工明确，维护简单。</p>
+<p><strong>enjoy and happy coding!</strong></p>
+
+    </div>
+
+    
+    
+    
+        
+      
+        <div id="reward-container">
+  <div></div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/wechatpay.png" alt="Cai xian 微信支付">
+        <p>微信支付</p>
+      </div>
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/alipay.png" alt="Cai xian 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/restful/" rel="tag"># restful</a>
+            
+              <a href="/tags/symfony/" rel="tag"># symfony</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/09/19/symfony-exception/" rel="next" title="使用symfony构建restful应用 - restful异常处理">
+                  <i class="fa fa-chevron-left"></i> 使用symfony构建restful应用 - restful异常处理
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+                <a href="/2019/10/12/clean-up-php/" rel="prev" title="记php的小tips">
+                  记php的小tips <i class="fa fa-chevron-right"></i>
+                </a>
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/avatar@kikyo.jpeg"
+      alt="Cai xian">
+  <p class="site-author-name" itemprop="name">Cai xian</p>
+  <div class="site-description motion-element" itemprop="description">A super nice guy!</div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/categories/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span>
+        </a>
+      </div>
+    
+  </nav>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+      
+      
+      
+        
+      
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2pheWNob3VteWxvdmU=" title="GitHub &rarr; https://github.com/jaychoumylove"><i class="fa fa-fw fa-github"></i></span>
+      </span>
+    
+      <span class="links-of-author-item">
+      
+      
+      
+        
+      
+        <span class="exturl" data-url="bWFpbHRvOmh1bGlsYW5nNzUxNzUyMEBnbWFpbC5jb20=" title="E-Mail &rarr; mailto:hulilang7517520@gmail.com"><i class="fa fa-fw fa-envelope"></i></span>
+      </span>
+    
+  </div>
+
+
+
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#目标："><span class="nav-number">1.</span> <span class="nav-text">目标：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#验证器的简单使用"><span class="nav-number">2.</span> <span class="nav-text">验证器的简单使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自定义验证器"><span class="nav-number">3.</span> <span class="nav-text">自定义验证器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自定义验证器的使用"><span class="nav-number">4.</span> <span class="nav-text">自定义验证器的使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#定义规则"><span class="nav-number">5.</span> <span class="nav-text">定义规则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用定义规则"><span class="nav-number">6.</span> <span class="nav-text">使用定义规则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#扩展-验证器与规则分层"><span class="nav-number">7.</span> <span class="nav-text">扩展 - 验证器与规则分层</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Cai xian</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">37k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">34 分钟</span>
+</div>
+  <div class="powered-by">由 <span class="exturl theme-link" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <span class="exturl theme-link" data-url="aHR0cHM6Ly90aGVtZS1uZXh0Lm9yZw==">NexT.Pisces</span> v7.3.0</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+    <span class="post-meta-divider">|</span>
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+<script src="/js/utils.js?v=7.3.0"></script><script src="/js/motion.js?v=7.3.0"></script>
+
+<script src="/js/schemes/pisces.js?v=7.3.0"></script>
+
+
+<script src="/js/next-boot.js?v=7.3.0"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.3.0"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/js/scrollspy.js?v=7.3.0"></script><script src="/js/post-details.js?v=7.3.0"></script>
+
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://hulilang.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function disqus_config() {
+    this.page.url = "https://jaychoumylove.github.io/2019/09/20/symfony-validator/";
+    this.page.identifier = "2019/09/20/symfony-validator/";
+    this.page.title = '使用symfony构建restful应用 - 验证器';};
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://hulilang.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    (function() {
+      var offsetTop = document.getElementById('comments').offsetTop - window.innerHeight;
+      if (offsetTop <= 0) {
+        // load directly when there's no a scrollbar
+        window.addEventListener('load', loadComments, false);
+      } else {
+        $(window).on('scroll.disqus_scroll', () => {
+          // offsetTop may changes because of manually resizing browser window or lazy loading images.
+          var offsetTop = document.getElementById('comments').offsetTop - window.innerHeight;
+          var scrollTop = window.scrollY;
+
+          // pre-load comments a bit? (margin or anything else)
+          if (offsetTop - scrollTop < 60) {
+            $(window).off('.disqus_scroll');
+            loadComments();
+          }
+        });
+      }
+    })();
+  
+</script>
+
+</body>
+</html>

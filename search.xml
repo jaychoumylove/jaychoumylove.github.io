@@ -1,0 +1,721 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>git取消对文件的更新</title>
+    <url>/2019/11/09/git-cancel-update/</url>
+    <content><![CDATA[<blockquote>
+<p>使用git管理项目的时候，涉及到多人维护项目。<br>当某一文件有多人修改的时候，这时boss来了，放下这个需求，我有个项目更需要你，这时候我们需要取消之前我们的更改（此时还未 <code>commit</code> 该文件），与此记录下取消对文件的更新姿势。</p>
+</blockquote>
+<p>在 <code>git</code> 中，<code>git checkout</code> 是一个很常用的命令，主要用于<strong>切换分支或恢复工作树文件</strong>，我们可以用它来解决这一问题。</p>
+<p>通常我用 <code>git checkout &lt;branch&gt;</code> 于切换分支，而</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git checkout -- [your cancel update files]</span><br></pre></td></tr></table></figure>
+
+<p>用于取消对文件的更改。</p>
+<p><strong>enjoy and happy coding!</strong></p>
+]]></content>
+      <categories>
+        <category>git</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>用curl模拟http请求</title>
+    <url>/2019/10/26/curl-request/</url>
+    <content><![CDATA[<blockquote>
+<p>curl 是利用url规则在命令行下工作的工具。我们可以通过它来测试和模拟链接。</p>
+</blockquote>
+<p>比如简单的用 <code>curl</code> 查看自己的 <code>ip</code> 地址：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">➜  ~ curl cip.cc</span><br><span class="line">IP	 : 222.***.***.142</span><br><span class="line">地址	: 中国  湖南  长沙</span><br><span class="line">运营商	: 电信</span><br><span class="line"></span><br><span class="line">数据二	: 湖南省长沙市 | 电信</span><br><span class="line"></span><br><span class="line">数据三	: 中国湖南省长沙市 | 电信</span><br><span class="line"></span><br><span class="line">URL	: http://www.cip.cc/222.***.***.142</span><br></pre></td></tr></table></figure>
+
+<a id="more"></a>
+<p>简单来说，可以用它在命令行发起请求。</p>
+<h3 id="HTTP-请求"><a href="#HTTP-请求" class="headerlink" title="HTTP 请求"></a>HTTP 请求</h3><h4 id="GET"><a href="#GET" class="headerlink" title="GET"></a>GET</h4><p>语法：<code>curl protocol://address:port/url?args</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">➜  ~ curl api.laravel.local/person?id=2</span><br><span class="line">&#123;&quot;message&quot;:&quot;Token\u5df2\u8fc7\u671f&quot;,&quot;data&quot;:[],&quot;errorCode&quot;:10003,&quot;requestUrl&quot;:&quot;person&quot;&#125;%</span><br></pre></td></tr></table></figure>
+
+<h4 id="POST"><a href="#POST" class="headerlink" title="POST"></a>POST</h4><p>语法：<code>curl -d &quot;args&quot; &quot;protocol://address:port/url&quot;</code><br><strong><em>注意：记得参数加引号</em></strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">➜  ~ curl -d &quot;mobile=10112345678&amp;password=12345678&quot; &quot;symfony.local/token/user&quot;</span><br><span class="line">&#123;&quot;message&quot;:&quot;mobile is not valid.&quot;,&quot;errorCode&quot;:10000,&quot;data&quot;:[],&quot;requestUrl&quot;:&quot;\/token\/user&quot;&#125;%</span><br></pre></td></tr></table></figure>
+
+<h4 id="PUT-PATCH-DELETE"><a href="#PUT-PATCH-DELETE" class="headerlink" title="PUT | PATCH | DELETE"></a>PUT | PATCH | DELETE</h4><p>需要使用其他协议的时候加上<code>-X</code>且在后面指明你要用的协议。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">➜  ~ curl -X PUT &quot;symfony.local/index/index&quot; -d &quot;mobile=15512345678&quot;</span><br><span class="line">&#123;&quot;message&quot;:&quot;OK&quot;,&quot;errorCode&quot;:0,&quot;data&quot;:&#123;&quot;mobile&quot;:&quot;15512345678&quot;&#125;,&quot;requestUrl&quot;:&quot;\/index\/index&quot;&#125;%</span><br></pre></td></tr></table></figure>
+
+<p>如果你的参数是放在 <code>body</code> 里面的 <code>json</code> 格式数据话，需要设置请求头 </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">➜  ~ curl -H &quot;Content-Type:application/json&quot; -X PATCH -d &apos;&#123;&quot;mobile&quot;:&quot;14412345678&quot;&#125;&apos; symfony.local/index/three</span><br><span class="line">&#123;&quot;message&quot;:&quot;OK&quot;,&quot;errorCode&quot;:0,&quot;data&quot;:&#123;&quot;mobile&quot;:&quot;14412345678&quot;&#125;,&quot;requestUrl&quot;:&quot;\/index\/three&quot;&#125;%</span><br></pre></td></tr></table></figure>
+
+<p>如果你想查看完整的请求信息加上 <code>-v</code> 类似这样用的：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">➜  ~ curl -v -X DELETE &quot;symfony.local/index/second?mobile=15212345678&quot;</span><br><span class="line">*   Trying ::1...</span><br><span class="line">* TCP_NODELAY set</span><br><span class="line">* Connected to symfony.local (::1) port 80 (#0)</span><br><span class="line">&gt; DELETE /index/second?mobile=15212345678 HTTP/1.1</span><br><span class="line">&gt; Host: symfony.local</span><br><span class="line">&gt; User-Agent: curl/7.54.0</span><br><span class="line">&gt; Accept: */*</span><br><span class="line">&gt;</span><br><span class="line">&lt; HTTP/1.1 200 OK</span><br><span class="line">&lt; Date: Sat, 26 Oct 2019 05:27:00 GMT</span><br><span class="line">&lt; Server: Apache</span><br><span class="line">&lt; X-Powered-By: PHP/7.2.14</span><br><span class="line">&lt; Cache-Control: no-cache, private</span><br><span class="line">&lt; X-Robots-Tag: noindex</span><br><span class="line">&lt; Content-Length: 93</span><br><span class="line">&lt; Content-Type: application/json</span><br><span class="line">&lt;</span><br><span class="line">* Connection #0 to host symfony.local left intact</span><br><span class="line">&#123;&quot;message&quot;:&quot;OK&quot;,&quot;errorCode&quot;:0,&quot;data&quot;:&#123;&quot;mobile&quot;:&quot;15212345678&quot;&#125;,&quot;requestUrl&quot;:&quot;\/index\/second&quot;&#125;%</span><br></pre></td></tr></table></figure>
+
+<h4 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">➜  ~ curl https://jaychoumylove.github.io/images/avator@slzs.jpg -o 1.jpg --progress</span><br><span class="line">######################################################################## 100.0%</span><br></pre></td></tr></table></figure>
+
+<p>关于更多 <code>curl</code> 的信息可以查看<span class="exturl" data-url="aHR0cHM6Ly9tYW4ubGludXhkZS5uZXQvY3VybA==" title="curl命令_Linux curl 命令用法详解：利用URL规则在命令行下工作的文件传输工具">curl命令_Linux curl 命令用法详解<i class="fa fa-external-link"></i></span></p>
+<p><strong>enjoy and happy coding!</strong></p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>curl</tag>
+        <tag>http</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>git撤销暂存区文件</title>
+    <url>/2019/10/26/git-reset-add-files/</url>
+    <content><![CDATA[<blockquote>
+<p>使用git管理项目的时候，要把新文件要加入到暂存区，<br>我一般用 <code>git add .</code>的方法将文件简单除暴的加入至暂存区。<br>但是如果有个不需要的文件被误操作 or 手抖加入至版本库管理呢？在这里记录下 <code>git</code> 将文件移出暂存区的姿势。</p>
+</blockquote>
+<p>这里可以使用 <code>git</code> 版本回滚的机制来解决这一问题。</p>
+<p>通常<code>git reset HEAD</code> 或者 <code>git reset HEAD .</code> ，可以回滚到当前工作区，也就是说如果之前有把文件加入暂存区的话，全部都会移出暂存区。<br>既然如此，就可以使用</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git reset HEAD [your reset files]</span><br></pre></td></tr></table></figure>
+
+<p>来把特定文件移出至暂存区，然后把该文件添加至 <code>.gitignore</code> 文件中。</p>
+<p><strong>enjoy and happy coding!</strong></p>
+]]></content>
+      <categories>
+        <category>git</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>git重写你的提交日志</title>
+    <url>/2019/10/26/git-reset-message/</url>
+    <content><![CDATA[<blockquote>
+<p>使用git管理项目的时候，每一次提交保存都有日志的记录，在这里记录下 <code>git</code> 提交日志的改写。</p>
+</blockquote>
+<p>使用 <code>git commit --amend</code> 可以更改你上一次的提交保存的日志。你也可以使用 <code>git commit --amend -m &quot;New commit message&quot;</code>快速更改。</p>
+<p>如果你的提交已经推送到远程的话，使用</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git push &lt;remote&gt; &lt;branch&gt; --force</span><br><span class="line"># Or</span><br><span class="line">git push &lt;remote&gt; &lt;branch&gt; -f</span><br></pre></td></tr></table></figure>
+
+<p>推送到远程更改日志。</p>
+<blockquote>
+<p>这种推送为强制推送，git 官方不推荐</p>
+</blockquote>
+<p>强制推送远程使用姿势不是很优雅， <em>(但是谁叫你写错日志呢？)</em> 所以，以后写日志之前要反复斟酌。以便团队日后 <code>code review</code> 更高效！</p>
+<p><strong>enjoy and happy coding!</strong></p>
+]]></content>
+      <categories>
+        <category>git</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PHP基础笔记之string</title>
+    <url>/2019/10/18/php-base-string/</url>
+    <content><![CDATA[<blockquote>
+<p>梳理php关于string的小知识</p>
+</blockquote>
+<h4 id="拼接"><a href="#拼接" class="headerlink" title="拼接"></a>拼接</h4><p>两种方式：</p>
+<ul>
+<li>普通字符串拼接</li>
+<li>运用<code>sprintf</code></li>
+</ul>
+<p>第一种方式在<a href="/2019/10/14/php-base-types/" title="PHP基础笔记之类型">PHP基础笔记之类型</a>有提到，示例主要针对 <code>sprintf</code> 函数:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $a = &apos;Jack&apos;;</span><br><span class="line"></span><br><span class="line">    echo sprintf(&apos;his\&apos;s name is &quot;%s&quot;.&apos;, $a);// his&apos;s name is Jack.</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="格式化"><a href="#格式化" class="headerlink" title="格式化"></a>格式化</h4><ul>
+<li><code>number_format</code> - 以千位分隔符方式格式化一个数字<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $numberFormat = &apos;2387484&apos;</span><br><span class="line">    echo number_format($numberFormat, 2);// 23874.84</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="转化"><a href="#转化" class="headerlink" title="转化"></a>转化</h4><ul>
+<li><code>floatval</code> 提取浮点值</li>
+<li><code>intval</code> 获取变量整数值</li>
+<li>除此之外，你还可以用 <code>settype</code> 来转换，</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $a = &apos;3.14158额&apos;;</span><br><span class="line">    $b = &apos;1个&apos;;</span><br><span class="line">    $true = true;</span><br><span class="line"></span><br><span class="line">    echo floatval($a); // 3.14159</span><br><span class="line">    echo intval($b); // 1</span><br><span class="line">    settype($true, &apos;string&apos;);</span><br><span class="line">    echo $true; // 1</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong><em>To be continue</em></strong></p>
+]]></content>
+      <categories>
+        <category>PHP</category>
+      </categories>
+      <tags>
+        <tag>notes</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PHP基础笔记之流程控制</title>
+    <url>/2019/10/15/php-base-control-structures/</url>
+    <content><![CDATA[<blockquote>
+<p>梳理关于<code>PHP</code>流程控制的一些小知识</p>
+</blockquote>
+<a id="more"></a>
+
+<h4 id="判断"><a href="#判断" class="headerlink" title="判断"></a>判断</h4><h5 id="if"><a href="#if" class="headerlink" title="if"></a>if</h5><p>这个比较好理解，示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    if ($a &gt; $b) &#123;</span><br><span class="line">        echo &quot;a is bigger than b&quot;;</span><br><span class="line">    &#125; elseif ($a == $b) &#123;</span><br><span class="line">        echo &quot;a is equal to b&quot;;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        echo &quot;a is smaller than b&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="switch"><a href="#switch" class="headerlink" title="switch"></a>switch</h5><p>类似于具有同一个表达式的一系列 <code>if</code> 语句。示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">if ($i == 0) &#123;</span><br><span class="line">    echo &quot;i equals 0&quot;;</span><br><span class="line">&#125; elseif ($i == 1) &#123;</span><br><span class="line">    echo &quot;i equals 1&quot;;</span><br><span class="line">&#125; elseif ($i == 2) &#123;</span><br><span class="line">    echo &quot;i equals 2&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">switch ($i) &#123;</span><br><span class="line">    case 0:</span><br><span class="line">        echo &quot;i equals 0&quot;;</span><br><span class="line">        break;</span><br><span class="line">    case 1:</span><br><span class="line">        echo &quot;i equals 1&quot;;</span><br><span class="line">        break;</span><br><span class="line">    case 2:</span><br><span class="line">        echo &quot;i equals 2&quot;;</span><br><span class="line">        break;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p><code>switch-case</code> 规范请参考 <span class="exturl" data-url="aHR0cHM6Ly9sZWFybmt1LmNvbS9sYXJhdmVsL3QvMjA3OS9wc3Itc3BlY2lmaWNhdGlvbi1wc3ItMi1jb2Rpbmctc3R5bGUtc3BlY2lmaWNhdGlvbiMwNDhiYTA=" title="PSR switch-case">PSR switch-case<i class="fa fa-external-link"></i></span></p>
+<h4 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h4><h5 id="for"><a href="#for" class="headerlink" title="for"></a>for</h5><p><code>PHP</code> 中最复杂的循环结构。<br>语法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">for (expr1; expr2; expr3)</span><br><span class="line">    statement</span><br></pre></td></tr></table></figure>
+
+<p>描述：</p>
+<ul>
+<li><code>expr1</code> 会在循环前无条件执行一次，你可以视为执行循环初始化的表达式。</li>
+<li><code>expr2</code> 会在每次循环前执行，如果返回<code>true</code>，则执行<code>statement</code>，否则跳出循环。</li>
+<li><code>expr3</code> 会在执行<code>statement</code>之后执行一次。</li>
+<li><code>statement</code> 循环体</li>
+</ul>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    /* example 1 */</span><br><span class="line">    for ($i = 1; $i &lt;= 10; $i++) &#123;</span><br><span class="line">        echo $i;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /* example 2 */</span><br><span class="line">    for ($i = 1; ; $i++) &#123;</span><br><span class="line">        if ($i &gt; 10) &#123;</span><br><span class="line">            break;</span><br><span class="line">        &#125;</span><br><span class="line">        echo $i;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /* example 3 */</span><br><span class="line">    $i = 1;</span><br><span class="line">    for (;;) &#123;</span><br><span class="line">        if ($i &gt; 10) &#123;</span><br><span class="line">            break;</span><br><span class="line">        &#125;</span><br><span class="line">        echo $i;</span><br><span class="line">        $i++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /* example 4 */</span><br><span class="line">    for ($i = 1, $j = 0; $i &lt;= 10; $j += $i, print $i, $i++);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="foreach"><a href="#foreach" class="headerlink" title="foreach"></a>foreach</h5><p>遍历数组的简单方式。</p>
+<blockquote>
+<p><code>foreach</code> 仅能够应用于数组和对象</p>
+</blockquote>
+<p>语法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">foreach (array_expression as $value)</span><br><span class="line">    statement</span><br><span class="line">foreach (array_expression as $key =&gt; $value)</span><br><span class="line">    statement</span><br></pre></td></tr></table></figure>
+
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">class Counter &#123;</span><br><span class="line">    public $counter = 0;</span><br><span class="line">    protected $counte2r = 1;</span><br><span class="line">    private $counte22r = 2;</span><br><span class="line"></span><br><span class="line">    public function increase()</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;counter++;</span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line">    public function print()</span><br><span class="line">    &#123;</span><br><span class="line">        return $this-&gt;counter;   </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$obj = new Counter;</span><br><span class="line">foreach($obj as $k =&gt; $a) &#123;</span><br><span class="line">    var_dump($k, $a);</span><br><span class="line">&#125;</span><br><span class="line">$array = [</span><br><span class="line">    [1, 2],</span><br><span class="line">    [3, 4],</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line">foreach ($array as $k =&gt; list($a)) &#123;</span><br><span class="line">    echo &quot;$k&quot; . PHP_EOL;</span><br><span class="line">    echo &quot;$a&quot; . PHP_EOL;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="while"><a href="#while" class="headerlink" title="while"></a>while</h5><p><code>while</code> 循环是 <code>PHP</code> 中最简单的循环类型。<br>语法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">while (expr)</span><br><span class="line">    statement</span><br></pre></td></tr></table></figure>
+
+<p><code>while</code> 语句的含意很简单，它告诉 <code>PHP</code> 只要 <code>while</code> 表达式(即<code>expr</code>)的值为 <code>true</code> 就重复执行嵌套中的循环语句。<br>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $created = false;</span><br><span class="line">    echo &apos;start&apos; . PHP_EOL;</span><br><span class="line">    while (empty($created)) &#123;</span><br><span class="line">        echo &apos;execute&apos; . PHP_EOL;</span><br><span class="line">        $created = rand(0, 1) ? true: false;</span><br><span class="line">    &#125;</span><br><span class="line">    echo &apos;end&apos; . PHP_EOL;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="do-while"><a href="#do-while" class="headerlink" title="do-while"></a>do-while</h5><p>个人认为：<code>do-while</code> 循环是 <code>PHP</code> 中第二简单的循环类型。<br>语法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">do statement</span><br><span class="line">while(expr)</span><br></pre></td></tr></table></figure>
+
+<p>不同于 <code>while</code> 的是，他的循环体在执行判断表达式 <code>expr</code> (返回 <code>false</code> 跳出循环，返回 <code>true</code> 则继续执行循环体)之前。<br>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $created = false;</span><br><span class="line">    echo &apos;start&apos; . PHP_EOL;</span><br><span class="line">    do &#123;</span><br><span class="line">        echo &apos;execute&apos; . PHP_EOL;</span><br><span class="line">        $created = rand(0, 1) ? true: false;</span><br><span class="line">    &#125; while (empty($created));</span><br><span class="line">    echo &apos;end&apos; . PHP_EOL;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="跳出循环"><a href="#跳出循环" class="headerlink" title="跳出循环"></a>跳出循环</h4><h5 id="break"><a href="#break" class="headerlink" title="break"></a>break</h5><p><code>break</code> 结束当前 <code>for</code>，<code>foreach</code>，<code>while</code>，<code>do-while</code> 或者 <code>switch</code> 结构的执行。<br><code>break</code> 可以接受一个可选的数字参数来决定 <strong><em>跳出</em></strong> 几重循环。<br>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $created = false;</span><br><span class="line">    $a = [2, 3];</span><br><span class="line">    echo &apos;start&apos; . PHP_EOL;</span><br><span class="line">    do &#123;</span><br><span class="line">        echo &apos;execute&apos; . PHP_EOL;</span><br><span class="line">        foreach($a as $k =&gt; $v) &#123;</span><br><span class="line">            $number = rand(0, 1);</span><br><span class="line">            if ($number) &#123;</span><br><span class="line">                break 2; // 跳出第二层循环 - do-while</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                break; // 跳出本层循环 - foreach</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        $created = rand(0, 1) ? true: false;</span><br><span class="line">        if ($created) break; // 跳出本层循环 - do-while</span><br><span class="line">    &#125; while (empty($created));</span><br><span class="line">    echo &apos;end&apos; . PHP_EOL;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="continue"><a href="#continue" class="headerlink" title="continue"></a>continue</h5><p><code>continue</code> 跳过本次循环的执行。<br><code>continue</code> 可以接受一个可选的数字参数来决定 <strong><em>跳过</em></strong> 几重循环。<br>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $a = [2, 3, 5, 6];</span><br><span class="line">    echo &apos;start&apos; . PHP_EOL;</span><br><span class="line">    $index = 0;</span><br><span class="line">    $length = count($a);</span><br><span class="line">    while ($index &lt; $length) &#123;</span><br><span class="line">        echo &quot;execute $&#123;a[$index]&#125;&quot; . PHP_EOL;</span><br><span class="line">        $number = rand(0, 1);</span><br><span class="line">        if ($number) &#123;</span><br><span class="line">            continue 2; // 跳过两重循环</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            continue; // 跳过一重循环</span><br><span class="line">        &#125;</span><br><span class="line">        $index ++;</span><br><span class="line">    &#125;</span><br><span class="line">    echo &apos;end&apos; . PHP_EOL;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="try-catch"><a href="#try-catch" class="headerlink" title="try-catch"></a>try-catch</h4><p>这个配合<code>MySQL</code>的事务处理一级棒！</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    // start mysql transaction</span><br><span class="line">    try &#123;</span><br><span class="line">        $first = rand(0, 1);</span><br><span class="line">        $second = rand(0, 1);</span><br><span class="line">        if ($first &gt; $second) &#123;</span><br><span class="line">            throw new Exception(&apos;Throw an exception here&apos;);</span><br><span class="line">        &#125;</span><br><span class="line">        if ($first === $second) &#123;</span><br><span class="line">            // commit mysql transaction</span><br><span class="line">            echo &apos;It&apos;s normal!&apos; . PHP_EOL;</span><br><span class="line">        &#125;</span><br><span class="line">        if ($first &lt; $second) &#123;</span><br><span class="line">            throw new Error(&apos;Throw an error here&apos;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; catch (\Error $error) &#123;</span><br><span class="line">        // rollback mysql transaction</span><br><span class="line">        throw $error;</span><br><span class="line">    &#125; catch (\Exception $exception) &#123;</span><br><span class="line">        // rollback mysql transaction</span><br><span class="line">        throw $exception;</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">        echo &apos;finally!&apos; . PHP_EOL;</span><br><span class="line">    &#125;</span><br><span class="line">    // or you can use &apos;catch(\Throwable $previous)&apos; to catch Error and Exception in PHP 7</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>enjoy and happy coding!</strong></p>
+]]></content>
+      <categories>
+        <category>PHP</category>
+      </categories>
+      <tags>
+        <tag>notes</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PHP基础笔记之类型</title>
+    <url>/2019/10/14/php-base-types/</url>
+    <content><![CDATA[<blockquote>
+<p>最近巩固下自己的php，故而整理了下php相关的技术点，不求大而全，只求能离php更近一点。<br>本文为<code>php基础</code>的开篇，只介绍类型基本信息及一些小技巧，不深入，后续专门写这几种类型的文章。</p>
+</blockquote>
+<h4 id="Basis-基本情况"><a href="#Basis-基本情况" class="headerlink" title="Basis 基本情况"></a>Basis 基本情况</h4><p>参考 <span class="exturl" data-url="aHR0cHM6Ly93d3cucGhwLm5ldC9tYW51YWwvemgvbGFuZ3VhZ2UudHlwZXMuaW50cm8ucGhw" title="php手册 - 类型">php手册 - 类型<i class="fa fa-external-link"></i></span></p>
+<a id="more"></a>
+<h4 id="Boolean-布尔"><a href="#Boolean-布尔" class="headerlink" title="Boolean - 布尔"></a>Boolean - 布尔</h4><p>基本用于判断，也是最大的最简洁的使用。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $action = 2;</span><br><span class="line">    var_dump(($action) ? true: false);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="转换"><a href="#转换" class="headerlink" title="转换"></a>转换</h5><p>你可以用 <code>(bool)</code> 或者 <code>(boolean)</code> 把一个值转换成 <code>boolean</code> 类型。当然大多数情况你不需要强制转换。</p>
+<blockquote>
+<p>当运算符，函数或者流程控制结构需要一个 boolean 参数时，该值会被自动转换。</p>
+</blockquote>
+<p>以下情况会转化成 <code>false</code> :</p>
+<ul>
+<li>布尔值 <code>FALSE</code> 本身</li>
+<li>整型值 <code>0</code>（零）</li>
+<li>浮点型值 <code>0.0</code>（零）</li>
+<li>空字符串<code>&quot;&quot;</code>，以及字符串 <code>&quot;0&quot;</code></li>
+<li>不包括任何元素的数组<code>array()</code>，<code>[]</code></li>
+<li>特殊类型 <code>null</code>（包括尚未赋值的变量<code>undefined</code>）</li>
+<li>从空标记生成的 <code>SimpleXML</code> 对象</li>
+</ul>
+<p>除开以上情况外，<strong><em>其他值都视为 <code>true</code></em></strong></p>
+<p>引用手册的示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    var_dump((bool) &quot;&quot;);        // bool(false)</span><br><span class="line">    var_dump((bool) 1);         // bool(true)</span><br><span class="line">    var_dump((bool) -2);        // bool(true)</span><br><span class="line">    var_dump((bool) &quot;foo&quot;);     // bool(true)</span><br><span class="line">    var_dump((bool) 2.3e5);     // bool(true)</span><br><span class="line">    var_dump((bool) array(12)); // bool(true)</span><br><span class="line">    var_dump((bool) array());   // bool(false)</span><br><span class="line">    var_dump((bool) &quot;false&quot;);   // bool(true)</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Integer-整型"><a href="#Integer-整型" class="headerlink" title="Integer - 整型"></a>Integer - 整型</h4><p>是集合 <code>ℤ = {..., -2, -1, 0, 1, 2, ...}</code> 中的某个数。<br>可以使用十进制，十六进制，八进制或二进制（<code>php 5.4.0+</code>）表示，前面可以加上可选的符号（<code>-</code> 或者 <code>+</code>）。</p>
+<p>引用手册的表达示例:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $a = 1234; // 十进制数</span><br><span class="line">    $a = -123; // 负数</span><br><span class="line">    $a = 0123; // 八进制数 (等于十进制 83),数字前必须加上 0（零）</span><br><span class="line">    $a = 0x1A; // 十六进制数 (等于十进制 26),数字前必须加上 0x。</span><br><span class="line">    $a = 0b11111111; // 二进制数字 (等于十进制 255),数字前必须加上 0b。</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="溢出"><a href="#溢出" class="headerlink" title="溢出"></a>溢出</h5><p>给定的一个数超出了 <code>integer</code> 的范围，将会被解释为 <code>float</code>。同样如果执行的运算结果超出了 <code>integer</code> 范围，也会返回 <code>float</code>。</p>
+<h4 id="String-字符串"><a href="#String-字符串" class="headerlink" title="String 字符串"></a>String 字符串</h4><p>由一系列的字符组成，其中每个字符等同于一个字节。详见<span class="exturl" data-url="aHR0cHM6Ly93d3cucGhwLm5ldC9tYW51YWwvemgvbGFuZ3VhZ2UudHlwZXMuc3RyaW5nLnBocCNsYW5ndWFnZS50eXBlcy5zdHJpbmcuZGV0YWlscw==" title="https://www.php.net/manual/zh/language.types.string.php#language.types.string.details">字符串类型详解<i class="fa fa-external-link"></i></span>。</p>
+<p>可以用<code>&quot;</code>或者<code>&#39;</code>来定义。</p>
+<blockquote>
+<p>如果想使用其它转义序列例如 <code>\r</code> 或者 <code>\n</code>，使用反斜线 <code>\</code> 来防止转义</p>
+</blockquote>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">echo &apos;this is a simple string&apos;;</span><br><span class="line"></span><br><span class="line">// 可以录入多行</span><br><span class="line">echo &apos;You can also have embedded newlines in </span><br><span class="line">strings this way as it is</span><br><span class="line">okay to do&apos;;</span><br><span class="line"></span><br><span class="line">// 输出： Arnold once said: &quot;I&apos;ll be back&quot;</span><br><span class="line">echo &apos;Arnold once said: &quot;I\&apos;ll be back&quot;&apos;;</span><br><span class="line"></span><br><span class="line">// 输出： You deleted C:\*.*?</span><br><span class="line">echo &apos;You deleted C:\\*.*?&apos;;</span><br><span class="line"></span><br><span class="line">// 输出： You deleted C:\*.*?</span><br><span class="line">echo &apos;You deleted C:\*.*?&apos;;</span><br><span class="line"></span><br><span class="line">// 输出： This will not expand: \n a newline</span><br><span class="line">echo &apos;This will not expand: \n a newline&apos;;</span><br><span class="line"></span><br><span class="line">// 输出： Variables do not $expand $either</span><br><span class="line">echo &apos;Variables do not $expand $either&apos;;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="解析变量"><a href="#解析变量" class="headerlink" title="解析变量"></a>解析变量</h5><p>早双引号的定义下可以可以解析变量，数组和对象也可以解析。替代的方案 - 变量拼接</p>
+<blockquote>
+<p>在遇到数组对象的索引是<code>string</code>类型时，需要用到<code>{}</code>解析，如果找不到数组的索引或者找不到对象的属性or方法，不会解析。<br>如何不希望解析对象，数组，变量时，添加反引号 <code>\</code> 防止转义</p>
+</blockquote>
+<p>如：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    class people &#123;</span><br><span class="line">        public $john = &quot;John Smith&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    $b = new people();</span><br><span class="line">    $a = [</span><br><span class="line">        1 =&gt; 2,</span><br><span class="line">        &quot;a&quot; =&gt; 3    </span><br><span class="line">    ];</span><br><span class="line">    var_dump(&quot;is a $a[1], $&#123;a[&apos;a&apos;]&#125;, $b-&gt;john &quot;);</span><br><span class="line">    var_dump(&quot;is a $a[&apos;a&apos;], $b-&gt;johns &quot;); // Won&apos;t work</span><br><span class="line">    var_dump(&quot;is a &quot; . $a[&apos;a&apos;]); // 拼接变量</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Array-数组"><a href="#Array-数组" class="headerlink" title="Array 数组"></a>Array 数组</h4><p>是一个有序映射。映射是一种把 <code>values</code> 关联到 <code>keys</code> 的类型。</p>
+<h5 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h5><p>可以用 <code>array()</code> 语言结构或者 <code>[]</code> (<code>PHP 5.4.0+</code>) 来新建一个数组。它接受任意数量用逗号分隔的<code>键（key） =&gt; 值（value）</code>对。</p>
+<p><code>key</code> 可以是 <code>integer</code> 或者 <code>string</code>。</p>
+<p><code>value</code> 可以是任意类型。</p>
+<p>此外 <code>key</code> 会有如下的强制转换：</p>
+<ul>
+<li>包含有合法整型值的字符串会被转换为整型。例如键名 <code>&quot;8&quot;</code> 实际会被储存为 <code>8</code>。但是 <code>&quot;08&quot;</code> 则不会强制转换，因为其不是一个合法的十进制数值。</li>
+<li>浮点数也会被转换为整型，意味着其小数部分会被舍去。例如键名 <code>8</code>.<code>7</code> 实际会被储存为 <code>8</code>。</li>
+<li>布尔值也会被转换成整型。即键名 <code>true</code> 实际会被储存为 <code>1</code> 而键名 <code>false</code> 会被储存为 <code>0</code>。</li>
+<li><code>Null</code> 会被转换为空字符串，即键名 <code>null</code> 实际会被储存为 <code>&quot;&quot;</code>。</li>
+</ul>
+<blockquote>
+<p>数组和对象不能被用为键名, 坚持这么做会导致警告：<code>Illegal offset type</code>。
+如果在数组定义中多个单元都使用了同一个键名，则只使用了最后一个，之前的都被覆盖了。</p>
+</blockquote>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $array = array(</span><br><span class="line">        1    =&gt; &quot;a&quot;,</span><br><span class="line">        &quot;1&quot;  =&gt; &quot;b&quot;,</span><br><span class="line">        1.5  =&gt; &quot;c&quot;,</span><br><span class="line">        true =&gt; &quot;d&quot;,</span><br><span class="line">    );</span><br><span class="line">    var_dump($array);</span><br><span class="line">    // will output</span><br><span class="line">    // array(1) &#123;</span><br><span class="line">    //    [1]=&gt;</span><br><span class="line">    //    string(1) &quot;d&quot;</span><br><span class="line">    // &#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Object-对象"><a href="#Object-对象" class="headerlink" title="Object 对象"></a>Object 对象</h4><p>要创建一个新的对象 <code>object</code>，使用 <code>new</code> 语句实例化.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">class foo</span><br><span class="line">&#123;</span><br><span class="line">    public $bar = &apos;bar&apos;;</span><br><span class="line">    function do_foo()</span><br><span class="line">    &#123;</span><br><span class="line">        echo &quot;Doing foo.&quot;; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$bar = new foo;</span><br><span class="line">var_dump($bar-&gt;do_foo());</span><br><span class="line">var_dump($bar-&gt;bar);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="转化"><a href="#转化" class="headerlink" title="转化"></a>转化</h5><p>如果将一个对象转换成对象，它将不会有任何变化。<br>如果其它任何类型的值被转换成对象，将会创建一个内置类 <code>stdClass</code> 的实例。<br>如果该值为 <code>NULL</code>，则新的实例为空。<br><code>array</code> 转换成 <code>object</code> 将使键名成为属性名并具有相对应的值。</p>
+<blockquote>
+<p>注意：使用 PHP 7.2.0 之前的版本，数字键只能通过迭代访问。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $obj = (object) array(&apos;1&apos; =&gt; &apos;foo&apos;);</span><br><span class="line">    var_dump(isset($obj-&gt;&#123;&apos;1&apos;&#125;)); // PHP 7.2.0 后输出 &apos;bool(true)&apos;，之前版本会输出 &apos;bool(false)&apos; </span><br><span class="line">    var_dump(key($obj)); // PHP 7.2.0 后输出 &apos;string(1) &quot;1&quot;&apos;，之前版本输出  &apos;int(1)&apos; </span><br><span class="line">    $obj = (object) &apos;ciao&apos;;</span><br><span class="line">    echo $obj-&gt;scalar;  // outputs &apos;ciao&apos;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Resource-资源"><a href="#Resource-资源" class="headerlink" title="Resource 资源"></a>Resource 资源</h4><p>这个就不介绍了，参考<span class="exturl" data-url="aHR0cHM6Ly93d3cucGhwLm5ldC9tYW51YWwvemgvbGFuZ3VhZ2UudHlwZXMucmVzb3VyY2UucGhw" title="Resource 资源类型">Resource 资源类型<i class="fa fa-external-link"></i></span>。</p>
+<h4 id="Null"><a href="#Null" class="headerlink" title="Null"></a>Null</h4><p>特殊的 <code>NULL</code> 值表示一个变量没有值。<code>NULL</code> 类型唯一可能的值就是 <code>NULL</code>。</p>
+<p>在下列情况下一个变量被认为是 <code>NULL</code>：</p>
+<ul>
+<li>被赋值为 <code>NULL</code>。</li>
+<li>尚未被赋值。</li>
+<li>被 <code>unset()</code>。</li>
+</ul>
+<h4 id="Callback-Callable-php-5-4-0"><a href="#Callback-Callable-php-5-4-0" class="headerlink" title="Callback / Callable php 5.4.0+"></a>Callback / Callable <code>php 5.4.0+</code></h4><p>一些函数如 <code>call_user_func()</code> 或 <code>usort()</code> 可以接受用户自定义的回调函数作为参数。回调函数不止可以是简单函数，还可以是对象的方法，包括静态类方法。</p>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">// Our closure</span><br><span class="line">$double = function($a) &#123;</span><br><span class="line">    return $a * 2;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// This is our range of numbers</span><br><span class="line">$numbers = range(1, 5);</span><br><span class="line"></span><br><span class="line">// Use the closure as a callback here to </span><br><span class="line">// double the size of each element in our </span><br><span class="line">// range</span><br><span class="line">$new_numbers = array_map($double, $numbers);</span><br><span class="line">print implode(&apos; &apos;, $new_numbers);</span><br><span class="line">// will output </span><br><span class="line">// 2 4 6 8 10</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="类型转化"><a href="#类型转化" class="headerlink" title="类型转化"></a>类型转化</h4><p>以上就是<code>php类型</code>的基本信息。下面罗列些允许的强制类型转换：</p>
+<ul>
+<li><code>(int)</code>, <code>(integer)</code> - 转换为整形 <code>integer</code></li>
+<li><code>(bool)</code>, <code>(boolean)</code> - 转换为布尔类型 <code>boolean</code></li>
+<li><code>(float)</code>, <code>(double)</code>, <code>(real)</code> - 转换为浮点型 <code>float</code></li>
+<li><code>(string)</code> - 转换为字符串 <code>string</code></li>
+<li><code>(array)</code> - 转换为数组 <code>array</code></li>
+<li><code>(object)</code> - 转换为对象 <code>object</code></li>
+<li><code>(unset)</code> - 转换为 <code>NULL</code> <em><code>(PHP 5)</code></em></li>
+</ul>
+<p><strong>enjoy and happy coding!</strong></p>
+]]></content>
+      <categories>
+        <category>PHP</category>
+      </categories>
+      <tags>
+        <tag>notes</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>记php的小tips</title>
+    <url>/2019/10/12/clean-up-php/</url>
+    <content><![CDATA[<p><span class="exturl" data-url="aHR0cHM6Ly9sZWFybmt1LmNvbS9sYXJhdmVsL3QvNzc3NC90aGUtY29uY2lzZW5lc3Mtb2YtdGhlLXBocC1jb2RlLXBocC1jbGVhbi1jb2Rl" title="php代码简洁之道">php代码简洁之道<i class="fa fa-external-link"></i></span><br><span class="exturl" data-url="aHR0cHM6Ly9wc3IucGhwaHViLm9yZy8=" title="php标准规范">php标准规范<i class="fa fa-external-link"></i></span><br><span class="exturl" data-url="aHR0cHM6Ly9sZWFybmt1LmNvbS9kb2NzL3BocC1kZXNpZ24tcGF0dGVybnMvMjAxOA==" title="php设计模式">php设计模式<i class="fa fa-external-link"></i></span><br><span class="exturl" data-url="aHR0cHM6Ly93d3cucGhwLm5ldC9kb2NzLnBocA==" title="php - Documentation">php - Documentation<i class="fa fa-external-link"></i></span></p>
+]]></content>
+      <categories>
+        <category>PHP</category>
+      </categories>
+      <tags>
+        <tag>cleanUpCode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用symfony构建restful应用 - 验证器</title>
+    <url>/2019/09/20/symfony-validator/</url>
+    <content><![CDATA[<h4 id="目标："><a href="#目标：" class="headerlink" title="目标："></a>目标：</h4><blockquote>
+<p>上篇文章我们成功构建了异常处理，下面我们来构建自己的验证器</p>
+</blockquote>
+<blockquote>
+<p>在<span class="exturl" data-url="aHR0cHM6Ly9zeW1mb255LmNvbS9kb2MvY3VycmVudC9jb21wb25lbnRzL3ZhbGlkYXRvci5odG1s" title="官方文档:validator">官方文档:validator<i class="fa fa-external-link"></i></span>中，验证器常常以注解的方式使用，我们构建的<code>restful</code>架构使用自定义验证器。</p>
+</blockquote>
+<a id="more"></a>
+
+<h4 id="验证器的简单使用"><a href="#验证器的简单使用" class="headerlink" title="验证器的简单使用"></a>验证器的简单使用</h4><p>安装：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">composer require symfony/validator</span><br></pre></td></tr></table></figure>
+
+<p>我们可以在控制器中使用简单的验证器来验证数据，像这样的：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">// src/controll/Word</span><br><span class="line">namespace App\Controller;</span><br><span class="line"></span><br><span class="line">use Symfony\Component\HttpFoundation\Response;</span><br><span class="line">use Symfony\Component\Routing\Annotation\Route;</span><br><span class="line">use Symfony\Component\Validator\Validation;</span><br><span class="line">use Symfony\Component\Validator\Constraints as Assert;</span><br><span class="line">use App\Exception\Parameter;</span><br><span class="line">use App\Exception\Success;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @Route(&quot;/hello&quot;)</span><br><span class="line"> */</span><br><span class="line">class Word</span><br><span class="line">&#123;</span><br><span class="line">    /**</span><br><span class="line">     * @Route(&quot;/word&quot;,methods=&#123;&quot;GET&quot;&#125;)</span><br><span class="line">     */</span><br><span class="line">    public function index()</span><br><span class="line">    &#123;</span><br><span class="line">        $validator = Validation::createValidator();</span><br><span class="line">        $violations = $validator-&gt;validate([</span><br><span class="line">            &apos;num&apos; =&gt; 12</span><br><span class="line">        ], new Assert\Collection([</span><br><span class="line">            &apos;num&apos; =&gt; new Assert\GreaterThan([</span><br><span class="line">                &apos;value&apos; =&gt; 10,</span><br><span class="line">            ])</span><br><span class="line">        ]))</span><br><span class="line">        if (0 !== count($violations)) &#123;</span><br><span class="line">            foreach ($res as $item) &#123;</span><br><span class="line">                $prefix = empty($message) ? &apos;&apos;: &apos;;&apos;;</span><br><span class="line">                $message .= $prefix . $item-&gt;getMessage();</span><br><span class="line">            &#125;</span><br><span class="line">            throw new Parameter([&apos;message&apos; =&gt; $message]);</span><br><span class="line">        &#125;</span><br><span class="line">        throw new Success();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如上，</p>
+<ul>
+<li>如果验证通过就会抛出<code>Success</code>，表示请求成功且数据验证通过。</li>
+<li>如果验证失败就会抛出<code>Parameter</code>，提示用户数据验证失败。</li>
+</ul>
+<h4 id="自定义验证器"><a href="#自定义验证器" class="headerlink" title="自定义验证器"></a>自定义验证器</h4><p>上面我们已经能够成功使用验证器了，但是距离我们的预期太远了。如果多几个数据，多几个约束，光是一个数据的校验就几十行代码，可读性极差，不能重用，日后维护也很困难</p>
+<p><strong><em>我们需要构建自己的验证器</em></strong>。<code>App\Validator\Base</code>代码实现：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">namespace App\Validator;</span><br><span class="line"></span><br><span class="line">use App\Exception\Parameter;</span><br><span class="line">use Symfony\Component\Validator\Constraints\Collection;</span><br><span class="line">use Symfony\Component\Validator\Validation;</span><br><span class="line">use Symfony\Component\Validator\Validator\ValidatorInterface;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Class Base</span><br><span class="line"> * @package App\Validator</span><br><span class="line"> */</span><br><span class="line">class Base</span><br><span class="line">&#123;</span><br><span class="line">    /**</span><br><span class="line">     * @var Collection</span><br><span class="line">     */</span><br><span class="line">    protected $collection;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * @var ValidatorInterface</span><br><span class="line">     */</span><br><span class="line">    protected static $validator;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Base constructor.</span><br><span class="line">     */</span><br><span class="line">    public function __construct () &#123;</span><br><span class="line">        if (empty(self::getValidator() instanceof ValidatorInterface)) &#123;</span><br><span class="line">            self::setValidator();</span><br><span class="line">        &#125;</span><br><span class="line">        static::setCollection();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * @param array $input</span><br><span class="line">     * @throws \Exception</span><br><span class="line">     */</span><br><span class="line">    public function check (array $input)</span><br><span class="line">    &#123;</span><br><span class="line">        $violations = self::getValidator()-&gt;validate($input, self::getCollection());</span><br><span class="line">        $message = &apos;&apos;;</span><br><span class="line">        foreach ($violations as $$violation) &#123;</span><br><span class="line">            $prefix = empty($message) ? &apos;&apos;: &apos;;&apos;;</span><br><span class="line">            $message .= $prefix . $$violation-&gt;getMessage();</span><br><span class="line">        &#125;</span><br><span class="line">        if ($message) throw new Parameter([&apos;message&apos; =&gt; $message]);</span><br><span class="line">    &#125;</span><br><span class="line">    ...getter or setter</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码中，我们构建了自己的验证器基类。<br>只要验证不通过，就会抛出参数异常的错误(<code>Parameter</code>)；<br>子类只需要实现<code>setCollection</code>定义约束就可以使用了。</p>
+<h4 id="自定义验证器的使用"><a href="#自定义验证器的使用" class="headerlink" title="自定义验证器的使用"></a>自定义验证器的使用</h4><p>我们来构建一个子类<code>App\Validator\Example</code>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">namespace App\Validator;</span><br><span class="line"></span><br><span class="line">use Symfony\Component\Validator\Constraints as Assert;</span><br><span class="line"></span><br><span class="line">class Example extends Base</span><br><span class="line">&#123;</span><br><span class="line">    public function setCollection ()</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;collection = new Assert\Collection([</span><br><span class="line">            &apos;num&apos; =&gt; new Assert\GreaterThan([</span><br><span class="line">                &apos;value&apos; =&gt; 10,</span><br><span class="line">            ])</span><br><span class="line">        ]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>让我们在控制器中使用它:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">// src/controll/Word</span><br><span class="line">namespace App\Controller;</span><br><span class="line"></span><br><span class="line">use Symfony\Component\HttpFoundation\Response;</span><br><span class="line">use Symfony\Component\Routing\Annotation\Route;</span><br><span class="line">use App\Validator\Example;</span><br><span class="line">use App\Exception\Success;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @Route(&quot;/hello&quot;)</span><br><span class="line"> */</span><br><span class="line">class Word</span><br><span class="line">&#123;</span><br><span class="line">    /**</span><br><span class="line">     * @Route(&quot;/word&quot;,methods=&#123;&quot;GET&quot;&#125;)</span><br><span class="line">     */</span><br><span class="line">    public function index()</span><br><span class="line">    &#123;</span><br><span class="line">        $data = [&apos;num&apos; =&gt; 12];</span><br><span class="line">        (new Example())-&gt;check($data);</span><br><span class="line">        throw new Success();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>从数行代码变为一行代码，是不是简洁多了？</p>
+<h4 id="定义规则"><a href="#定义规则" class="headerlink" title="定义规则"></a>定义规则</h4><blockquote>
+<p>上面我们虽然实现了自定义验证器。但是用的规则还是<code>symfony/validation</code>里面的，当需要验证特殊字段的时候(比如验证手机号码)，我们还是需要自己定义的规则。</p>
+</blockquote>
+<p>下面我们就来实现一下验证手机号码的规则。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">php bin/console make:validator Mobile</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码中，我们使用<code>makebundle</code>帮我们自动生成了<code>App\Validator\Mobile</code>和<code>App\Validator\MobileValidator</code>，如果你没有安装<code>makebundle</code>的话，执行以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">composer require symfony/maker-bundle --dev</span><br></pre></td></tr></table></figure>
+
+<p>下面我们来实现<code>App\Validator\Mobile</code>和<code>App\Validator\MobileValidator</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">namespace App\Validator;</span><br><span class="line"></span><br><span class="line">use Symfony\Component\Validator\Constraint;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @Annotation</span><br><span class="line"> */</span><br><span class="line">class Mobile extends Constraint</span><br><span class="line">&#123;</span><br><span class="line">    public $message = &apos;电话号码错误&apos;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>创建<code>App\Rule\MobileValidator.php</code>文件，定义我们的规则：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">namespace App\Validator;</span><br><span class="line"></span><br><span class="line">use Symfony\Component\Validator\Constraint;</span><br><span class="line">use Symfony\Component\Validator\ConstraintValidator;</span><br><span class="line"></span><br><span class="line">class MobileValidator extends ConstraintValidator</span><br><span class="line">&#123;</span><br><span class="line">    public function validate($value, Constraint $constraint)</span><br><span class="line">    &#123;</span><br><span class="line">        /* @var $constraint \App\Validator\Mobile */</span><br><span class="line"></span><br><span class="line">        $rule = &apos;^1(3|4|5|7|8)[0-9]\d&#123;8&#125;$^&apos;;</span><br><span class="line">        $res = preg_match($rule, $value);</span><br><span class="line">        if (empty($res)) &#123;</span><br><span class="line">            $this-&gt;context</span><br><span class="line">                -&gt;buildViolation($constraint-&gt;message)</span><br><span class="line">                -&gt;setParameter(&apos;&#123;&#123; value &#125;&#125;&apos;, $value)</span><br><span class="line">                -&gt;addViolation();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，我们用了一个简单的正则表达式来验证电话号码，失败后丢入错误的上下文中。</p>
+<h4 id="使用定义规则"><a href="#使用定义规则" class="headerlink" title="使用定义规则"></a>使用定义规则</h4><p>我们已经有了自己定义的规则，我们怎么来使用它呢？</p>
+<p>更新我们的<code>App\Validator\Example</code>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">namespace App\Validator;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">use App\Validator\Mobile;</span><br><span class="line">use Symfony\Component\Validator\Constraints as Assert;</span><br><span class="line"></span><br><span class="line">class Example extends Base</span><br><span class="line">&#123;</span><br><span class="line">    public function setCollection ()</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;collection = new Assert\Collection([</span><br><span class="line">            &apos;num&apos; =&gt; new Assert\GreaterThan([</span><br><span class="line">                &apos;value&apos; =&gt; 10,</span><br><span class="line">            ]),</span><br><span class="line">            &apos;mobile&apos; =&gt; new Mobile()</span><br><span class="line">        ]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后我们在控制器中使用它：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">// src/controll/Word</span><br><span class="line">namespace App\Controller;</span><br><span class="line"></span><br><span class="line">use Symfony\Component\HttpFoundation\Response;</span><br><span class="line">use Symfony\Component\Routing\Annotation\Route;</span><br><span class="line">use App\Validator\Example;</span><br><span class="line">use App\Exception\Success;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @Route(&quot;/hello&quot;)</span><br><span class="line"> */</span><br><span class="line">class Word</span><br><span class="line">&#123;</span><br><span class="line">    /**</span><br><span class="line">     * @Route(&quot;/word&quot;,methods=&#123;&quot;GET&quot;&#125;)</span><br><span class="line">     */</span><br><span class="line">    public function index()</span><br><span class="line">    &#123;</span><br><span class="line">        $data = [</span><br><span class="line">            &apos;num&apos; =&gt; 12.</span><br><span class="line">            &apos;mobile&apos; =&gt; &apos;12345678920&apos;</span><br><span class="line">        ];</span><br><span class="line">        (new Example())-&gt;check($data);</span><br><span class="line">        throw new Success();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到我们几乎没有改动控制器的代码，只是更新了验证的数据而已。</p>
+<h4 id="扩展-验证器与规则分层"><a href="#扩展-验证器与规则分层" class="headerlink" title="扩展 - 验证器与规则分层"></a>扩展 - 验证器与规则分层</h4><p>到这里我们基本实现了自己的数据校验层，细心的同学可能发现了，我们的定义的规则和验证器都放在了<code>App\Validator</code>下，其实这也没什么，但是以后验证层多起来，找文件非常困难，更何况还有可能有重名文件存在。</p>
+<p><strong><em>我们希望验证器和我们定义的规则分开，规则都放在<code>App\Rule</code>下</em></strong></p>
+<p>上面我们通过<code>makebundle</code>创建了我们的规则。同理我们可以创建自己的<code>make</code>命令，不需要动其中的逻辑，只要简单的修改创建命令和创建规则的文件夹就行了。<em>这里只是简单的实现，如果想深入的话，还请参阅源码</em></p>
+<p>创建<code>App\Make\Rule</code>，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">namespace App\Make;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">use Symfony\Bundle\MakerBundle\ConsoleStyle;</span><br><span class="line">use Symfony\Bundle\MakerBundle\DependencyBuilder;</span><br><span class="line">use Symfony\Bundle\MakerBundle\Generator;</span><br><span class="line">use Symfony\Bundle\MakerBundle\InputConfiguration;</span><br><span class="line">use Symfony\Bundle\MakerBundle\Maker\AbstractMaker;</span><br><span class="line">use Symfony\Bundle\MakerBundle\Str;</span><br><span class="line">use Symfony\Component\Console\Command\Command;</span><br><span class="line">use Symfony\Component\Console\Input\InputArgument;</span><br><span class="line">use Symfony\Component\Console\Input\InputInterface;</span><br><span class="line">use Symfony\Component\Validator\Validation;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Class Rule</span><br><span class="line"> * @package App\Make</span><br><span class="line"> */</span><br><span class="line">class Rule extends AbstractMaker</span><br><span class="line">&#123;</span><br><span class="line">    /**</span><br><span class="line">     * @return string</span><br><span class="line">     */</span><br><span class="line">    public static function getCommandName (): string</span><br><span class="line">    &#123;</span><br><span class="line">        return &apos;make:rule&apos;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * @param Command            $command</span><br><span class="line">     * @param InputConfiguration $inputConfig</span><br><span class="line">     */</span><br><span class="line">    public function configureCommand (Command $command, InputConfiguration $inputConfig)</span><br><span class="line">    &#123;</span><br><span class="line">        $command</span><br><span class="line">            -&gt;setDescription(&apos;Creates a new validator and constraint class&apos;)</span><br><span class="line">            -&gt;addArgument(&apos;name&apos;, InputArgument::OPTIONAL, &apos;The name of the validator class (e.g. &lt;fg=yellow&gt;EnabledValidator&lt;/&gt;)&apos;)</span><br><span class="line">            -&gt;setHelp(file_get_contents(__DIR__.&apos;/../../vendor/symfony/maker-bundle/src/Resources/help/MakeValidator.txt&apos;));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * @param InputInterface $input</span><br><span class="line">     * @param ConsoleStyle   $io</span><br><span class="line">     * @param Generator      $generator</span><br><span class="line">     * @throws \Exception</span><br><span class="line">     */</span><br><span class="line">    public function generate (InputInterface $input, ConsoleStyle $io, Generator $generator)</span><br><span class="line">    &#123;</span><br><span class="line">        $validatorClassNameDetails = $generator-&gt;createClassNameDetails(</span><br><span class="line">            $input-&gt;getArgument(&apos;name&apos;),</span><br><span class="line">            &apos;Rule\\&apos;,</span><br><span class="line">            &apos;Validator&apos;</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        $constraintFullClassName = Str::removeSuffix($validatorClassNameDetails-&gt;getFullName(), &apos;Validator&apos;);</span><br><span class="line"></span><br><span class="line">        $generator-&gt;generateClass(</span><br><span class="line">            $validatorClassNameDetails-&gt;getFullName(),</span><br><span class="line">            &apos;validator/Validator.tpl.php&apos;,</span><br><span class="line">            [</span><br><span class="line">                &apos;constraint_class_name&apos; =&gt; $constraintFullClassName,</span><br><span class="line">            ]</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        $generator-&gt;generateClass(</span><br><span class="line">            $constraintFullClassName,</span><br><span class="line">            &apos;validator/Constraint.tpl.php&apos;,</span><br><span class="line">            []</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        $generator-&gt;writeChanges();</span><br><span class="line"></span><br><span class="line">        $this-&gt;writeSuccessMessage($io);</span><br><span class="line"></span><br><span class="line">        $io-&gt;text([</span><br><span class="line">            &apos;Next: Open your new constraint &amp; validators and add your logic.&apos;,</span><br><span class="line">            &apos;Find the documentation at &lt;fg=yellow&gt;http://symfony.com/doc/current/validation/custom_constraint.html&lt;/&gt;&apos;,</span><br><span class="line">        ]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * @param DependencyBuilder $dependencies</span><br><span class="line">     */</span><br><span class="line">    public function configureDependencies (DependencyBuilder $dependencies)</span><br><span class="line">    &#123;</span><br><span class="line">        $dependencies-&gt;addClassDependency(</span><br><span class="line">            Validation::class,</span><br><span class="line">            &apos;validator&apos;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样，我们就可以通过自己的命令创建规则了。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">php bin/console make:rule [rulename]</span><br></pre></td></tr></table></figure>
+
+<p>以后创建的规则都定义在<code>App\Rule</code>下，不用担心验证器和规则重名的问题。</p>
+<p>由此，我们构建了自己的数据校验层，它十分简洁，分工明确，维护简单。</p>
+<p><strong>enjoy and happy coding!</strong></p>
+]]></content>
+      <categories>
+        <category>PHP</category>
+      </categories>
+      <tags>
+        <tag>restful</tag>
+        <tag>symfony</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用symfony构建restful应用 - restful异常处理</title>
+    <url>/2019/09/19/symfony-exception/</url>
+    <content><![CDATA[<h4 id="目标："><a href="#目标：" class="headerlink" title="目标："></a>目标：</h4><blockquote>
+<p>上篇文章我们构建了一个基础的api接口，本篇文章我们要构建自己的异常处理以及restful返回。</p>
+</blockquote>
+<a id="more"></a>
+
+<h4 id="抛出异常"><a href="#抛出异常" class="headerlink" title="抛出异常"></a>抛出异常</h4><p>我们可以在控制器中主动抛出一个异常，像这样的：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">// src/controll/Word</span><br><span class="line">namespace App\Controller;</span><br><span class="line"></span><br><span class="line">use Symfony\Component\HttpFoundation\Response;</span><br><span class="line">use Symfony\Component\Routing\Annotation\Route;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @Route(&quot;/hello&quot;)</span><br><span class="line"> */</span><br><span class="line">class Word</span><br><span class="line">&#123;</span><br><span class="line">    /**</span><br><span class="line">     * @Route(&quot;/word&quot;,methods=&#123;&quot;GET&quot;&#125;)</span><br><span class="line">     */</span><br><span class="line">    public function index()</span><br><span class="line">    &#123;</span><br><span class="line">        throw new \Exception(&apos;something was wrong!&apos;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>你可以用<code>curl</code>命令来（或者用<code>postman</code>）请求<code>[yourdomain]/hello/word</code>查看效果。</p>
+<!--more-->
+
+<h4 id="异常捕获"><a href="#异常捕获" class="headerlink" title="异常捕获"></a>异常捕获</h4><p>上面我们已经抛出了异常，接下来我们需要捕获这个异常并进行处理。</p>
+<p>在<code>symfony</code>中，有这么一个组件：</p>
+<blockquote>
+<p>HttpKernel组件提供了一个接口，该接口规范了从请求开始并创建适当响应的过程. 无论该系统的架构多么多样，该组件都是任何应用程序或框架的核心。</p>
+</blockquote>
+<p>这个组件对外暴露了一个事件：<code>kernel.exception</code>，可以让我们很轻松的实现自定义异常处理</p>
+<p>在<code>config/services.yaml</code>下加入以下代码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># design exception handler</span><br><span class="line">App\EventListener\Exception:</span><br><span class="line">    tags:</span><br><span class="line">        - &#123; name: kernel.event_listener, event: kernel.exception &#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中，<code>App\EventListener\Exception</code>是我们的异常处理类，通过<code>tags</code>来告知<code>symfony</code>他是<code>kernel.exception</code>事件的<em>监听者</em>。
+下面我们来实现<code>App\EventListener\Exception</code>类：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">namespace App\EventListener;</span><br><span class="line"></span><br><span class="line">use Symfony\Component\HttpFoundation\JsonResponse;</span><br><span class="line">use Symfony\Component\HttpKernel\Event\ExceptionEvent;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Class Exception</span><br><span class="line"> * @package App\EventListener</span><br><span class="line"> */</span><br><span class="line">class Exception</span><br><span class="line">&#123;</span><br><span class="line">    /**</span><br><span class="line">     * @param ExceptionEvent $event</span><br><span class="line">     * @return ExceptionEvent</span><br><span class="line">     */</span><br><span class="line">    public function onKernelException(ExceptionEvent $event)</span><br><span class="line">    &#123;</span><br><span class="line">        $event-&gt;setResponse($this-&gt;createJsonRespons($event));</span><br><span class="line"></span><br><span class="line">        return $event;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * @param ExceptionEvent $event</span><br><span class="line">     * @return JsonResponse</span><br><span class="line">     */</span><br><span class="line">    private function createJsonResponse (ExceptionEvent $event)</span><br><span class="line">    &#123;</span><br><span class="line">        return JsonResponse::create([</span><br><span class="line">            &apos;message&apos; =&gt; $event-&gt;getException()-&gt;getMessage(),</span><br><span class="line">            &apos;requestUrl&apos; =&gt; $event-&gt;getRequest()-&gt;getPathInfo()</span><br><span class="line">        ], $event-&gt;getException()-&gt;getStatusCode());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码中，我们捕获了抛出的异常，并且把异常信息以json数据形式返回。</p>
+<h4 id="自定义异常处理"><a href="#自定义异常处理" class="headerlink" title="自定义异常处理"></a>自定义异常处理</h4><p>上面的代码中我们能够通过<code>onKernelException</code>方法，能够捕获到异常，但是我们并不知道是框架自己的异常还是我们主动抛出的异常。为了区分以及构建更友好的<code>restful</code>结构，我们需要自定义异常。</p>
+<p>我们在<code>src</code>目录下创建<code>Exception\Base</code>作为我们异常的基类。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">namespace App\Exception;</span><br><span class="line"></span><br><span class="line">use Symfony\Component\HttpKernel\Exception\HttpException;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Class Base</span><br><span class="line"> * @package App\Exception</span><br><span class="line"> */</span><br><span class="line">class Base extends HttpException</span><br><span class="line">&#123;</span><br><span class="line">    /**</span><br><span class="line">     * 返回的http状态码</span><br><span class="line">     * @var int</span><br><span class="line">     */</span><br><span class="line">    protected $status = 500;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 错误信息</span><br><span class="line">     * @var string</span><br><span class="line">     */</span><br><span class="line">    protected $message = &apos;unknown&apos;;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 自定义错误码</span><br><span class="line">     * @var int</span><br><span class="line">     */</span><br><span class="line">    protected $errorCode = 999;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 附加数据</span><br><span class="line">     * @var array</span><br><span class="line">     */</span><br><span class="line">    protected $data = [];</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 允许携带的附加数据key</span><br><span class="line">     * @var array</span><br><span class="line">     */</span><br><span class="line">    co $accessKey = [</span><br><span class="line">        &apos;data&apos;, &apos;errorCode&apos;, &apos;message&apos;</span><br><span class="line">    ];</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Base constructor.</span><br><span class="line">     * @param array           $errorData</span><br><span class="line">     * @param int             $statusCode</span><br><span class="line">     * @param \Throwable|null $previous</span><br><span class="line">     */</span><br><span class="line">    public function __construct (array $errorData = [], int $statusCode = 0, \Throwable $previous = null)</span><br><span class="line">    &#123;</span><br><span class="line">        foreach ($this-&gt;accessKey as $key =&gt; $value) &#123;</span><br><span class="line">            if (array_key_exists($value, $errorData)) $this-&gt;$value = $errorData[$value];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if ($statusCode) $this-&gt;setStatus($statusCode);</span><br><span class="line"></span><br><span class="line">        parent::__construct($this-&gt;getStatus(), $this-&gt;getMessage(), $previous, [], $this-&gt;getStatus());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ...getter or setter</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上的代码中，核心的代码即为构造方法。</p>
+<p>结合我们的<code>App\EventListener\Exception</code>，我们把他的代码改为如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">namespace App\EventListener;</span><br><span class="line"></span><br><span class="line">use App\Exception\Base;</span><br><span class="line">use Symfony\Component\HttpFoundation\JsonResponse;</span><br><span class="line">use Symfony\Component\HttpKernel\Event\ExceptionEvent;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Class Exception</span><br><span class="line"> * @package App\EventListener</span><br><span class="line"> */class Exception</span><br><span class="line">&#123;</span><br><span class="line">    /**</span><br><span class="line">     * @var</span><br><span class="line">     */</span><br><span class="line">    private $event;</span><br><span class="line">    /**</span><br><span class="line">     * @var int</span><br><span class="line">     */</span><br><span class="line">    private $statusCode = 500;</span><br><span class="line">    /**</span><br><span class="line">     * @var int</span><br><span class="line">     */</span><br><span class="line">    private $errorCode = 999;</span><br><span class="line">    /**</span><br><span class="line">     * @var string</span><br><span class="line">     */</span><br><span class="line">    private $message = &apos;服务器异常&apos;;</span><br><span class="line">    /**</span><br><span class="line">     * @var array</span><br><span class="line">     */</span><br><span class="line">    private $data = [];</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * @param ExceptionEvent $event</span><br><span class="line">     * @return ExceptionEvent</span><br><span class="line">     */</span><br><span class="line">    public function onKernelException(ExceptionEvent $event)</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;setEvent($event);</span><br><span class="line">        $exception = $event-&gt;getException();</span><br><span class="line">        if ($exception instanceof Base) &#123;</span><br><span class="line">            $this-&gt;setData($exception-&gt;getData());</span><br><span class="line">            $this-&gt;setMessage($exception-&gt;getMessage());</span><br><span class="line">            $this-&gt;setErrorCode($exception-&gt;getErrorCode());</span><br><span class="line">            $this-&gt;setStatusCode($exception-&gt;getStatus());</span><br><span class="line"></span><br><span class="line">            $event-&gt;setResponse($this-&gt;createJsonResponse());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return $event;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * @return JsonResponse</span><br><span class="line">     */</span><br><span class="line">    private function createJsonResponse ()</span><br><span class="line">    &#123;</span><br><span class="line">        return JsonResponse::create([</span><br><span class="line">            &apos;message&apos; =&gt; $this-&gt;getMessage(),</span><br><span class="line">            &apos;errorCode&apos; =&gt; $this-&gt;getErrorCode(),</span><br><span class="line">            &apos;data&apos; =&gt; $this-&gt;getData(),</span><br><span class="line">            &apos;requestUrl&apos; =&gt; $this-&gt;getEvent()-&gt;getRequest()-&gt;getPathInfo()</span><br><span class="line">        ], $this-&gt;getStatusCode());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ...getter or setter</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上的代码我们捕获了所有的异常，并且如果是继承自<code>App\Exception\Base</code>异常的话能够很有好的返回json数据，其中包括了</p>
+<ul>
+<li><code>status</code>-http状态码</li>
+<li><code>message</code>-异常消息</li>
+<li><code>errorCode</code>-自定义错误码</li>
+<li><code>data</code>-返回数据</li>
+<li><code>requestUrl</code>-当前请求接口</li>
+</ul>
+<p>能够应付大部分场景，如果你觉得还不够的话，可以补充。</p>
+<h4 id="使用异常"><a href="#使用异常" class="headerlink" title="使用异常"></a>使用异常</h4><p>我们已经有了自定义的异常，我们怎么来使用它呢？</p>
+<p>我们首先定义一个参数异常类<code>App\Exception\Parameter</code>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">namespace App\Exception;</span><br><span class="line"></span><br><span class="line">class Parameter extends Base</span><br><span class="line">&#123;</span><br><span class="line">    protected $status = 400;</span><br><span class="line">    protected $errorCode = 10000;</span><br><span class="line">    protected $message = &quot;参数错误&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>什么，才<code>10</code>行代码？没错，就是如此简单。</p>
+<p>然后我们可以在控制器使用它了。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">// src/controll/Word</span><br><span class="line">namespace App\Controller;</span><br><span class="line"></span><br><span class="line">use App\Exception\Parameter;</span><br><span class="line">use Symfony\Component\HttpFoundation\Response;</span><br><span class="line">use Symfony\Component\Routing\Annotation\Route;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @Route(&quot;/hello&quot;)</span><br><span class="line"> */</span><br><span class="line">class Word</span><br><span class="line">&#123;</span><br><span class="line">    /**</span><br><span class="line">     * @Route(&quot;/word&quot;,methods=&#123;&quot;GET&quot;&#125;)</span><br><span class="line">     */</span><br><span class="line">    public function index()</span><br><span class="line">    &#123;</span><br><span class="line">        throw new \Exception(&apos;something was wrong!&apos;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * @Route(&quot;/word&quot;,methods=&#123;&quot;POST&quot;&#125;)</span><br><span class="line">     */</span><br><span class="line">    public function custom()</span><br><span class="line">    &#123;</span><br><span class="line">        throw new Parameter();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>为了避免重复，我们定义了另外一个路由<code>hello\word</code>，只不过请求方式换了<code>POST</code>而已。</p>
+<h4 id="产品环境下的500异常"><a href="#产品环境下的500异常" class="headerlink" title="产品环境下的500异常"></a>产品环境下的500异常</h4><p>如上，你已经自定义了异常处理了，但是细心的同学可能发现了，我们的抛出<code>Exception</code>的时候，还是是由框架渲染的，在产品环境下，我们不希望用户看到这些异常。</p>
+<p>所以，我们只需要在产品环境下让框架的异常正常返回就可以了。为此我们需要拿到配置环境的值。<br>在<code>config/services.yaml</code>下加入以下代码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># design exception handler</span><br><span class="line">App\EventListener\Exception:</span><br><span class="line">    tags:</span><br><span class="line">        - &#123; name: kernel.event_listener, event: kernel.exception &#125;</span><br><span class="line">+        arguments:</span><br><span class="line">+            $debug: &apos;%kernel.debug%&apos;</span><br></pre></td></tr></table></figure>
+
+<p>这样我们拿到了配置<code>debug</code>的值。异常处理就容易了。</p>
+<p>至此，完整的<code>App\EventListener\Exception</code>类：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">namespace App\EventListener;</span><br><span class="line"></span><br><span class="line">use App\Exception\Base;</span><br><span class="line">use Symfony\Component\HttpFoundation\JsonResponse;</span><br><span class="line">use Symfony\Component\HttpKernel\Event\ExceptionEvent;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Class Exception</span><br><span class="line"> * @package App\EventListener</span><br><span class="line"> */</span><br><span class="line">class Exception</span><br><span class="line">&#123;</span><br><span class="line">    /**</span><br><span class="line">     * @var</span><br><span class="line">     */</span><br><span class="line">    private $debug;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * @var</span><br><span class="line">     */</span><br><span class="line">    private $event;</span><br><span class="line">    /**</span><br><span class="line">     * @var int</span><br><span class="line">     */</span><br><span class="line">    private $statusCode = 500;</span><br><span class="line">    /**</span><br><span class="line">     * @var int</span><br><span class="line">     */</span><br><span class="line">    private $errorCode = 999;</span><br><span class="line">    /**</span><br><span class="line">     * @var string</span><br><span class="line">     */</span><br><span class="line">    private $message = &apos;服务器异常&apos;;</span><br><span class="line">    /**</span><br><span class="line">     * @var array</span><br><span class="line">     */</span><br><span class="line">    private $data = [];</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * ExceptionListener constructor.</span><br><span class="line">     * @param $debug</span><br><span class="line">     */</span><br><span class="line">    public function __construct ($debug) &#123;</span><br><span class="line">        $this-&gt;debug = $debug;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * @param ExceptionEvent $event</span><br><span class="line">     * @return ExceptionEvent</span><br><span class="line">     */</span><br><span class="line">    public function onKernelException(ExceptionEvent $event)</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;setEvent($event);</span><br><span class="line">        $exception = $event-&gt;getException();</span><br><span class="line">        if ($exception instanceof Base) &#123;</span><br><span class="line">            $this-&gt;setData($exception-&gt;getData());</span><br><span class="line">            $this-&gt;setMessage($exception-&gt;getMessage());</span><br><span class="line">            $this-&gt;setErrorCode($exception-&gt;getErrorCode());</span><br><span class="line">            $this-&gt;setStatusCode($exception-&gt;getStatus());</span><br><span class="line"></span><br><span class="line">            $event-&gt;setResponse($this-&gt;createJsonResponse());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if ($this-&gt;debug) &#123;</span><br><span class="line">            return $event;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // do something else ...</span><br><span class="line">        $event-&gt;setResponse($this-&gt;createJsonResponse());</span><br><span class="line">        return $event;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * @return JsonResponse</span><br><span class="line">     */</span><br><span class="line">    private function createJsonResponse ()</span><br><span class="line">    &#123;</span><br><span class="line">        return JsonResponse::create([</span><br><span class="line">            &apos;message&apos; =&gt; $this-&gt;getMessage(),</span><br><span class="line">            &apos;errorCode&apos; =&gt; $this-&gt;getErrorCode(),</span><br><span class="line">            &apos;data&apos; =&gt; $this-&gt;getData(),</span><br><span class="line">            &apos;requestUrl&apos; =&gt; $this-&gt;getEvent()-&gt;getRequest()-&gt;getPathInfo()</span><br><span class="line">        ], $this-&gt;getStatusCode());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如上，我们已经完成了最复杂的一层构建。接下来我们来实现数据的校验层吧。</p>
+<p><strong>enjoy and happy coding!</strong></p>
+]]></content>
+      <categories>
+        <category>PHP</category>
+      </categories>
+      <tags>
+        <tag>restful</tag>
+        <tag>symfony</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用symfony构建restful应用 - 项目初始化</title>
+    <url>/2019/09/19/symfony-init/</url>
+    <content><![CDATA[<h4 id="目标："><a href="#目标：" class="headerlink" title="目标："></a>目标：</h4><blockquote>
+<p>使用symfony构建一个api基础接口</p>
+</blockquote>
+<a id="more"></a>
+
+<h4 id="新建一个symfony应用"><a href="#新建一个symfony应用" class="headerlink" title="新建一个symfony应用"></a>新建一个symfony应用</h4><p>下载symfony：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">composer create-project symfony/skeleton my_project_name</span><br></pre></td></tr></table></figure>
+
+<p>然后把你配置的域名指向项目的<code>public</code>下面就可以用域名访问了。</p>
+<!--more-->
+
+<blockquote>
+<p>如果你是apache环境记得重写url</p>
+</blockquote>
+<p>如果你看了<span class="exturl" data-url="aHR0cHM6Ly9zeW1mb255LmNvbS9kb2MvY3VycmVudC9zZXR1cC5odG1s" title="官方文档">官方文档:set_up<i class="fa fa-external-link"></i></span>的话，你可能会运行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">symfony server:start</span><br></pre></td></tr></table></figure>
+
+<p>或者是</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">php bin/console server:run</span><br></pre></td></tr></table></figure>
+
+<p>但是你会发现报错</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[InvalidArgumentException]</span><br><span class="line">There are no commands defined in the &quot;server&quot; namespace</span><br></pre></td></tr></table></figure>
+
+<p>这是因为没有<code>WebServerBundle</code>的缘故，安装：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">composer require --dev symfony/web-server-bundle</span><br></pre></td></tr></table></figure>
+
+<p>然后用浏览器打开<span class="exturl" data-url="aHR0cDovLzEyNy4wLjAuMTo4MDAw" title="127.0.0.1:8000">127.0.0.1:8000<i class="fa fa-external-link"></i></span>就可以看见默认页面了。</p>
+<h4 id="创建第一个路由"><a href="#创建第一个路由" class="headerlink" title="创建第一个路由"></a>创建第一个路由</h4><p><strong>symfony</strong>配置路由的方式比较灵活。这里主要介绍两种简单的方式。</p>
+<h5 id="在路由配置中配置路由"><a href="#在路由配置中配置路由" class="headerlink" title="在路由配置中配置路由"></a>在路由配置中配置路由</h5><p>在<code>config/routes.yaml</code> 添加一下配置（<em>假设你的控制器<code>src/controll/Word</code></em>）：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">index:</span><br><span class="line">    path: /hello/word</span><br><span class="line">    controller: App\Controller\Word::index</span><br></pre></td></tr></table></figure>
+
+<p>控制器：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">// src/controll/Word</span><br><span class="line">namespace App\Controller;</span><br><span class="line"></span><br><span class="line">use Symfony\Component\HttpFoundation\Response;</span><br><span class="line"></span><br><span class="line">class Word</span><br><span class="line">&#123;</span><br><span class="line">    public function index()</span><br><span class="line">    &#123;</span><br><span class="line">        $number = random_int(0, 100);</span><br><span class="line"></span><br><span class="line">        return new Response(</span><br><span class="line">            &apos;&lt;html&gt;&lt;body&gt;Hello word: &apos;.$number.&apos;&lt;/body&gt;&lt;/html&gt;&apos;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在路由<code>hello\word</code>下面就可以看到你的返回页面了。</p>
+<h4 id="使用注解路由"><a href="#使用注解路由" class="headerlink" title="使用注解路由"></a>使用注解路由</h4><p>这种方式比较灵活，也是我个人比较推荐的路由注册方式，它直接作用于控制器的注解之中。<br>当然，它额外的需要你有<code>annotations</code>组件。安装：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">composer require annotations</span><br></pre></td></tr></table></figure>
+
+<p>使用注解路由，我们可以把控制器改写成这样：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">// src/controll/Word</span><br><span class="line">namespace App\Controller;</span><br><span class="line"></span><br><span class="line">use Symfony\Component\HttpFoundation\Response;</span><br><span class="line">+  use Symfony\Component\Routing\Annotation\Route;</span><br><span class="line"></span><br><span class="line">+     /**</span><br><span class="line">+      * @Route(&quot;/hello&quot;)</span><br><span class="line">+      */</span><br><span class="line">class Word</span><br><span class="line">&#123;</span><br><span class="line">+     /**</span><br><span class="line">+      * @Route(&quot;/word&quot;,methods=&#123;&quot;GET&quot;&#125;)</span><br><span class="line">+      */</span><br><span class="line">    public function index()</span><br><span class="line">    &#123;</span><br><span class="line">        $number = random_int(0, 100);</span><br><span class="line"></span><br><span class="line">        return new Response(</span><br><span class="line">            &apos;&lt;html&gt;&lt;body&gt;Hello word: &apos;.$number.&apos;&lt;/body&gt;&lt;/html&gt;&apos;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>与此同时我们可以把刚才在<code>config/routes.yaml</code>添加的路由<code>hello\word</code>删除掉了。<br>其中<code>methods</code>参数标识这个接口的请求方式，甚至可以指定多个请求方式如：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @Route(&quot;/word&quot;,methods=&#123;&quot;GET&quot;,&quot;HEAD&quot;&#125;)</span><br><span class="line"> */</span><br></pre></td></tr></table></figure>
+
+<h4 id="查看路由"><a href="#查看路由" class="headerlink" title="查看路由"></a>查看路由</h4><p>输入以下命令即可查看已经注册的路由：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">php bin/console debug:router</span><br></pre></td></tr></table></figure>
+
+<p>更多信息请查看<span class="exturl" data-url="aHR0cHM6Ly9zeW1mb255LmNvbS9kb2MvY3VycmVudC9jb21wb25lbnRzL3JvdXRpbmcuaHRtbA==" title="The Routing Component">The Routing Component<i class="fa fa-external-link"></i></span></p>
+<p><strong>enjoy and happy coding!</strong></p>
+]]></content>
+      <categories>
+        <category>PHP</category>
+      </categories>
+      <tags>
+        <tag>restful</tag>
+        <tag>symfony</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>记markdown语法</title>
+    <url>/2019/06/28/markdown/</url>
+    <content><![CDATA[<p>记一些学习markdown的资料</p>
+<a id="more"></a>
+
+<h3 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h3><p>标题的语法： <code>#</code>，标题的数量代表级别(如：<code>##</code>代表二级标题)，你可以类比<code>html</code>里面的<code>h1~h6</code>.
+示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#一级标题</span><br><span class="line">##二级标题</span><br><span class="line">###三级标题</span><br><span class="line">####四级标题</span><br><span class="line">#####五级标题</span><br><span class="line">######六级标题</span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<blockquote>
+<h1 id="一级标题"><a href="#一级标题" class="headerlink" title="一级标题"></a>一级标题</h1><h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><h5 id="五级标题"><a href="#五级标题" class="headerlink" title="五级标题"></a>五级标题</h5><h6 id="六级标题"><a href="#六级标题" class="headerlink" title="六级标题"></a>六级标题</h6></blockquote>
+<hr>
+<h3 id="字体"><a href="#字体" class="headerlink" title="字体"></a>字体</h3><ul>
+<li><h4 id="斜体"><a href="#斜体" class="headerlink" title="斜体"></a>斜体</h4>在你要倾斜的字体左右用一个<code>*</code>包起来;</li>
+<li><h4 id="加粗"><a href="#加粗" class="headerlink" title="加粗"></a>加粗</h4>在你要加粗的字体左右用两个<code>*</code>包起来;</li>
+<li><h4 id="斜体加粗"><a href="#斜体加粗" class="headerlink" title="斜体加粗"></a>斜体加粗</h4>没错，用三个<code>*</code>包起来的字体即可斜体加粗;</li>
+<li><h4 id="删除线"><a href="#删除线" class="headerlink" title="删除线"></a>删除线</h4>在你要删除线的字体左右用两个<code>~</code>包起来;</li>
+</ul>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">这是**加粗**，这是*斜体*，***斜体加粗***，以及~~删除线~~</span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<blockquote>
+<p>这是<strong>加粗</strong>，这是<em>斜体</em>，<strong><em>斜体加粗</em></strong>，以及<del>删除线</del></p>
+</blockquote>
+<hr>
+<h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><p>在你要引用的文字前加<code>&gt;</code>即可；</p>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt;引用一</span><br><span class="line">&gt;&gt;引用二</span><br><span class="line">&gt;&gt;&gt;&gt;&gt;&gt;引用n</span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<blockquote>
+<p>引用一</p>
+<blockquote>
+<p>引用二</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>引用n</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<hr>
+<h4 id="分割线"><a href="#分割线" class="headerlink" title="分割线"></a>分割线</h4><p>用三个（或更多）<code>*</code>或者<code>-</code></p>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">***</span><br><span class="line">---</span><br><span class="line">****</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<hr>
+<hr>
+<hr>
+<hr>
+<h4 id="图片与链接"><a href="#图片与链接" class="headerlink" title="图片与链接"></a>图片与链接</h4><p>链接语法：<code>[链接名](链接 &quot;链接title&quot;)</code><br>图片语法：<code>![图片alt](图片地址 &quot;图片title&quot;)</code></p>
+<blockquote>
+<p><strong><em>注意：中间有一个空格</em></strong></p>
+</blockquote>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[才先の博客](https://jaychoumylove.github.io &quot;才先の博客&quot;)</span><br><span class="line">![这里是alt](https://jaychoumylove.github.io/images/avatar.gif &quot;这里是title&quot;)</span><br></pre></td></tr></table></figure>
+
+<p>效果：<br><a href="https://jaychoumylove.github.io" title="才先の博客">才先の博客</a><br><img src="/images/avatar.gif" alt="这里是alt" title="这里是title"></p>
+<hr>
+<h4 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h4><p><strong>无序列表</strong>用 <code>-</code> <code>+</code> <code>*</code> 任何一种都可以，可以在列表后加<code>[]</code>标识是否勾选（<em>注意空格</em>）等</p>
+<blockquote>
+<p>注意 <code>*</code> <code>+</code> <code>-</code> 与内容之间要有一个空格</p>
+</blockquote>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">- 1</span><br><span class="line">- 2</span><br><span class="line">- 3</span><br><span class="line"></span><br><span class="line">+ a</span><br><span class="line">+ b</span><br><span class="line">+ c</span><br><span class="line"></span><br><span class="line">* [ ]  A </span><br><span class="line">* [ ]  B </span><br><span class="line">* [x]  C</span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<blockquote>
+<ul>
+<li>1</li>
+<li>2</li>
+<li>3</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>a</li>
+<li>b</li>
+<li>c</li>
+</ul>
+</blockquote>
+<ul>
+<li><input disabled type="checkbox"> A</li>
+<li><input disabled type="checkbox"> B</li>
+<li><input checked disabled type="checkbox"> C</li>
+</ul>
+<p><strong>有序列表</strong>的语法是数字加点</p>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1. A</span><br><span class="line">2. B</span><br><span class="line">3. C</span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<blockquote>
+<ol>
+<li>A</li>
+<li>B</li>
+<li>C</li>
+</ol>
+</blockquote>
+<p><strong>列表嵌套</strong><br>如果想要列表嵌套的话，上一级和下一级之间要有三个空格</p>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">- 1</span><br><span class="line">   1. A</span><br><span class="line">      + a</span><br><span class="line">         * 45</span><br><span class="line">         * 23</span><br><span class="line">         * 8989</span><br><span class="line">      + b</span><br><span class="line">   2. B</span><br><span class="line">      * !</span><br><span class="line">      * @</span><br><span class="line">- 2</span><br><span class="line">- 3</span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<blockquote>
+<ul>
+<li>1<ol>
+<li>A<ul>
+<li>a<ul>
+<li>45</li>
+<li>23</li>
+<li>8989</li>
+</ul>
+</li>
+<li>b</li>
+</ul>
+</li>
+<li>B<ul>
+<li>!</li>
+<li>@</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>2</li>
+<li>3</li>
+</ul>
+</blockquote>
+<hr>
+<h4 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h4><p>这个解释比较麻烦，直接上示例吧</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">|这是你的表头|表头|表头|</span><br><span class="line">|---|:---:|---:|</span><br><span class="line">|这是你的内容|内容|内容|</span><br><span class="line">|我是居左的|我是居中的|我是居右的|</span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<table>
+<thead>
+<tr>
+<th>这是你的表头</th>
+<th align="center">表头</th>
+<th align="right">表头</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>这是你的内容</td>
+<td align="center">内容</td>
+<td align="right">内容</td>
+</tr>
+<tr>
+<td>我是居左的</td>
+<td align="center">我是居中的</td>
+<td align="right">我是居右的</td>
+</tr>
+</tbody></table>
+<hr>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><p>语法：用反引号把你的代码包起来,单行代码用一个即可，代码块用三个</p>
+<blockquote>
+<p><em>注意，以下示例为了防止转义将反引号用()包起来了，实际上是没有的</em></p>
+</blockquote>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(`) create user page (`) </span><br><span class="line"></span><br><span class="line">(```)</span><br><span class="line">function foo() &#123;</span><br><span class="line">    return &quot;bar&quot;</span><br><span class="line">&#125;</span><br><span class="line">foo();</span><br><span class="line">(```)</span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<p><code>create user page</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">function foo() &#123;</span><br><span class="line">    return &quot;bar&quot;</span><br><span class="line">&#125;</span><br><span class="line">foo();</span><br></pre></td></tr></table></figure>
+
+<hr>
+]]></content>
+      <categories>
+        <category>MarkDown</category>
+      </categories>
+      <tags>
+        <tag>notes</tag>
+      </tags>
+  </entry>
+</search>
