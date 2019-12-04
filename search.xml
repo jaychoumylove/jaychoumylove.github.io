@@ -6,7 +6,9 @@
     <content><![CDATA[<blockquote>
 <p>使用 <code>git</code> 团队协作管理项目的时候，难免会有错误的提交，按照正常的流程应该是在后续的提交纠正这些错误，但是如果这些错误本就不必要的话，是可以用回滚来操作的，于此记录下 <code>git</code> 下回滚的姿势。</p>
 </blockquote>
-<p>如果说，本次提交仅限本地的话，我们可以用 <code>git reset --hard [your reset sha]</code> 来回退本地的版本，从而实现取消错误代码。如：</p>
+<a id="more"></a>
+
+<p>如果说，本次提交仅限本地的话，我们可以用 <code>git reset --hard [your reset version]</code> 来回退本地的版本，从而实现取消错误代码。如：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ laravel git:(master) git ll</span><br><span class="line">commit ee3105a (HEAD -&gt; master)</span><br><span class="line">Author: caixian &lt;qq52577517@163.com&gt;</span><br><span class="line">Date:   Wed Dec 4 09:34:17 2019 +0800</span><br><span class="line"></span><br><span class="line">    some stupid do this</span><br><span class="line"></span><br><span class="line"> app/Http/Controllers/User.php | 1 +</span><br><span class="line"> 1 file changed, 1 insertion(+)</span><br><span class="line"></span><br><span class="line">commit c92f163 (origin/master)</span><br><span class="line">Author: caixian &lt;qq52577517@163.com&gt;</span><br><span class="line">Date:   Sat Nov 9 14:55:46 2019 +0800</span><br><span class="line"></span><br><span class="line">    clear cors</span><br><span class="line">:q</span><br><span class="line">$ laravel git:(master) git reset --hard c92f163</span><br><span class="line">HEAD is now at c92f163 clear cors</span><br></pre></td></tr></table></figure>
 
 <p>如上，由于我们还未推送至远程，所以我们接下来的 <code>commit</code>, <code>push</code> 等一系列的行为都是正常的。</p>
@@ -90,6 +92,26 @@
       </tags>
   </entry>
   <entry>
+    <title>git撤销暂存区文件</title>
+    <url>/2019/10/26/git-reset-add-files/</url>
+    <content><![CDATA[<blockquote>
+<p>使用git管理项目的时候，要把新文件要加入到暂存区，<br>我一般用 <code>git add .</code>的方法将文件简单除暴的加入至暂存区。<br>但是如果有个不需要的文件被误操作 or 手抖加入至版本库管理呢？在这里记录下 <code>git</code> 将文件移出暂存区的姿势。</p>
+</blockquote>
+<p>这里可以使用 <code>git</code> 版本回滚的机制来解决这一问题。</p>
+<p>通常<code>git reset HEAD</code> 或者 <code>git reset HEAD .</code> ，可以回滚到当前工作区，也就是说如果之前有把文件加入暂存区的话，全部都会移出暂存区。<br>既然如此，就可以使用</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git reset HEAD [your reset files]</span><br></pre></td></tr></table></figure>
+
+<p>来把特定文件移出至暂存区，然后把该文件添加至 <code>.gitignore</code> 文件中。</p>
+<p><strong>enjoy and happy coding!</strong></p>
+]]></content>
+      <categories>
+        <category>git</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>git重写你的提交日志</title>
     <url>/2019/10/26/git-reset-message/</url>
     <content><![CDATA[<blockquote>
@@ -104,26 +126,6 @@
 <p>这种推送为强制推送，git 官方不推荐</p>
 </blockquote>
 <p>强制推送远程使用姿势不是很优雅， <em>(但是谁叫你写错日志呢？)</em> 所以，以后写日志之前要反复斟酌。以便团队日后 <code>code review</code> 更高效！</p>
-<p><strong>enjoy and happy coding!</strong></p>
-]]></content>
-      <categories>
-        <category>git</category>
-      </categories>
-      <tags>
-        <tag>git</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>git撤销暂存区文件</title>
-    <url>/2019/10/26/git-reset-add-files/</url>
-    <content><![CDATA[<blockquote>
-<p>使用git管理项目的时候，要把新文件要加入到暂存区，<br>我一般用 <code>git add .</code>的方法将文件简单除暴的加入至暂存区。<br>但是如果有个不需要的文件被误操作 or 手抖加入至版本库管理呢？在这里记录下 <code>git</code> 将文件移出暂存区的姿势。</p>
-</blockquote>
-<p>这里可以使用 <code>git</code> 版本回滚的机制来解决这一问题。</p>
-<p>通常<code>git reset HEAD</code> 或者 <code>git reset HEAD .</code> ，可以回滚到当前工作区，也就是说如果之前有把文件加入暂存区的话，全部都会移出暂存区。<br>既然如此，就可以使用</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git reset HEAD [your reset files]</span><br></pre></td></tr></table></figure>
-
-<p>来把特定文件移出至暂存区，然后把该文件添加至 <code>.gitignore</code> 文件中。</p>
 <p><strong>enjoy and happy coding!</strong></p>
 ]]></content>
       <categories>

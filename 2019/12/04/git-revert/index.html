@@ -58,18 +58,18 @@
   };
 </script>
 
-  <meta name="description" content="使用 git 团队协作管理项目的时候，难免会有错误的提交，按照正常的流程应该是在后续的提交纠正这些错误，但是如果这些错误本就不必要的话，是可以用回滚来操作的，于此记录下 git 下回滚的姿势。  如果说，本次提交仅限本地的话，我们可以用 git reset --hard [your reset sha] 来回退本地的版本，从而实现取消错误代码。如： 12345678910111213141516">
+  <meta name="description" content="使用 git 团队协作管理项目的时候，难免会有错误的提交，按照正常的流程应该是在后续的提交纠正这些错误，但是如果这些错误本就不必要的话，是可以用回滚来操作的，于此记录下 git 下回滚的姿势。">
 <meta name="keywords" content="git">
 <meta property="og:type" content="article">
 <meta property="og:title" content="git工作区回滚">
 <meta property="og:url" content="https://jaychoumylove.github.io/2019/12/04/git-revert/index.html">
 <meta property="og:site_name" content="Danself">
-<meta property="og:description" content="使用 git 团队协作管理项目的时候，难免会有错误的提交，按照正常的流程应该是在后续的提交纠正这些错误，但是如果这些错误本就不必要的话，是可以用回滚来操作的，于此记录下 git 下回滚的姿势。  如果说，本次提交仅限本地的话，我们可以用 git reset --hard [your reset sha] 来回退本地的版本，从而实现取消错误代码。如： 12345678910111213141516">
+<meta property="og:description" content="使用 git 团队协作管理项目的时候，难免会有错误的提交，按照正常的流程应该是在后续的提交纠正这些错误，但是如果这些错误本就不必要的话，是可以用回滚来操作的，于此记录下 git 下回滚的姿势。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-12-04T02:26:49.078Z">
+<meta property="og:updated_time" content="2019-12-04T02:31:43.879Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="git工作区回滚">
-<meta name="twitter:description" content="使用 git 团队协作管理项目的时候，难免会有错误的提交，按照正常的流程应该是在后续的提交纠正这些错误，但是如果这些错误本就不必要的话，是可以用回滚来操作的，于此记录下 git 下回滚的姿势。  如果说，本次提交仅限本地的话，我们可以用 git reset --hard [your reset sha] 来回退本地的版本，从而实现取消错误代码。如： 12345678910111213141516">
+<meta name="twitter:description" content="使用 git 团队协作管理项目的时候，难免会有错误的提交，按照正常的流程应该是在后续的提交纠正这些错误，但是如果这些错误本就不必要的话，是可以用回滚来操作的，于此记录下 git 下回滚的姿势。">
   <link rel="canonical" href="https://jaychoumylove.github.io/2019/12/04/git-revert/">
 
 
@@ -302,7 +302,7 @@
                 
               
 
-              <time title="创建时间：2019-12-04 09:20:30 / 修改时间：10:26:49" itemprop="dateCreated datePublished" datetime="2019-12-04T09:20:30+08:00">2019-12-04</time>
+              <time title="创建时间：2019-12-04 09:20:30 / 修改时间：10:31:43" itemprop="dateCreated datePublished" datetime="2019-12-04T09:20:30+08:00">2019-12-04</time>
             </span>
           
             
@@ -380,7 +380,9 @@
         <blockquote>
 <p>使用 <code>git</code> 团队协作管理项目的时候，难免会有错误的提交，按照正常的流程应该是在后续的提交纠正这些错误，但是如果这些错误本就不必要的话，是可以用回滚来操作的，于此记录下 <code>git</code> 下回滚的姿势。</p>
 </blockquote>
-<p>如果说，本次提交仅限本地的话，我们可以用 <code>git reset --hard [your reset sha]</code> 来回退本地的版本，从而实现取消错误代码。如：</p>
+<a id="more"></a>
+
+<p>如果说，本次提交仅限本地的话，我们可以用 <code>git reset --hard [your reset version]</code> 来回退本地的版本，从而实现取消错误代码。如：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">$ laravel git:(master) git ll</span><br><span class="line">commit ee3105a (HEAD -&gt; master)</span><br><span class="line">Author: caixian &lt;qq52577517@163.com&gt;</span><br><span class="line">Date:   Wed Dec 4 09:34:17 2019 +0800</span><br><span class="line"></span><br><span class="line">    some stupid do this</span><br><span class="line"></span><br><span class="line"> app/Http/Controllers/User.php | 1 +</span><br><span class="line"> 1 file changed, 1 insertion(+)</span><br><span class="line"></span><br><span class="line">commit c92f163 (origin/master)</span><br><span class="line">Author: caixian &lt;qq52577517@163.com&gt;</span><br><span class="line">Date:   Sat Nov 9 14:55:46 2019 +0800</span><br><span class="line"></span><br><span class="line">    clear cors</span><br><span class="line">:q</span><br><span class="line">$ laravel git:(master) git reset --hard c92f163</span><br><span class="line">HEAD is now at c92f163 clear cors</span><br></pre></td></tr></table></figure>
 
 <p>如上，由于我们还未推送至远程，所以我们接下来的 <code>commit</code>, <code>push</code> 等一系列的行为都是正常的。</p>
