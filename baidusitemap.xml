@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://jaychoumylove.github.io/2019/09/19/symfony-exception/</loc>
+    <lastmod>2019-12-18</lastmod>
+  </url>  <url>
     <loc>https://jaychoumylove.github.io/2019/12/04/git-revert/</loc>
     <lastmod>2019-12-04</lastmod>
   </url>  <url>
@@ -11,9 +14,6 @@
     <lastmod>2019-11-09</lastmod>
   </url>  <url>
     <loc>https://jaychoumylove.github.io/2019/09/19/symfony-init/</loc>
-    <lastmod>2019-11-09</lastmod>
-  </url>  <url>
-    <loc>https://jaychoumylove.github.io/2019/09/19/symfony-exception/</loc>
     <lastmod>2019-11-09</lastmod>
   </url>  <url>
     <loc>https://jaychoumylove.github.io/2019/10/26/git-reset-message/</loc>

@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://jaychoumylove.github.io/2019/09/19/symfony-exception/</loc>
+    
+    <lastmod>2019-12-18T02:31:15.388Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://jaychoumylove.github.io/2019/12/04/git-revert/</loc>
     
     <lastmod>2019-12-04T02:31:43.879Z</lastmod>
@@ -26,13 +33,6 @@
     <loc>https://jaychoumylove.github.io/2019/09/19/symfony-init/</loc>
     
     <lastmod>2019-11-09T06:06:57.559Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://jaychoumylove.github.io/2019/09/19/symfony-exception/</loc>
-    
-    <lastmod>2019-11-09T06:06:51.792Z</lastmod>
     
   </url>
   
