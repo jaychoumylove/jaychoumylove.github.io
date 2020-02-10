@@ -1,6 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>JavaScript handle Event</title>
+    <url>/2020/02/10/javascript-dom-event-listener/</url>
+    <content><![CDATA[<blockquote>
+<p>最近接触 <code>web</code> 事件接触比较多，于此记录下部分 <code>JavaScript</code> 对 <code>Webdom</code> 的姿势以及需要注意事宜。</p>
+</blockquote>
+<h3 id="事件命名"><a href="#事件命名" class="headerlink" title="事件命名"></a>事件命名</h3><p>尽量以 <code>handle</code> , <code>init</code> 等表示<strong>处理动词</strong> 开头，中间以 <strong>处理对象</strong>  衔接，最后由<strong>处理事件类型</strong>结尾。如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">type HandleEvent = (evt: Event) =&gt; void;</span><br><span class="line">const handleTargetClick: HandleEvent = (evt: Event) =&gt; &#123;</span><br><span class="line">    console.info(&apos;you just clicked!&apos;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<a id="more"></a>
+
+<h3 id="事件注册的方式"><a href="#事件注册的方式" class="headerlink" title="事件注册的方式"></a>事件注册的方式</h3><p>我们来对比几种事件注册的方式：</p>
+<p> <code>Html</code> 中</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;button type=&quot;button&quot; onclick=&quot;handleTargerClick&quot;&gt;点击我试试&lt;/button&gt;</span><br></pre></td></tr></table></figure>
+
+<p> <code>JavaScript</code> 中：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">type target = Element | Document;</span><br><span class="line">target.onclick = handleTargerClick;</span><br><span class="line">target.addEventListener(&apos;click&apos;, handleTargerClick, false);</span><br></pre></td></tr></table></figure>
+
+<p>第一种是我比较喜欢的绑定方式，它显性绑定了处理事件的执行方法到 <code>target</code> 上， 我们很容易理解。</p>
+<p>方式二可以说是隐式绑定，相对于第一种方式，你得自己找出你要绑定的 <code>target</code>。</p>
+<blockquote>
+<p>需要注意的是，如果你调用了两次的话，第二次会把第一次覆盖掉。</p>
+</blockquote>
+<p>方式三区别于方式二的主要地方在于：</p>
+<ul>
+<li>可以绑定多个事件处理，既绑定了多个不同的事件方法会并存。</li>
+<li>绑定了相同的事件处理后，自动选择靠后的那一个 (<strong>不对匿名函数作用</strong>)</li>
+<li>指定了事件触发的阶段(<strong>捕获</strong> or <strong>冒泡</strong>)</li>
+</ul>
+<blockquote>
+<p>强烈建议使用这种绑定方式</p>
+</blockquote>
+<blockquote>
+<p>强烈建议不要使用匿名函数绑定</p>
+</blockquote>
+<p>我们可以绑定多个事件处理，如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">const handelTargetClickAgain: HandleEvent = (evt: Event) =&gt; &#123;</span><br><span class="line">    console.info(&apos;handle click again&apos;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">target.addEventListener(&apos;click&apos;, handleTargerClick, false);</span><br><span class="line">target.addEventListener(&apos;click&apos;, handelTargetClickAgain, true);</span><br></pre></td></tr></table></figure>
+
+<p>如果你运行了这段代码，你会惊讶的发现，在控制台打印的第一条 <code>string</code> 竟然是 <code>handle click again</code>，而不是 <code>you just clicked!</code>。WTF，你可能会跳起来大喊: “What hell was that? Are you kidding me?”。</p>
+<p>这就涉及到第三个参数了，第三个参数规定是一个 <code>boolean</code>，默认 <code>false</code>。如果你指定它为 <code>true</code>，事件处理将在 <strong>捕获</strong> 阶段触发，反之则在 <strong>冒泡</strong> 阶段触发。而这个捕获和冒泡怎么理解呢？事件的触发，先捕获，在冒泡。也就是说，捕获在前，冒泡在后。<br>上面代码中，由于我们在绑定 <code>handelTargetClickAgain</code> 指定了捕获阶段，所以它会先触发。</p>
+<h3 id="事件阻止冒泡"><a href="#事件阻止冒泡" class="headerlink" title="事件阻止冒泡"></a>事件阻止冒泡</h3><p>我们发现这些一连串的事件处理放在了一起，他们之间的业务关系些许复杂，会有特殊情况发生。 (<em>你永远不知道你的甲方会提出什么需求</em> )，比如：某些特殊的情况就不要 <code>handelTargetClickAgain</code> 了。</p>
+<p>这个时候就需要用到 <strong>阻止冒泡</strong> <code>stopPropagation</code> | <code>preventDefault</code> 了，我们可以把上述代码稍加修改。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">const handleTargetClick: HandleEvent = (evt: Event) =&gt; &#123;</span><br><span class="line">    console.info(&apos;you just clicked!&apos;);</span><br><span class="line">&#125;</span><br><span class="line">const handelTargetClickAgain: HandleEvent = (evt: Event) =&gt; &#123;</span><br><span class="line">    console.info(&apos;handle click again&apos;);</span><br><span class="line">    // 模拟特殊情况</span><br><span class="line">    if (Math.random() &gt; 0.5) &#123;</span><br><span class="line">        evt.stopPropagation(); // 阻止时间想上冒泡，即不会触发 handleTargetClick</span><br><span class="line">        // evt.preventDefault(); // 阻止时间的默认动作</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">target.addEventListener(&apos;click&apos;, handleTargerClick, false);</span><br><span class="line">target.addEventListener(&apos;click&apos;, handelTargetClickAgain, true);</span><br></pre></td></tr></table></figure>
+
+<p>如此，对事件处理更上一层楼。</p>
+<p><strong>enjoy and happy coding!</strong></p>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+        <category>Webdom</category>
+      </categories>
+      <tags>
+        <tag>notes</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>git工作区回滚</title>
     <url>/2019/12/04/git-revert/</url>
     <content><![CDATA[<blockquote>
