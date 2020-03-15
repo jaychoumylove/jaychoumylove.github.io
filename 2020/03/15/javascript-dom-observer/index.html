@@ -58,19 +58,19 @@
   };
 </script>
 
-  <meta name="description" content="使用git管理项目的时候，涉及到多人维护项目。当某一文件有多人修改的时候，这时boss来了，放下这个需求，我有个项目更需要你，这时候我们需要取消之前我们的更改（此时还未 commit 该文件），于此记录下取消对文件的更新姿势。  在 git 中，git checkout 是一个很常用的命令，主要用于切换分支或恢复工作树文件，我们可以用它来解决这一问题。 通常我用 git checkout &amp;lt">
-<meta name="keywords" content="git">
+  <meta name="description" content="最近接触 webdom 比较多，于此记录下部分 JavaScript 观察（或者说监听） Webdom 的姿势  我们最近在开发一个在线原型编辑，用户可以在我们的编辑器上编辑一些产品原型类似的东西，相似的产品有 墨刀 ，但是我们的方向主要是图文。 里面涉及到很多 Dom 的监听与变化，事件主要在上一篇文章说过，这次说说 Dom 的变化方面。">
+<meta name="keywords" content="notes">
 <meta property="og:type" content="article">
-<meta property="og:title" content="git取消对文件的更新">
-<meta property="og:url" content="https://jaychoumylove.github.io/2019/11/09/git-cancel-update/index.html">
+<meta property="og:title" content="使用JavaScript监听Dom节点变化">
+<meta property="og:url" content="https://jaychoumylove.github.io/2020/03/15/javascript-dom-observer/index.html">
 <meta property="og:site_name" content="Danself">
-<meta property="og:description" content="使用git管理项目的时候，涉及到多人维护项目。当某一文件有多人修改的时候，这时boss来了，放下这个需求，我有个项目更需要你，这时候我们需要取消之前我们的更改（此时还未 commit 该文件），于此记录下取消对文件的更新姿势。  在 git 中，git checkout 是一个很常用的命令，主要用于切换分支或恢复工作树文件，我们可以用它来解决这一问题。 通常我用 git checkout &amp;lt">
+<meta property="og:description" content="最近接触 webdom 比较多，于此记录下部分 JavaScript 观察（或者说监听） Webdom 的姿势  我们最近在开发一个在线原型编辑，用户可以在我们的编辑器上编辑一些产品原型类似的东西，相似的产品有 墨刀 ，但是我们的方向主要是图文。 里面涉及到很多 Dom 的监听与变化，事件主要在上一篇文章说过，这次说说 Dom 的变化方面。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-12-04T02:22:11.287Z">
+<meta property="og:updated_time" content="2020-03-15T06:45:17.945Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="git取消对文件的更新">
-<meta name="twitter:description" content="使用git管理项目的时候，涉及到多人维护项目。当某一文件有多人修改的时候，这时boss来了，放下这个需求，我有个项目更需要你，这时候我们需要取消之前我们的更改（此时还未 commit 该文件），于此记录下取消对文件的更新姿势。  在 git 中，git checkout 是一个很常用的命令，主要用于切换分支或恢复工作树文件，我们可以用它来解决这一问题。 通常我用 git checkout &amp;lt">
-  <link rel="canonical" href="https://jaychoumylove.github.io/2019/11/09/git-cancel-update/">
+<meta name="twitter:title" content="使用JavaScript监听Dom节点变化">
+<meta name="twitter:description" content="最近接触 webdom 比较多，于此记录下部分 JavaScript 观察（或者说监听） Webdom 的姿势  我们最近在开发一个在线原型编辑，用户可以在我们的编辑器上编辑一些产品原型类似的东西，相似的产品有 墨刀 ，但是我们的方向主要是图文。 里面涉及到很多 Dom 的监听与变化，事件主要在上一篇文章说过，这次说说 Dom 的变化方面。">
+  <link rel="canonical" href="https://jaychoumylove.github.io/2020/03/15/javascript-dom-observer/">
 
 
 <script id="page-configurations">
@@ -84,7 +84,7 @@
   };
 </script>
 
-  <title>git取消对文件的更新 | Danself</title>
+  <title>使用JavaScript监听Dom节点变化 | Danself</title>
   
 
 
@@ -274,7 +274,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jaychoumylove.github.io/2019/11/09/git-cancel-update/">
+    <link itemprop="mainEntityOfPage" href="https://jaychoumylove.github.io/2020/03/15/javascript-dom-observer/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Cai xian">
@@ -286,7 +286,7 @@
       <meta itemprop="name" content="Danself">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">git取消对文件的更新
+        <h2 class="post-title" itemprop="name headline">使用JavaScript监听Dom节点变化
 
           
         </h2>
@@ -302,19 +302,11 @@
                 
               
 
-              <time title="创建时间：2019-11-09 00:46:41" itemprop="dateCreated datePublished" datetime="2019-11-09T00:46:41+08:00">2019-11-09</time>
+              <time title="创建时间：2020-03-15 13:33:30 / 修改时间：14:45:17" itemprop="dateCreated datePublished" datetime="2020-03-15T13:33:30+08:00">2020-03-15</time>
             </span>
           
             
 
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-04 10:22:11" itemprop="dateModified" datetime="2019-12-04T10:22:11+08:00">2019-12-04</time>
-              </span>
             
           
             <span class="post-meta-item">
@@ -323,7 +315,14 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/git/" itemprop="url" rel="index"><span itemprop="name">git</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JavaScript/Webdom/" itemprop="url" rel="index"><span itemprop="name">Webdom</span></a></span>
 
                 
                 
@@ -350,7 +349,7 @@
       
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2019/11/09/git-cancel-update/#comments" itemprop="discussionUrl"><span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/11/09/git-cancel-update/" itemprop="commentCount"></span></a>
+    <a title="disqus" href="/2020/03/15/javascript-dom-observer/#comments" itemprop="discussionUrl"><span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/03/15/javascript-dom-observer/" itemprop="commentCount"></span></a>
   </span>
   
   
@@ -362,7 +361,7 @@
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span>292</span>
+              <span>4.4k</span>
             </span>
           
             <span class="post-meta-item" title="阅读时长">
@@ -372,7 +371,7 @@
               
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               
-              <span>1 分钟</span>
+              <span>4 分钟</span>
             </span>
           
 
@@ -386,14 +385,34 @@
 
       
         <blockquote>
-<p>使用git管理项目的时候，涉及到多人维护项目。<br>当某一文件有多人修改的时候，这时boss来了，放下这个需求，我有个项目更需要你，这时候我们需要取消之前我们的更改（此时还未 <code>commit</code> 该文件），于此记录下取消对文件的更新姿势。</p>
+<p>最近接触 <code>webdom</code> 比较多，于此记录下部分 <code>JavaScript</code> 观察（或者说监听） <code>Webdom</code> 的姿势</p>
 </blockquote>
-<p>在 <code>git</code> 中，<code>git checkout</code> 是一个很常用的命令，主要用于<strong>切换分支或恢复工作树文件</strong>，我们可以用它来解决这一问题。</p>
-<p>通常我用 <code>git checkout &lt;branch&gt;</code> 于切换分支，而</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -- [your cancel update files]</span><br></pre></td></tr></table></figure>
+<p>我们最近在开发一个在线原型编辑，用户可以在我们的编辑器上编辑一些产品原型类似的东西，相似的产品有 <span class="exturl" data-url="aHR0cHM6Ly9tb2Rhby5jYy8=" title="墨刀">墨刀<i class="fa fa-external-link"></i></span> ，但是我们的方向主要是图文。</p>
+<p>里面涉及到很多 <code>Dom</code> 的监听与变化，事件主要在上一篇文章说过，这次说说 <code>Dom</code> 的变化方面。</p>
+<a id="more"></a>
 
-<p>用于取消对文件的更改。</p>
-<p><strong>enjoy and happy coding!</strong></p>
+<p>比较主要的就是一些 <code>Dom</code> 标签的添加与移除，有一块比较特殊的：</p>
+<blockquote>
+<p>某个element , 当这个元素被移除的时候，释放另外一个 element 的状态</p>
+</blockquote>
+<p>看起来好像不是很麻烦，只要在移除的地方释放就完事了。类似于这样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">const trigger = document.querySelector(&apos;.someTrigger&apos;),</span><br><span class="line">    remove = document.querySelector(&apos;.someRemove&apos;),</span><br><span class="line">    release = document.querySelector(&apos;.someRelease&apos;);</span><br><span class="line"></span><br><span class="line">trigger.addEventListener(&apos;click&apos;, function() &#123;</span><br><span class="line">    remove.remove();</span><br><span class="line">    release.setAttribute(&apos;some_state&apos;, &apos;release&apos;);</span><br><span class="line">    ...other code</span><br><span class="line">&#125;, false);</span><br></pre></td></tr></table></figure>
+
+<p>后面我发现，这个状态简直有毒，因为业务的相关性太大，居然有十几个场景要设置的，而且有时候添加 <code>Dom</code> 节点也会涉及到。当然了，这不能难到我，我把代码修改了。变成了这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">const trigger1 = document.querySelector(&apos;.someTrigger&apos;),</span><br><span class="line">    remove = document.querySelector(&apos;.someRemove&apos;),</span><br><span class="line">    release = document.querySelector(&apos;.someRelease&apos;)</span><br><span class="line">    //...others;</span><br><span class="line"></span><br><span class="line">trigger1.addEventListener(&apos;click&apos;, beTrigger, false);</span><br><span class="line">trigger2.addEventListener(&apos;click&apos;, beTrigger, false);</span><br><span class="line">trigger3.addEventListener(&apos;dblclick&apos;, beTrigger, false);</span><br><span class="line">trigger4.addEventListener(&apos;scroll&apos;, beTrigger, false);</span><br><span class="line">trigger5.addEventListener(&apos;focus&apos;, otherTrigger, false);</span><br><span class="line"></span><br><span class="line">function beTrigger() &#123;</span><br><span class="line">    remove.remove();</span><br><span class="line">    release.setAttribute(&apos;some_state&apos;, &apos;release&apos;);</span><br><span class="line">    // ...other code</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function otherTrigger() &#123;</span><br><span class="line">    const child = document.createElement(&apos;div&apos;);</span><br><span class="line">    trigger.appendChild(child);</span><br><span class="line">    release.setAttribute(&apos;some_state&apos;, &apos;other&apos;);</span><br><span class="line">    // ...other code</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种处理方式很好，我提交代码进行了测试，没问题。于此我就下班了。</p>
+<p>下班的路上，我还是对提交的代码很不安，虽然代码看起来什么问题，也能够处理业务，但是每一次有一个场景要触发，我就得添加一条 <code>someElement.addEventListener(&#39;someEvent&#39;, otherFunction, true|false)</code>，重复写这个对我这样有代码强迫的人很难受。</p>
+<p>回家后我发现基本都是 <code>Dom</code> 节点在新增或者移除而触发的。</p>
+<blockquote>
+<p>可不可以监听容器下的 <code>Dom</code> 节点的变化呢？</p>
+</blockquote>
+<p>答案是可以的。</p>
+<p>我认为这个应该也是类似于事件处理的一类，于是我发现了 <code>DOMNodeRemoved</code> 和 <code>DOMNodeInserted</code>，它们被归类在了 <code>Mutation Events</code>里面，但是已经被 <code>Web</code> 标准废弃了，替代它的是 <code>MutationObserver</code>。</p>
+<p>看了它的示例，我用 <code>React</code> 改写成了如下代码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">import React from &apos;react&apos;;</span><br><span class="line">import &#123; Button, Right &#125; from &apos;anypath&apos;;</span><br><span class="line"></span><br><span class="line">let observer = null, content;</span><br><span class="line"></span><br><span class="line">class ObserveDom extends React.Component &#123;</span><br><span class="line">    constructor(props) &#123;</span><br><span class="line">        super(props);</span><br><span class="line">        this.addElement = this.addElement.bind(this);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    componentDidMount () &#123;</span><br><span class="line">        observer = new MutationObserver(this.observerCallBack);</span><br><span class="line">        this.initContent();</span><br><span class="line">        observer.observe(content, &#123; childList: true &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    componentWillUnmount() &#123;</span><br><span class="line">        observer.disconnect();</span><br><span class="line">        observer = null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    observerCallBack (mutationsList, observer) &#123;</span><br><span class="line">        Object.keys(mutationsList).map(function (index) &#123;</span><br><span class="line">            const item = mutationsList[index];</span><br><span class="line">            switch (item.type) &#123;</span><br><span class="line">            case &apos;childList&apos;:</span><br><span class="line">                console.info(item);</span><br><span class="line">                console.info(&apos;childList has been modified&apos;);</span><br><span class="line">                // ...other code</span><br><span class="line">                break;</span><br><span class="line">            default:</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    initContent() &#123;</span><br><span class="line">        if (content instanceof Element == false) content = document.getElementById(&apos;content&apos;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    addElement() &#123;</span><br><span class="line">        const child = document.createElement(&apos;div&apos;);</span><br><span class="line">        Object.keys(itemStyle).map(function (item) &#123;</span><br><span class="line">            child.style[item] = itemStyle[item];</span><br><span class="line">        &#125;);</span><br><span class="line">        child.innerHTML = &apos;Item&apos;;</span><br><span class="line">        content.appendChild(child);</span><br><span class="line">        // ...other code</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    render() &#123;</span><br><span class="line">        return &lt;div id=&apos;content&apos;&gt;</span><br><span class="line">            &lt;header&gt;</span><br><span class="line">                &lt;title&gt;ObserveDom&lt;/title&gt;</span><br><span class="line">                &lt;Right&gt;</span><br><span class="line">                    &lt;Button onClick=&#123;this.addElement&#125;&gt;Add Element&lt;/Button&gt;</span><br><span class="line">                    &lt;Button onClick=&#123;this.addElement&#125;&gt;Remove Element&lt;/Button&gt;</span><br><span class="line">                &lt;/Right&gt;</span><br><span class="line">            &lt;/header&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const itemStyle = &#123;// ...anyStyle&#125;</span><br><span class="line"></span><br><span class="line">export default ObserveDom;</span><br></pre></td></tr></table></figure>
+
+<p>你甚至可以用这个 <code>MutationObserver</code> 给观察对象一个钩子，类似生命周期那样的(不过不是很有必要)，这里我使用了 <code>class</code> 没有用 <code>hooks</code> ，因为用前者比较对生命周期划分的比较清晰，容易理解（当然用 <code>hooks</code> 也可以实现）。</p>
 
     </div>
 
@@ -432,7 +451,7 @@
           
           <div class="post-tags">
             
-              <a href="/tags/git/" rel="tag"># git</a>
+              <a href="/tags/notes/" rel="tag"># notes</a>
             
           </div>
         
@@ -442,8 +461,8 @@
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
               
-                <a href="/2019/10/26/curl-request/" rel="next" title="用curl模拟http请求">
-                  <i class="fa fa-chevron-left"></i> 用curl模拟http请求
+                <a href="/2020/02/10/javascript-dom-event-listener/" rel="next" title="JavaScript handle Event">
+                  <i class="fa fa-chevron-left"></i> JavaScript handle Event
                 </a>
               
             </div>
@@ -451,10 +470,6 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-              
-                <a href="/2019/12/04/git-revert/" rel="prev" title="git工作区回滚">
-                  git工作区回滚 <i class="fa fa-chevron-right"></i>
-                </a>
               
             </div>
           </div>
@@ -747,9 +762,9 @@
 </script>
 <script>
   function disqus_config() {
-    this.page.url = "https://jaychoumylove.github.io/2019/11/09/git-cancel-update/";
-    this.page.identifier = "2019/11/09/git-cancel-update/";
-    this.page.title = 'git取消对文件的更新';};
+    this.page.url = "https://jaychoumylove.github.io/2020/03/15/javascript-dom-observer/";
+    this.page.identifier = "2020/03/15/javascript-dom-observer/";
+    this.page.title = '使用JavaScript监听Dom节点变化';};
   function loadComments() {
     if (window.DISQUS) {
       DISQUS.reset({
