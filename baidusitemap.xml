@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://jaychoumylove.github.io/2020/06/28/http-request/</loc>
+    <lastmod>2020-06-28</lastmod>
+  </url>  <url>
+    <loc>https://jaychoumylove.github.io/2019/06/28/markdown/</loc>
+    <lastmod>2020-05-03</lastmod>
+  </url>  <url>
     <loc>https://jaychoumylove.github.io/2020/03/15/javascript-dom-observer/</loc>
     <lastmod>2020-03-15</lastmod>
   </url>  <url>
@@ -30,8 +36,5 @@
   </url>  <url>
     <loc>https://jaychoumylove.github.io/2019/10/26/git-reset-add-files/</loc>
     <lastmod>2019-11-09</lastmod>
-  </url>  <url>
-    <loc>https://jaychoumylove.github.io/2019/06/28/markdown/</loc>
-    <lastmod>2019-10-17</lastmod>
   </url>
 </urlset>

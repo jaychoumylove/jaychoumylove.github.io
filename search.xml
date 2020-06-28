@@ -1,6 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>浅谈前后端请求加密与签名</title>
+    <url>/2020/06/28/http-request/</url>
+    <content><![CDATA[<blockquote>
+<p>最近在做服务请求加密相关的工作，于此记录下一些资料。</p>
+</blockquote>
+<h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>网络中的请求安全问题一般有两个方面：</p>
+<ul>
+<li>请求安全性：即服务端收到你的请求时，需要鉴别请求是否有效</li>
+<li>数据保密性：请求数据可能会被抓包，为避免用户敏感数据被窃取，需要进行数据加密。</li>
+</ul>
+<a id="more"></a>
+
+<h4 id="请求唯一性-once-time-timestamp"><a href="#请求唯一性-once-time-timestamp" class="headerlink" title="请求唯一性 - once, time|timestamp"></a>请求唯一性 - once, time|timestamp</h4><p>这个主要是为了防止无限制重复请求。<br>我们可以给请求加一个<code>once</code>字段(<code>一个随机{数|字符串}</code>)，每次接受请求时，检查<code>once</code>是否存在，不存在直接拒绝。如果存在的话，我们把这个<code>once</code>拿到缓存库去找，找得到，说明已经被使用过，拒绝该次请求；找不到，记录请求信息，把<code>once</code>写入到缓存中，正常执行。</p>
+<p>但是这样无限制的往缓存里面塞请求数据信息的话，对于流量大的网站，是不能接受的，总不能让缓存崩掉吧。所以每一个<code>once</code>缓存都会设置过期时间，这个时间根据你的并发量决定(比如<code>5 mins</code>)，并发量高设置的时间就短，反之就长一点。</p>
+<p>依靠缓存的自动过期还是很单一的，所以我们会在请求加上<code>time|timestamp</code>字段<code>一个时间戳</code>，服务器接收这个请求的时候，取出<code>time</code>，如果服务端的当前时间戳与<code>time</code>的差值大于过期时间的话，就直接拒绝该次请求；否则就进行下一步处理，如检查<code>once</code>。</p>
+<h4 id="请求一致性-数据安全-sign"><a href="#请求一致性-数据安全-sign" class="headerlink" title="请求一致性|数据安全 - sign"></a>请求一致性|数据安全 - sign</h4><p>主要用于数据防串改。<br>服务端和客户端约定一个签名生成算法，客户端请求前，调用签名算法，生成<code>sign</code>，并且把<code>sign</code>和请求参数一起发送给服务器。服务器拿到请求的时候，把<code>sign</code>单独提取出来，用签名算法对其他请求参数进行签名，如果生成的签名和<code>sign</code>一致，说明数据没有被串改，可以进行下一步处理。<br>主要的算法：</p>
+<ul>
+<li><code>MD5</code><ul>
+<li>是信息摘要算法，<strong><em>不是加密算法</em></strong></li>
+<li>加密算法是可以解密的，换言之，我加密之后我是需要知道加密的内容的（可解密）。</li>
+<li>但是<code>MD5</code>是不可逆的，没哟解密的说法，所以<code>MD5</code>是可以用来生成唯一数据，校验数据是否被串改的（<code>sha-1</code>类似）。</li>
+</ul>
+</li>
+<li><code>Base64</code><ul>
+<li>是编码规范，<strong><em>不是加密算法</em></strong></li>
+<li>这货主要是为了处理网咯传输里面不支持和不可见字符的问题。（比如前端用<code>JavaScript</code>转义请求参数中空格的转义和后端某些语言对空格的转义不一致，这时候就会用到）</li>
+<li>换言之，签名算法里面对数据的转义可以用</li>
+</ul>
+</li>
+<li><code>aes</code><ul>
+<li>对称加密算法</li>
+<li>客服端和服务器端共同确定一个用来加密和解密的秘钥。然后客服端在请求服务器是通过该秘钥对数据进行加密，服务器端在接收到请求之后使用该秘钥对数据进行解密。</li>
+<li>服务端和客户端需要公用一个秘钥，不安全。</li>
+</ul>
+</li>
+<li><code>rsa</code><ul>
+<li>非对称加密算法</li>
+<li>服务器端生成公钥和私钥，把公钥发送给客户端。客服端在请求服务器是，通过公钥对数据进行加密。服务器端接收到请求之后，使用私钥对加密的数据进行解密。</li>
+<li>虽然避免了泄露的隐患，但是加密数据较大时，效率低，且需要分段加密处理</li>
+</ul>
+</li>
+</ul>
+<p>一般来说，签名算法主要是保证数据的唯一性，你可以选用<code>MD5</code>和<code>Base64</code>。
+一般是一下几种方式</p>
+<ul>
+<li>请求数据拼接</li>
+<li>请求数据排序，一般按字母排序</li>
+<li>请求数据加盐，一般是随机字符串和时间戳，会以明文方式请求服务端 </li>
+<li>请求数据<code>base64</code>编码，防止转义字符</li>
+<li>请求数据<code>md5</code>加密</li>
+</ul>
+<p>数据加密一般通过<code>rsa</code>算法利用公钥<code>rsa_pu</code>生成私钥<code>aes_key</code>，然后通过<code>aes</code>算法利用私钥<code>aes_key</code>对请求参数进行加密得到<code>secret_Data</code>，然后把公钥<code>rsa_pu</code>对私钥<code>aes_key</code>加密得到<code>secret_key</code>, 把<code>secret_Data</code>和<code>secret_key</code>一起发送给服务端，服务端通过私钥解密<code>secret_key</code>得到<code>aes_key</code>，然后通过<code>aes</code>算法利用<code>aes_key</code>解密<code>secret_Data</code>得到请求数据。反过来，服务端要返回保密的请求信息也是差不多的思路，</p>
+<ul>
+<li>利用非对称算法加密对称算法的秘钥生成秘钥密文，通过对称算法用私钥加密数据生成数据密文。</li>
+<li>用非对称算法解密私钥密文得到私钥，通过对称算法用私钥解密数据密文得到加秘数据。</li>
+</ul>
+<h4 id="用户的身份认证-token-Authorization"><a href="#用户的身份认证-token-Authorization" class="headerlink" title="用户的身份认证 - token|Authorization"></a>用户的身份认证 - token|Authorization</h4><p>服务端需要知道发起者的身份信息。<br>这点就不用说了，一般我们会在用户登录之后返回给用户一个<code>token</code>，之后的每一次请求都带上这个<code>token</code>，服务端用过读取<code>token</code> 存取的信息鉴别用户身份。<br>主要的实现方式（我目前所接触到的）：</p>
+<ul>
+<li><code>cache</code><ul>
+<li>把用户的铭感信息存入到缓存中，通过读取缓存信息鉴别用户身份。</li>
+<li>实现简单，用户数据高度保密</li>
+<li>占用缓存资源，可能会滥用缓存，可能会被对手利用，无限制刷缓存</li>
+</ul>
+</li>
+<li><code>jwt</code><ul>
+<li>通过<code>jwt</code>保存用户铭感信息至payload中。读取<code>payload</code>鉴别用户信息</li>
+<li>业界潮流，相关库也比较多</li>
+<li>一旦被抓包，用户数据会被泄露</li>
+</ul>
+</li>
+<li><code>aes</code>等对称加密算法<ul>
+<li>通过对称加密算法，对用户身份信息进行加密，读取解密之后的用户信息</li>
+<li>用户数据保密性高，同时也不消耗服务器资源</li>
+<li>好像没有</li>
+</ul>
+</li>
+</ul>
+<p>选用哪一种好？其实对我来说，以上三种方式都是合格的，因为用户身份认证的核心在于，只要这个<code>token</code> 是我们自己的服务器签发的（无法伪造），就没问题。就拿<code>jwt</code>方式来说，虽然用户的数据（比如用户的<code>id</code>，用户的身份<code>scope</code>等信息）可能会被抓包获取到，但是抓包方无法伪造<code>jwt</code>的活，那就是成功的（你还是要老老实实的请求我们的<code>token</code>接口）.</p>
+<blockquote>
+<p>文章参考：</p>
+</blockquote>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vUGVya2luc1podS9wLzk3MTM4MzYuaHRtbA==" title="网络请求中常见的加密机制和加密算法理解">网络请求中常见的加密机制和加密算法理解<i class="fa fa-external-link"></i></span></li>
+</ul>
+]]></content>
+      <categories>
+        <category>PHP</category>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>http</tag>
+        <tag>data</tag>
+        <tag>secret</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>使用JavaScript监听Dom节点变化</title>
     <url>/2020/03/15/javascript-dom-observer/</url>
     <content><![CDATA[<blockquote>
@@ -188,6 +284,26 @@
       </tags>
   </entry>
   <entry>
+    <title>git撤销暂存区文件</title>
+    <url>/2019/10/26/git-reset-add-files/</url>
+    <content><![CDATA[<blockquote>
+<p>使用git管理项目的时候，要把新文件要加入到暂存区，<br>我一般用 <code>git add .</code>的方法将文件简单除暴的加入至暂存区。<br>但是如果有个不需要的文件被误操作 or 手抖加入至版本库管理呢？在这里记录下 <code>git</code> 将文件移出暂存区的姿势。</p>
+</blockquote>
+<p>这里可以使用 <code>git</code> 版本回滚的机制来解决这一问题。</p>
+<p>通常<code>git reset HEAD</code> 或者 <code>git reset HEAD .</code> ，可以回滚到当前工作区，也就是说如果之前有把文件加入暂存区的话，全部都会移出暂存区。<br>既然如此，就可以使用</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git reset HEAD [your reset files]</span><br></pre></td></tr></table></figure>
+
+<p>来把特定文件移出至暂存区，然后把该文件添加至 <code>.gitignore</code> 文件中。</p>
+<p><strong>enjoy and happy coding!</strong></p>
+]]></content>
+      <categories>
+        <category>git</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>git重写你的提交日志</title>
     <url>/2019/10/26/git-reset-message/</url>
     <content><![CDATA[<blockquote>
@@ -202,26 +318,6 @@
 <p>这种推送为强制推送，git 官方不推荐</p>
 </blockquote>
 <p>强制推送远程使用姿势不是很优雅， <em>(但是谁叫你写错日志呢？)</em> 所以，以后写日志之前要反复斟酌。以便团队日后 <code>code review</code> 更高效！</p>
-<p><strong>enjoy and happy coding!</strong></p>
-]]></content>
-      <categories>
-        <category>git</category>
-      </categories>
-      <tags>
-        <tag>git</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>git撤销暂存区文件</title>
-    <url>/2019/10/26/git-reset-add-files/</url>
-    <content><![CDATA[<blockquote>
-<p>使用git管理项目的时候，要把新文件要加入到暂存区，<br>我一般用 <code>git add .</code>的方法将文件简单除暴的加入至暂存区。<br>但是如果有个不需要的文件被误操作 or 手抖加入至版本库管理呢？在这里记录下 <code>git</code> 将文件移出暂存区的姿势。</p>
-</blockquote>
-<p>这里可以使用 <code>git</code> 版本回滚的机制来解决这一问题。</p>
-<p>通常<code>git reset HEAD</code> 或者 <code>git reset HEAD .</code> ，可以回滚到当前工作区，也就是说如果之前有把文件加入暂存区的话，全部都会移出暂存区。<br>既然如此，就可以使用</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git reset HEAD [your reset files]</span><br></pre></td></tr></table></figure>
-
-<p>来把特定文件移出至暂存区，然后把该文件添加至 <code>.gitignore</code> 文件中。</p>
 <p><strong>enjoy and happy coding!</strong></p>
 ]]></content>
       <categories>
