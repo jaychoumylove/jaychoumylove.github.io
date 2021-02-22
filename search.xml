@@ -1,6 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>sql语句之query笔记</title>
+    <url>/2021/02/22/database-query/</url>
+    <content><![CDATA[<blockquote>
+<p>此为<code>sql</code>语句的开篇记录，作为我多次维护数据的应用笔记，以求日后方便。</p>
+</blockquote>
+<h4 id="统计类的查询"><a href="#统计类的查询" class="headerlink" title="统计类的查询"></a>统计类的查询</h4><p>大多是统计类的函数的运用，主要有：</p>
+<ul>
+<li>COUNT(): 计数</li>
+<li>SUM(): 求和</li>
+<li>AVG()：求平均值</li>
+<li>MIN()：取最小值</li>
+<li>MAX()：取最大值</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">sum</span>(<span class="string">`field`</span>) <span class="keyword">as</span> [<span class="keyword">alias</span>] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">count</span>(<span class="number">1</span>) <span class="keyword">as</span> [<span class="keyword">alias</span>] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">avg</span>(<span class="string">`field`</span>) <span class="keyword">as</span> [<span class="keyword">alias</span>] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">min</span>(<span class="string">`field`</span>) <span class="keyword">as</span> [<span class="keyword">alias</span>] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">max</span>(<span class="string">`field`</span>) <span class="keyword">as</span> [<span class="keyword">alias</span>] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>count 里面一般传一个字段或者是一个数值，个人喜欢传 <code>1</code></p>
+</blockquote>
+<h4 id="数据过滤"><a href="#数据过滤" class="headerlink" title="数据过滤"></a>数据过滤</h4><p>某种情况下你需要过滤某些数据，普遍的情况下，我们会用<code>where</code>语句来过滤。</p>
+<h5 id="所有数据"><a href="#所有数据" class="headerlink" title="所有数据"></a>所有数据</h5><p>一般的查询来说，拿到所有数据，根本不需要<code>where</code>，就可以拿到所有语句。<br>但是我们要更新所有语句，或者快速删除所有数据(保留自增键)的时候，如果不写入<code>where</code>条件的话，执行语句会报错，提示必须要有<code>where</code>条件。<br>这里有一个小技巧。</p>
+<p>既然必须要有<code>where</code>,那我们就写一个一个条件，比如<code>1=1</code>,<code>1&gt;0</code>,<code>1&lt;2</code>,<code>foo&lt;&gt;bar</code>等等.</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">where 1 = 1</span><br><span class="line">where 1 &gt; 0</span><br><span class="line">where 1 &lt; 2</span><br><span class="line">where 'foo' &lt;&gt; 'bar'</span><br></pre></td></tr></table></figure>
+
+<p>然后我们的语句大概就是这个样子</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> [<span class="keyword">field</span>] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">update</span> [<span class="keyword">table</span>] <span class="keyword">set</span> [<span class="keyword">field</span>] = <span class="string">'some value'</span> <span class="keyword">where</span> <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> <span class="literal">true</span>;</span><br></pre></td></tr></table></figure>
+
+<h5 id="去重"><a href="#去重" class="headerlink" title="去重"></a>去重</h5><ul>
+<li><code>distinct</code> 可以支持多个字段去重</li>
+<li><code>group by</code> 这个主要应用在聚合统计场景中，但是也可以去重</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">distinct</span> [<span class="keyword">field</span>], [other <span class="keyword">field</span>] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"><span class="keyword">select</span> [<span class="keyword">field</span>] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>] <span class="keyword">group</span> <span class="keyword">by</span> [<span class="keyword">field</span>];</span><br></pre></td></tr></table></figure>
+
+<h5 id="筛选重复数据"><a href="#筛选重复数据" class="headerlink" title="筛选重复数据"></a>筛选重复数据</h5><ul>
+<li><code>count</code> 通过计数来筛选数据(计数值大于 1 的就是重复值，反之就是唯一值)</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">count</span>(<span class="number">1</span>) <span class="keyword">as</span> _c <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>] <span class="keyword">group</span> <span class="keyword">by</span> [<span class="keyword">field</span>];</span><br></pre></td></tr></table></figure>
+
+<h5 id="查询子语句"><a href="#查询子语句" class="headerlink" title="查询子语句"></a>查询子语句</h5><ul>
+<li>有些时候加入查询子语句更方便理解，如上面的查询就可以改写成这样的</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> (<span class="keyword">select</span> <span class="keyword">count</span>(<span class="number">1</span>) <span class="keyword">as</span> _c <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>] <span class="keyword">group</span> <span class="keyword">by</span> [<span class="keyword">field</span>]) b <span class="keyword">where</span> b._c &gt; <span class="number">1</span>;</span><br><span class="line"><span class="comment"># b._c = 1;</span></span><br></pre></td></tr></table></figure>
+
+<p>是不是清晰多了。</p>
+<blockquote>
+<p>题外话，一个面试题：请从数据库(<code>people</code>)中取出随机的五条数据（有效数据量不断会上升）。</p>
+</blockquote>
+<p>解答：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1 先拿到最小id和最大id</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">min</span>(<span class="keyword">id</span>) <span class="keyword">as</span> minId <span class="keyword">from</span> perple;</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">max</span>(<span class="keyword">id</span>) <span class="keyword">as</span> maxId <span class="keyword">from</span> perple;</span><br><span class="line"><span class="comment"># 2 然后拿到一个随机id(介于最小，最大之间)</span></span><br><span class="line"><span class="comment"># 3 再拿到一条记录</span></span><br><span class="line"><span class="keyword">select</span> [<span class="keyword">field</span>] <span class="keyword">from</span> people <span class="keyword">where</span> <span class="keyword">id</span> &gt; <span class="keyword">round</span>(<span class="keyword">rand</span>() * ([maxId] - [minId]) + [minId]) <span class="keyword">limit</span> <span class="number">1</span>;</span><br><span class="line"><span class="comment"># 然后重复 5 次 2 ~ 3 操作</span></span><br></pre></td></tr></table></figure>
+
+<p><strong><em>To be continue</em></strong></p>
+]]></content>
+      <categories>
+        <category>SQL</category>
+      </categories>
+      <tags>
+        <tag>notes</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>用curl模拟http请求</title>
     <url>/2019/10/26/curl-request/</url>
     <content><![CDATA[<blockquote>
@@ -33,11 +92,70 @@
 <p><strong>enjoy and happy coding!</strong></p>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>shell</category>
       </categories>
       <tags>
         <tag>curl</tag>
         <tag>http</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>sql语句之update笔记</title>
+    <url>/2021/02/22/database-update/</url>
+    <content><![CDATA[<blockquote>
+<p><code>sql</code> 语句更新篇</p>
+</blockquote>
+<h3 id="基础篇"><a href="#基础篇" class="headerlink" title="基础篇"></a>基础篇</h3><ul>
+<li>基本赋值更新</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">update</span> [<span class="keyword">table</span>] <span class="keyword">set</span> [<span class="keyword">field</span>] = [<span class="keyword">value</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>自增、自减等</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">update</span> [<span class="keyword">table</span>] <span class="keyword">set</span> [<span class="keyword">field</span>] = [<span class="keyword">field</span>] + <span class="number">1</span> <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"><span class="keyword">update</span> [<span class="keyword">table</span>] <span class="keyword">set</span> [<span class="keyword">field</span>] = [<span class="keyword">field</span>] - <span class="number">1</span> <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"><span class="keyword">update</span> [<span class="keyword">table</span>] <span class="keyword">set</span> [<span class="keyword">field</span>] = [<span class="keyword">field</span>] * <span class="number">1</span> <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"><span class="keyword">update</span> [<span class="keyword">table</span>] <span class="keyword">set</span> [<span class="keyword">field</span>] = [<span class="keyword">field</span>] / <span class="number">1</span> <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">update</span> [<span class="keyword">table</span>] <span class="keyword">set</span> [<span class="keyword">field</span>] = [<span class="keyword">field</span>] + [an other <span class="keyword">field</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>更新多个字段</li>
+</ul>
+<blockquote>
+<p>在<code>set</code>后面用逗号隔开便可</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">update</span> [<span class="keyword">table</span>] <span class="keyword">set</span> [<span class="keyword">field</span>] = [<span class="keyword">field</span>] + <span class="number">1</span>, [field2] = <span class="number">2</span> <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>更新记录数量限制等</li>
+</ul>
+<blockquote>
+<p>和查询一样，更新也是可以接收 <code>order by</code>, <code>limit</code> 的;</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">update</span> [<span class="keyword">table</span>] <span class="keyword">set</span> [<span class="keyword">field</span>] = [<span class="keyword">field</span>] + <span class="number">1</span>, [field2] = <span class="number">2</span> <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>] <span class="keyword">order</span> <span class="keyword">by</span> [<span class="keyword">field</span>] <span class="keyword">limit</span> [<span class="keyword">limit</span>] <span class="keyword">offset</span> [<span class="keyword">offset</span>];</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>替换更新</li>
+</ul>
+<blockquote>
+<p>写入了记录发现要批量更新，但是只能更新字段的一部分，这时候就可以用替换了</p>
+</blockquote>
+<p>以下是清理图片后缀的语句.</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">update</span> [<span class="keyword">table</span>] <span class="keyword">set</span> <span class="string">`image`</span> = <span class="keyword">REPLACE</span>(<span class="string">`image`</span>, <span class="string">'.png'</span>, <span class="string">''</span>)<span class="keyword">where</span> <span class="string">`image`</span> <span class="keyword">LIKE</span> <span class="string">'%.png%'</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>字符串合并</li>
+</ul>
+<blockquote>
+<p>这个很少会用到，一般是在存储过程里面使用</p>
+</blockquote>
+<p>以下是我当初维护数据时，为了清除重复数据做出的标记改动，以便我新增唯一索引</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">update</span> [<span class="keyword">table</span>] <span class="keyword">set</span> union_data = <span class="keyword">concat</span>(<span class="string">`union_data`</span>,<span class="string">'-'</span>,<span class="string">`id`</span>) <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br></pre></td></tr></table></figure>
+
+<p><strong><em>To be continue</em></strong></p>
+]]></content>
+      <categories>
+        <category>SQL</category>
+      </categories>
+      <tags>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -95,6 +213,133 @@
 <p>这种推送为强制推送，git 官方不推荐</p>
 </blockquote>
 <p>强制推送远程使用姿势不是很优雅， <em>(但是谁叫你写错日志呢？)</em> 所以，以后写日志之前要反复斟酌。以便团队日后 <code>code review</code> 更高效！</p>
+<p><strong>enjoy and happy coding!</strong></p>
+]]></content>
+      <categories>
+        <category>git</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>浅谈前后端请求加密与签名</title>
+    <url>/2020/06/28/http-request/</url>
+    <content><![CDATA[<blockquote>
+<p>最近在做服务请求加密相关的工作，于此记录下一些资料。</p>
+</blockquote>
+<h4 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h4><p>网络中的请求安全问题一般有两个方面：</p>
+<ul>
+<li>请求安全性：即服务端收到你的请求时，需要鉴别请求是否有效</li>
+<li>数据保密性：请求数据可能会被抓包，为避免用户敏感数据被窃取，需要进行数据加密。</li>
+</ul>
+<a id="more"></a>
+
+<h4 id="请求唯一性-once-time-timestamp"><a href="#请求唯一性-once-time-timestamp" class="headerlink" title="请求唯一性 - once, time|timestamp"></a>请求唯一性 - once, time|timestamp</h4><p>这个主要是为了防止无限制重复请求。<br>我们可以给请求加一个<code>once</code>字段(<code>一个随机{数|字符串}</code>)，每次接受请求时，检查<code>once</code>是否存在，不存在直接拒绝。如果存在的话，我们把这个<code>once</code>拿到缓存库去找，找得到，说明已经被使用过，拒绝该次请求；找不到，记录请求信息，把<code>once</code>写入到缓存中，正常执行。</p>
+<p>但是这样无限制的往缓存里面塞请求数据信息的话，对于流量大的网站，是不能接受的，总不能让缓存崩掉吧。所以每一个<code>once</code>缓存都会设置过期时间，这个时间根据你的并发量决定(比如<code>5 mins</code>)，并发量高设置的时间就短，反之就长一点。</p>
+<p>依靠缓存的自动过期还是很单一的，所以我们会在请求加上<code>time|timestamp</code>字段<code>一个时间戳</code>，服务器接收这个请求的时候，取出<code>time</code>，如果服务端的当前时间戳与<code>time</code>的差值大于过期时间的话，就直接拒绝该次请求；否则就进行下一步处理，如检查<code>once</code>。</p>
+<h4 id="请求一致性-数据安全-sign"><a href="#请求一致性-数据安全-sign" class="headerlink" title="请求一致性|数据安全 - sign"></a>请求一致性|数据安全 - sign</h4><p>主要用于数据防串改。<br>服务端和客户端约定一个签名生成算法，客户端请求前，调用签名算法，生成<code>sign</code>，并且把<code>sign</code>和请求参数一起发送给服务器。服务器拿到请求的时候，把<code>sign</code>单独提取出来，用签名算法对其他请求参数进行签名，如果生成的签名和<code>sign</code>一致，说明数据没有被串改，可以进行下一步处理。<br>主要的算法：</p>
+<ul>
+<li><code>MD5</code><ul>
+<li>是信息摘要算法，<strong><em>不是加密算法</em></strong></li>
+<li>加密算法是可以解密的，换言之，我加密之后我是需要知道加密的内容的（可解密）。</li>
+<li>但是<code>MD5</code>是不可逆的，没哟解密的说法，所以<code>MD5</code>是可以用来生成唯一数据，校验数据是否被串改的（<code>sha-1</code>类似）。</li>
+</ul>
+</li>
+<li><code>Base64</code><ul>
+<li>是编码规范，<strong><em>不是加密算法</em></strong></li>
+<li>这货主要是为了处理网咯传输里面不支持和不可见字符的问题。（比如前端用<code>JavaScript</code>转义请求参数中空格的转义和后端某些语言对空格的转义不一致，这时候就会用到）</li>
+<li>换言之，签名算法里面对数据的转义可以用</li>
+</ul>
+</li>
+<li><code>aes</code><ul>
+<li>对称加密算法</li>
+<li>客服端和服务器端共同确定一个用来加密和解密的秘钥。然后客服端在请求服务器是通过该秘钥对数据进行加密，服务器端在接收到请求之后使用该秘钥对数据进行解密。</li>
+<li>服务端和客户端需要公用一个秘钥，不安全。</li>
+</ul>
+</li>
+<li><code>rsa</code><ul>
+<li>非对称加密算法</li>
+<li>服务器端生成公钥和私钥，把公钥发送给客户端。客服端在请求服务器是，通过公钥对数据进行加密。服务器端接收到请求之后，使用私钥对加密的数据进行解密。</li>
+<li>虽然避免了泄露的隐患，但是加密数据较大时，效率低，且需要分段加密处理</li>
+</ul>
+</li>
+</ul>
+<p>一般来说，签名算法主要是保证数据的唯一性，你可以选用<code>MD5</code>和<code>Base64</code>。<br>一般是一下几种方式</p>
+<ul>
+<li>请求数据拼接</li>
+<li>请求数据排序，一般按字母排序</li>
+<li>请求数据加盐，一般是随机字符串和时间戳，会以明文方式请求服务端 </li>
+<li>请求数据<code>base64</code>编码，防止转义字符</li>
+<li>请求数据<code>md5</code>加密</li>
+</ul>
+<p>数据加密一般通过<code>rsa</code>算法利用公钥<code>rsa_pu</code>生成私钥<code>aes_key</code>，然后通过<code>aes</code>算法利用私钥<code>aes_key</code>对请求参数进行加密得到<code>secret_Data</code>，然后把公钥<code>rsa_pu</code>对私钥<code>aes_key</code>加密得到<code>secret_key</code>, 把<code>secret_Data</code>和<code>secret_key</code>一起发送给服务端，服务端通过私钥解密<code>secret_key</code>得到<code>aes_key</code>，然后通过<code>aes</code>算法利用<code>aes_key</code>解密<code>secret_Data</code>得到请求数据。反过来，服务端要返回保密的请求信息也是差不多的思路，</p>
+<ul>
+<li>利用非对称算法加密对称算法的秘钥生成秘钥密文，通过对称算法用私钥加密数据生成数据密文。</li>
+<li>用非对称算法解密私钥密文得到私钥，通过对称算法用私钥解密数据密文得到加秘数据。</li>
+</ul>
+<h4 id="用户的身份认证-token-Authorization"><a href="#用户的身份认证-token-Authorization" class="headerlink" title="用户的身份认证 - token|Authorization"></a>用户的身份认证 - token|Authorization</h4><p>服务端需要知道发起者的身份信息。<br>这点就不用说了，一般我们会在用户登录之后返回给用户一个<code>token</code>，之后的每一次请求都带上这个<code>token</code>，服务端用过读取<code>token</code> 存取的信息鉴别用户身份。<br>主要的实现方式（我目前所接触到的）：</p>
+<ul>
+<li><code>cache</code><ul>
+<li>把用户的铭感信息存入到缓存中，通过读取缓存信息鉴别用户身份。</li>
+<li>实现简单，用户数据高度保密</li>
+<li>占用缓存资源，可能会滥用缓存，可能会被对手利用，无限制刷缓存</li>
+</ul>
+</li>
+<li><code>jwt</code><ul>
+<li>通过<code>jwt</code>保存用户铭感信息至payload中。读取<code>payload</code>鉴别用户信息</li>
+<li>业界潮流，相关库也比较多</li>
+<li>一旦被抓包，用户数据会被泄露</li>
+</ul>
+</li>
+<li><code>aes</code>等对称加密算法<ul>
+<li>通过对称加密算法，对用户身份信息进行加密，读取解密之后的用户信息</li>
+<li>用户数据保密性高，同时也不消耗服务器资源</li>
+<li>好像没有</li>
+</ul>
+</li>
+</ul>
+<p>选用哪一种好？其实对我来说，以上三种方式都是合格的，因为用户身份认证的核心在于，只要这个<code>token</code> 是我们自己的服务器签发的（无法伪造），就没问题。就拿<code>jwt</code>方式来说，虽然用户的数据（比如用户的<code>id</code>，用户的身份<code>scope</code>等信息）可能会被抓包获取到，但是抓包方无法伪造<code>jwt</code>的活，那就是成功的（你还是要老老实实的请求我们的<code>token</code>接口）.</p>
+<blockquote>
+<p>文章参考：</p>
+</blockquote>
+<ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vUGVya2luc1podS9wLzk3MTM4MzYuaHRtbA==" title="网络请求中常见的加密机制和加密算法理解">网络请求中常见的加密机制和加密算法理解<i class="fa fa-external-link"></i></span></li>
+</ul>
+]]></content>
+      <categories>
+        <category>PHP</category>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>http</tag>
+        <tag>data</tag>
+        <tag>secret</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>git工作区回滚</title>
+    <url>/2019/12/04/git-revert/</url>
+    <content><![CDATA[<blockquote>
+<p>使用 <code>git</code> 团队协作管理项目的时候，难免会有错误的提交，按照正常的流程应该是在后续的提交纠正这些错误，但是如果这些错误本就不必要的话，是可以用回滚来操作的，于此记录下 <code>git</code> 下回滚的姿势。</p>
+</blockquote>
+<a id="more"></a>
+
+<p>如果说，本次提交仅限本地的话，我们可以用 <code>git reset --hard [your reset version]</code> 来回退本地的版本，从而实现取消错误代码。如：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ laravel git:(master) git ll</span><br><span class="line">commit ee3105a (HEAD -&gt; master)</span><br><span class="line">Author: caixian &lt;qq52577517@163.com&gt;</span><br><span class="line">Date:   Wed Dec 4 09:34:17 2019 +0800</span><br><span class="line"></span><br><span class="line">    some stupid do this</span><br><span class="line"></span><br><span class="line"> app/Http/Controllers/User.php | 1 +</span><br><span class="line"> 1 file changed, 1 insertion(+)</span><br><span class="line"></span><br><span class="line">commit c92f163 (origin/master)</span><br><span class="line">Author: caixian &lt;qq52577517@163.com&gt;</span><br><span class="line">Date:   Sat Nov 9 14:55:46 2019 +0800</span><br><span class="line"></span><br><span class="line">    clear cors</span><br><span class="line">:q</span><br><span class="line">$ laravel git:(master) git reset --hard c92f163</span><br><span class="line">HEAD is now at c92f163 clear cors</span><br></pre></td></tr></table></figure>
+
+<p>如上，由于我们还未推送至远程，所以我们接下来的 <code>commit</code>, <code>push</code> 等一系列的行为都是正常的。</p>
+<p>如果说，某人不慎把错误代码提交且推送到看远程的话，这个时候就小心了，正常情况下，尽量走正常路线解决错误代码 <em>(既在当前版本下找到错误代码且更正然后提交到远程)</em> ，正式环境下的代码可以用 <code>git reset --hard [version]</code> 暂时回退到正常版本。如果涉及到的代码量不大的话，我们可以用到 <code>git revert [version]</code> 来撤销更改。如：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ laravel git:(master) git ll</span><br><span class="line">commit 9a258dc (HEAD -&gt; master, origin/master)</span><br><span class="line">Author: caixian &lt;qq52577517@163.com&gt;</span><br><span class="line">Date:   Wed Dec 4 09:46:29 2019 +0800</span><br><span class="line"></span><br><span class="line">    some stupid do this</span><br><span class="line"></span><br><span class="line"> app/Http/Controllers/User.php | 1 +</span><br><span class="line"> 1 file changed, 1 insertion(+)</span><br><span class="line"></span><br><span class="line">commit c92f163</span><br><span class="line">Author: caixian &lt;qq52577517@163.com&gt;</span><br><span class="line">Date:   Sat Nov 9 14:55:46 2019 +0800</span><br><span class="line"></span><br><span class="line">    clear cors</span><br><span class="line">:q</span><br><span class="line"></span><br><span class="line">$ laravel git:(master) git revert 9a258dc</span><br><span class="line">Revert &quot;clear cors&quot;</span><br><span class="line"></span><br><span class="line">This reverts commit 9a258dc95d0c8c5b75c9e33c1513479be2f07e53.</span><br><span class="line"></span><br><span class="line"># Please enter the commit message for your changes. Lines starting</span><br><span class="line"># with &apos;#&apos; will be ignored, and an empty message aborts the commit.</span><br><span class="line">#</span><br><span class="line"># On branch master</span><br><span class="line"># Changes to be committed:</span><br><span class="line">#       modified:   app/Http/Controllers/User.php</span><br><span class="line">#</span><br><span class="line">~</span><br><span class="line">~</span><br><span class="line">~</span><br><span class="line">:wq</span><br><span class="line"></span><br><span class="line">[master fda0be6] Revert &quot;some stupid do this&quot;</span><br><span class="line"> 1 file changed, 7 insertions(+), 6 deletions(-)</span><br><span class="line"></span><br><span class="line">$ laravel git:(master) git push origin master</span><br><span class="line">Enumerating objects: 7, done.</span><br><span class="line">Counting objects: 100% (7/7), done.</span><br><span class="line">Delta compression using up to 4 threads</span><br><span class="line">Compressing objects: 100% (4/4), done.</span><br><span class="line">Writing objects: 100% (4/4), 437 bytes | 437.00 KiB/s, done.</span><br><span class="line">Total 4 (delta 3), reused 0 (delta 0)</span><br><span class="line">remote: Resolving deltas: 100% (3/3), completed with 3 local objects.</span><br><span class="line">remote:</span><br><span class="line">remote: GitHub found 2 vulnerabilities on ElegantLive/learn-laravel&apos;s default branch (2 moderate). To find out more, visit:</span><br><span class="line">remote:      https://github.com/ElegantLive/learn-laravel/network/alerts</span><br><span class="line">remote:</span><br><span class="line">To github.com:ElegantLive/learn-laravel.git</span><br><span class="line">   9a258dc..fda0be6  master -&gt; master</span><br><span class="line">$ laravel git:(master) git ll</span><br><span class="line">commit fda0be6 (HEAD -&gt; master, origin/master)</span><br><span class="line">Author: caixian &lt;qq52577517@163.com&gt;</span><br><span class="line">Date:   Wed Dec 4 09:49:54 2019 +0800</span><br><span class="line"></span><br><span class="line">    Revert &quot;some stupid do this&quot;</span><br><span class="line"></span><br><span class="line">    This reverts commit dbdc6db09ffa9bd5af461fc91f04261566bb017c.</span><br><span class="line"></span><br><span class="line">app/Http/Controllers/User.php | 1 -</span><br><span class="line"> 1 file changed, 1 deletion(-)</span><br><span class="line"></span><br><span class="line">commit 9a258dc</span><br><span class="line">Author: caixian &lt;qq52577517@163.com&gt;</span><br><span class="line">Date:   Wed Dec 4 09:46:29 2019 +0800</span><br><span class="line"></span><br><span class="line">    some stupid do this</span><br><span class="line"></span><br><span class="line"> app/Http/Controllers/User.php | 1 +</span><br><span class="line"> 1 file changed, 1 insertion(+)</span><br><span class="line"></span><br><span class="line">commit c92f163</span><br><span class="line">Author: caixian &lt;qq52577517@163.com&gt;</span><br><span class="line">Date:   Sat Nov 9 14:55:46 2019 +0800</span><br><span class="line"></span><br><span class="line">    clear cors</span><br><span class="line">:q</span><br></pre></td></tr></table></figure>
+
+<p>由上可以看到，我们成功撤销了<code>some stupid do this</code> 的更改，且成功推送到了远程，这样我们就可以基于上个版本(<code>clear cors</code>)继续开发。</p>
+<blockquote>
+<p>注意： <code>git revert [version]</code> 是撤销某个提交的更改，不是回退到某个版本</p>
+</blockquote>
+<p>当然，如果说，有多个错误提交形成一错再错的连环作用的话，建议基于稳定版本重新开一个分支</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git checkout -b [new branch name] // 切换至新分支</span><br><span class="line">git reset --hard [version] // 回退至稳定版本</span><br><span class="line">git push -f origin [new branch name] // 强制推送到远程（当然你也可以基于当前分支回退稳定版本，然后强行推送至远程）</span><br></pre></td></tr></table></figure>
+
+<p>祝你好运</p>
 <p><strong>enjoy and happy coding!</strong></p>
 ]]></content>
       <categories>
@@ -201,306 +446,386 @@
       </tags>
   </entry>
   <entry>
-    <title>git工作区回滚</title>
-    <url>/2019/12/04/git-revert/</url>
+    <title>PHP流程控制小梳理</title>
+    <url>/2021/02/08/php-base-control-structures/</url>
     <content><![CDATA[<blockquote>
-<p>使用 <code>git</code> 团队协作管理项目的时候，难免会有错误的提交，按照正常的流程应该是在后续的提交纠正这些错误，但是如果这些错误本就不必要的话，是可以用回滚来操作的，于此记录下 <code>git</code> 下回滚的姿势。</p>
+<p>梳理, 温习关于<code>PHP</code>流程控制的一些小知识</p>
 </blockquote>
 <a id="more"></a>
 
-<p>如果说，本次提交仅限本地的话，我们可以用 <code>git reset --hard [your reset version]</code> 来回退本地的版本，从而实现取消错误代码。如：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ laravel git:(master) git ll</span><br><span class="line">commit ee3105a (HEAD -&gt; master)</span><br><span class="line">Author: caixian &lt;qq52577517@163.com&gt;</span><br><span class="line">Date:   Wed Dec 4 09:34:17 2019 +0800</span><br><span class="line"></span><br><span class="line">    some stupid do this</span><br><span class="line"></span><br><span class="line"> app/Http/Controllers/User.php | 1 +</span><br><span class="line"> 1 file changed, 1 insertion(+)</span><br><span class="line"></span><br><span class="line">commit c92f163 (origin/master)</span><br><span class="line">Author: caixian &lt;qq52577517@163.com&gt;</span><br><span class="line">Date:   Sat Nov 9 14:55:46 2019 +0800</span><br><span class="line"></span><br><span class="line">    clear cors</span><br><span class="line">:q</span><br><span class="line">$ laravel git:(master) git reset --hard c92f163</span><br><span class="line">HEAD is now at c92f163 clear cors</span><br></pre></td></tr></table></figure>
+<h4 id="判断"><a href="#判断" class="headerlink" title="判断"></a>判断</h4><h5 id="if"><a href="#if" class="headerlink" title="if"></a>if</h5><p>这个比较好理解，示例：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">if</span> ($a &gt; $b) &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"a is bigger than b"</span>;</span><br><span class="line">    &#125; <span class="keyword">elseif</span> ($a == $b) &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"a is equal to b"</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"a is smaller than b"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
-<p>如上，由于我们还未推送至远程，所以我们接下来的 <code>commit</code>, <code>push</code> 等一系列的行为都是正常的。</p>
-<p>如果说，某人不慎把错误代码提交且推送到看远程的话，这个时候就小心了，正常情况下，尽量走正常路线解决错误代码 <em>(既在当前版本下找到错误代码且更正然后提交到远程)</em> ，正式环境下的代码可以用 <code>git reset --hard [version]</code> 暂时回退到正常版本。如果涉及到的代码量不大的话，我们可以用到 <code>git revert [version]</code> 来撤销更改。如：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ laravel git:(master) git ll</span><br><span class="line">commit 9a258dc (HEAD -&gt; master, origin/master)</span><br><span class="line">Author: caixian &lt;qq52577517@163.com&gt;</span><br><span class="line">Date:   Wed Dec 4 09:46:29 2019 +0800</span><br><span class="line"></span><br><span class="line">    some stupid do this</span><br><span class="line"></span><br><span class="line"> app/Http/Controllers/User.php | 1 +</span><br><span class="line"> 1 file changed, 1 insertion(+)</span><br><span class="line"></span><br><span class="line">commit c92f163</span><br><span class="line">Author: caixian &lt;qq52577517@163.com&gt;</span><br><span class="line">Date:   Sat Nov 9 14:55:46 2019 +0800</span><br><span class="line"></span><br><span class="line">    clear cors</span><br><span class="line">:q</span><br><span class="line"></span><br><span class="line">$ laravel git:(master) git revert 9a258dc</span><br><span class="line">Revert &quot;clear cors&quot;</span><br><span class="line"></span><br><span class="line">This reverts commit 9a258dc95d0c8c5b75c9e33c1513479be2f07e53.</span><br><span class="line"></span><br><span class="line"># Please enter the commit message for your changes. Lines starting</span><br><span class="line"># with &apos;#&apos; will be ignored, and an empty message aborts the commit.</span><br><span class="line">#</span><br><span class="line"># On branch master</span><br><span class="line"># Changes to be committed:</span><br><span class="line">#       modified:   app/Http/Controllers/User.php</span><br><span class="line">#</span><br><span class="line">~</span><br><span class="line">~</span><br><span class="line">~</span><br><span class="line">:wq</span><br><span class="line"></span><br><span class="line">[master fda0be6] Revert &quot;some stupid do this&quot;</span><br><span class="line"> 1 file changed, 7 insertions(+), 6 deletions(-)</span><br><span class="line"></span><br><span class="line">$ laravel git:(master) git push origin master</span><br><span class="line">Enumerating objects: 7, done.</span><br><span class="line">Counting objects: 100% (7/7), done.</span><br><span class="line">Delta compression using up to 4 threads</span><br><span class="line">Compressing objects: 100% (4/4), done.</span><br><span class="line">Writing objects: 100% (4/4), 437 bytes | 437.00 KiB/s, done.</span><br><span class="line">Total 4 (delta 3), reused 0 (delta 0)</span><br><span class="line">remote: Resolving deltas: 100% (3/3), completed with 3 local objects.</span><br><span class="line">remote:</span><br><span class="line">remote: GitHub found 2 vulnerabilities on ElegantLive/learn-laravel&apos;s default branch (2 moderate). To find out more, visit:</span><br><span class="line">remote:      https://github.com/ElegantLive/learn-laravel/network/alerts</span><br><span class="line">remote:</span><br><span class="line">To github.com:ElegantLive/learn-laravel.git</span><br><span class="line">   9a258dc..fda0be6  master -&gt; master</span><br><span class="line">$ laravel git:(master) git ll</span><br><span class="line">commit fda0be6 (HEAD -&gt; master, origin/master)</span><br><span class="line">Author: caixian &lt;qq52577517@163.com&gt;</span><br><span class="line">Date:   Wed Dec 4 09:49:54 2019 +0800</span><br><span class="line"></span><br><span class="line">    Revert &quot;some stupid do this&quot;</span><br><span class="line"></span><br><span class="line">    This reverts commit dbdc6db09ffa9bd5af461fc91f04261566bb017c.</span><br><span class="line"></span><br><span class="line">app/Http/Controllers/User.php | 1 -</span><br><span class="line"> 1 file changed, 1 deletion(-)</span><br><span class="line"></span><br><span class="line">commit 9a258dc</span><br><span class="line">Author: caixian &lt;qq52577517@163.com&gt;</span><br><span class="line">Date:   Wed Dec 4 09:46:29 2019 +0800</span><br><span class="line"></span><br><span class="line">    some stupid do this</span><br><span class="line"></span><br><span class="line"> app/Http/Controllers/User.php | 1 +</span><br><span class="line"> 1 file changed, 1 insertion(+)</span><br><span class="line"></span><br><span class="line">commit c92f163</span><br><span class="line">Author: caixian &lt;qq52577517@163.com&gt;</span><br><span class="line">Date:   Sat Nov 9 14:55:46 2019 +0800</span><br><span class="line"></span><br><span class="line">    clear cors</span><br><span class="line">:q</span><br></pre></td></tr></table></figure>
+<h5 id="switch"><a href="#switch" class="headerlink" title="switch"></a>switch</h5><p>类似于具有同一个表达式的一系列 <code>if</code> 语句。示例：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span> ($i == <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"i equals 0"</span>;</span><br><span class="line">&#125; <span class="keyword">elseif</span> ($i == <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"i equals 1"</span>;</span><br><span class="line">&#125; <span class="keyword">elseif</span> ($i == <span class="number">2</span>) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"i equals 2"</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">switch</span> ($i) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"i equals 0"</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"i equals 1"</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"i equals 2"</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
-<p>由上可以看到，我们成功撤销了<code>some stupid do this</code> 的更改，且成功推送到了远程，这样我们就可以基于上个版本(<code>clear cors</code>)继续开发。</p>
+<p><code>switch-case</code> 规范请参考 <span class="exturl" data-url="aHR0cHM6Ly9sZWFybmt1LmNvbS9sYXJhdmVsL3QvMjA3OS9wc3Itc3BlY2lmaWNhdGlvbi1wc3ItMi1jb2Rpbmctc3R5bGUtc3BlY2lmaWNhdGlvbiMwNDhiYTA=" title="PSR switch-case">PSR switch-case<i class="fa fa-external-link"></i></span></p>
+<h4 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h4><h5 id="for"><a href="#for" class="headerlink" title="for"></a>for</h5><p><code>PHP</code> 中最复杂的循环结构。<br>语法：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (expr1; expr2; expr3)</span><br><span class="line">    statement</span><br></pre></td></tr></table></figure>
+
+<p>描述：</p>
+<ul>
+<li><code>expr1</code> 会在循环前无条件执行一次，你可以视为执行循环初始化的表达式。</li>
+<li><code>expr2</code> 会在每次循环前执行，如果返回<code>true</code>，则执行<code>statement</code>，否则跳出循环。</li>
+<li><code>expr3</code> 会在执行<code>statement</code>之后执行一次。</li>
+<li><code>statement</code> 循环体</li>
+</ul>
+<p>示例：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="comment">/* example 1 */</span></span><br><span class="line">    <span class="keyword">for</span> ($i = <span class="number">1</span>; $i &lt;= <span class="number">10</span>; $i++) &#123;</span><br><span class="line">        <span class="keyword">echo</span> $i;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* example 2 */</span></span><br><span class="line">    <span class="keyword">for</span> ($i = <span class="number">1</span>; ; $i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> ($i &gt; <span class="number">10</span>) &#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">echo</span> $i;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* example 3 */</span></span><br><span class="line">    $i = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">        <span class="keyword">if</span> ($i &gt; <span class="number">10</span>) &#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">echo</span> $i;</span><br><span class="line">        $i++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* example 4 */</span></span><br><span class="line">    <span class="keyword">for</span> ($i = <span class="number">1</span>, $j = <span class="number">0</span>; $i &lt;= <span class="number">10</span>; $j += $i, <span class="keyword">print</span> $i, $i++);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="foreach"><a href="#foreach" class="headerlink" title="foreach"></a>foreach</h5><p>遍历数组的简单方式。</p>
 <blockquote>
-<p>注意： <code>git revert [version]</code> 是撤销某个提交的更改，不是回退到某个版本</p>
+<p><code>foreach</code> 仅能够应用于数组和对象</p>
 </blockquote>
-<p>当然，如果说，有多个错误提交形成一错再错的连环作用的话，建议基于稳定版本重新开一个分支</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git checkout -b [new branch name] // 切换至新分支</span><br><span class="line">git reset --hard [version] // 回退至稳定版本</span><br><span class="line">git push -f origin [new branch name] // 强制推送到远程（当然你也可以基于当前分支回退稳定版本，然后强行推送至远程）</span><br></pre></td></tr></table></figure>
+<p>语法：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">foreach</span> (array_expression <span class="keyword">as</span> $value)</span><br><span class="line">    statement</span><br><span class="line"><span class="keyword">foreach</span> (array_expression <span class="keyword">as</span> $key =&gt; $value)</span><br><span class="line">    statement</span><br></pre></td></tr></table></figure>
 
-<p>祝你好运</p>
+<p>示例：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Counter</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $counter = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">protected</span> $counte2r = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">private</span> $counte22r = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">increase</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;counter++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">print</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;counter;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$obj = <span class="keyword">new</span> Counter;</span><br><span class="line"><span class="keyword">foreach</span>($obj <span class="keyword">as</span> $k =&gt; $a) &#123;</span><br><span class="line">    var_dump($k, $a);</span><br><span class="line">&#125;</span><br><span class="line">$array = [</span><br><span class="line">    [<span class="number">1</span>, <span class="number">2</span>],</span><br><span class="line">    [<span class="number">3</span>, <span class="number">4</span>],</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="keyword">foreach</span> ($array <span class="keyword">as</span> $k =&gt; <span class="keyword">list</span>($a)) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"$k"</span> . PHP_EOL;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"$a"</span> . PHP_EOL;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="while"><a href="#while" class="headerlink" title="while"></a>while</h5><p><code>while</code> 循环是 <code>PHP</code> 中最简单的循环类型。<br>语法：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">while</span> (expr)</span><br><span class="line">    statement</span><br></pre></td></tr></table></figure>
+
+<p><code>while</code> 语句的含意很简单，它告诉 <code>PHP</code> 只要 <code>while</code> 表达式(即<code>expr</code>)的值为 <code>true</code> 就重复执行嵌套中的循环语句。<br>示例：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $created = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'start'</span> . PHP_EOL;</span><br><span class="line">    <span class="keyword">while</span> (<span class="keyword">empty</span>($created)) &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">'execute'</span> . PHP_EOL;</span><br><span class="line">        $created = rand(<span class="number">0</span>, <span class="number">1</span>) ? <span class="keyword">true</span>: <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'end'</span> . PHP_EOL;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="do-while"><a href="#do-while" class="headerlink" title="do-while"></a>do-while</h5><p>个人认为：<code>do-while</code> 循环是 <code>PHP</code> 中第二简单的循环类型。<br>语法：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">do</span> statement</span><br><span class="line"><span class="keyword">while</span>(expr)</span><br></pre></td></tr></table></figure>
+
+<p>不同于 <code>while</code> 的是，他的循环体在执行判断表达式 <code>expr</code> (返回 <code>false</code> 跳出循环，返回 <code>true</code> 则继续执行循环体)之前。<br>示例：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $created = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'start'</span> . PHP_EOL;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">'execute'</span> . PHP_EOL;</span><br><span class="line">        $created = rand(<span class="number">0</span>, <span class="number">1</span>) ? <span class="keyword">true</span>: <span class="keyword">false</span>;</span><br><span class="line">    &#125; <span class="keyword">while</span> (<span class="keyword">empty</span>($created));</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'end'</span> . PHP_EOL;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="跳出循环"><a href="#跳出循环" class="headerlink" title="跳出循环"></a>跳出循环</h4><h5 id="break"><a href="#break" class="headerlink" title="break"></a>break</h5><p><code>break</code> 结束当前 <code>for</code>，<code>foreach</code>，<code>while</code>，<code>do-while</code> 或者 <code>switch</code> 结构的执行。<br><code>break</code> 可以接受一个可选的数字参数来决定 <strong><em>跳出</em></strong> 几重循环。<br>示例：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $created = <span class="keyword">false</span>;</span><br><span class="line">    $a = [<span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'start'</span> . PHP_EOL;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">'execute'</span> . PHP_EOL;</span><br><span class="line">        <span class="keyword">foreach</span>($a <span class="keyword">as</span> $k =&gt; $v) &#123;</span><br><span class="line">            $number = rand(<span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">            <span class="keyword">if</span> ($number) &#123;</span><br><span class="line">                <span class="keyword">break</span> <span class="number">2</span>; <span class="comment">// 跳出第二层循环 - do-while</span></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">break</span>; <span class="comment">// 跳出本层循环 - foreach</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        $created = rand(<span class="number">0</span>, <span class="number">1</span>) ? <span class="keyword">true</span>: <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">if</span> ($created) <span class="keyword">break</span>; <span class="comment">// 跳出本层循环 - do-while</span></span><br><span class="line">    &#125; <span class="keyword">while</span> (<span class="keyword">empty</span>($created));</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'end'</span> . PHP_EOL;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="continue"><a href="#continue" class="headerlink" title="continue"></a>continue</h5><p><code>continue</code> 跳过本次循环的执行。<br><code>continue</code> 可以接受一个可选的数字参数来决定 <strong><em>跳过</em></strong> 几重循环。<br>示例：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $a = [<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">6</span>];</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'start'</span> . PHP_EOL;</span><br><span class="line">    $index = <span class="number">0</span>;</span><br><span class="line">    $length = count($a);</span><br><span class="line">    <span class="keyword">while</span> ($index &lt; $length) &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"execute $&#123;a[$index]&#125;"</span> . PHP_EOL;</span><br><span class="line">        $number = rand(<span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">if</span> ($number) &#123;</span><br><span class="line">            <span class="keyword">continue</span> <span class="number">2</span>; <span class="comment">// 跳过两重循环</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">continue</span>; <span class="comment">// 跳过一重循环</span></span><br><span class="line">        &#125;</span><br><span class="line">        $index ++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'end'</span> . PHP_EOL;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="try-catch"><a href="#try-catch" class="headerlink" title="try-catch"></a>try-catch</h4><p>这个配合<code>MySQL</code>的事务处理一级棒！</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="comment">// start mysql transaction</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        $first = rand(<span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">        $second = rand(<span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">if</span> ($first &gt; $second) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="keyword">Exception</span>(<span class="string">'Throw an exception here'</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> ($first === $second) &#123;</span><br><span class="line">            <span class="comment">// commit mysql transaction</span></span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"It's normal!"</span> . PHP_EOL;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> ($first &lt; $second) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">'Throw an error here'</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (\Error $error) &#123;</span><br><span class="line">        <span class="comment">// rollback mysql transaction</span></span><br><span class="line">        <span class="keyword">throw</span> $error;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (\<span class="keyword">Exception</span> $exception) &#123;</span><br><span class="line">        <span class="comment">// rollback mysql transaction</span></span><br><span class="line">        <span class="keyword">throw</span> $exception;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">'finally!'</span> . PHP_EOL;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// or you can use 'catch(\Throwable $previous)' to catch Error and Exception in PHP 7</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p><strong>enjoy and happy coding!</strong></p>
 ]]></content>
       <categories>
-        <category>git</category>
+        <category>PHP</category>
       </categories>
       <tags>
-        <tag>git</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
-    <title>浅谈前后端请求加密与签名</title>
-    <url>/2020/06/28/http-request/</url>
+    <title>PHP梳理之array</title>
+    <url>/2021/02/08/php-base-array/</url>
     <content><![CDATA[<blockquote>
-<p>最近在做服务请求加密相关的工作，于此记录下一些资料。</p>
+<p>梳理 php 关于 <code>array</code> 的小知识，以后数组函数的应用尽量看这一篇文章</p>
 </blockquote>
-<h4 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h4><p>网络中的请求安全问题一般有两个方面：</p>
-<ul>
-<li>请求安全性：即服务端收到你的请求时，需要鉴别请求是否有效</li>
-<li>数据保密性：请求数据可能会被抓包，为避免用户敏感数据被窃取，需要进行数据加密。</li>
-</ul>
 <a id="more"></a>
 
-<h4 id="请求唯一性-once-time-timestamp"><a href="#请求唯一性-once-time-timestamp" class="headerlink" title="请求唯一性 - once, time|timestamp"></a>请求唯一性 - once, time|timestamp</h4><p>这个主要是为了防止无限制重复请求。<br>我们可以给请求加一个<code>once</code>字段(<code>一个随机{数|字符串}</code>)，每次接受请求时，检查<code>once</code>是否存在，不存在直接拒绝。如果存在的话，我们把这个<code>once</code>拿到缓存库去找，找得到，说明已经被使用过，拒绝该次请求；找不到，记录请求信息，把<code>once</code>写入到缓存中，正常执行。</p>
-<p>但是这样无限制的往缓存里面塞请求数据信息的话，对于流量大的网站，是不能接受的，总不能让缓存崩掉吧。所以每一个<code>once</code>缓存都会设置过期时间，这个时间根据你的并发量决定(比如<code>5 mins</code>)，并发量高设置的时间就短，反之就长一点。</p>
-<p>依靠缓存的自动过期还是很单一的，所以我们会在请求加上<code>time|timestamp</code>字段<code>一个时间戳</code>，服务器接收这个请求的时候，取出<code>time</code>，如果服务端的当前时间戳与<code>time</code>的差值大于过期时间的话，就直接拒绝该次请求；否则就进行下一步处理，如检查<code>once</code>。</p>
-<h4 id="请求一致性-数据安全-sign"><a href="#请求一致性-数据安全-sign" class="headerlink" title="请求一致性|数据安全 - sign"></a>请求一致性|数据安全 - sign</h4><p>主要用于数据防串改。<br>服务端和客户端约定一个签名生成算法，客户端请求前，调用签名算法，生成<code>sign</code>，并且把<code>sign</code>和请求参数一起发送给服务器。服务器拿到请求的时候，把<code>sign</code>单独提取出来，用签名算法对其他请求参数进行签名，如果生成的签名和<code>sign</code>一致，说明数据没有被串改，可以进行下一步处理。<br>主要的算法：</p>
+<h4 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h4><ul>
+<li>以下是正常的创建</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $a = <span class="keyword">array</span>(); <span class="comment">// []</span></span><br><span class="line">    $b = []; <span class="comment">// []</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
 <ul>
-<li><code>MD5</code><ul>
-<li>是信息摘要算法，<strong><em>不是加密算法</em></strong></li>
-<li>加密算法是可以解密的，换言之，我加密之后我是需要知道加密的内容的（可解密）。</li>
-<li>但是<code>MD5</code>是不可逆的，没哟解密的说法，所以<code>MD5</code>是可以用来生成唯一数据，校验数据是否被串改的（<code>sha-1</code>类似）。</li>
-</ul>
+<li><p>其他方式创建</p>
 </li>
-<li><code>Base64</code><ul>
-<li>是编码规范，<strong><em>不是加密算法</em></strong></li>
-<li>这货主要是为了处理网咯传输里面不支持和不可见字符的问题。（比如前端用<code>JavaScript</code>转义请求参数中空格的转义和后端某些语言对空格的转义不一致，这时候就会用到）</li>
-<li>换言之，签名算法里面对数据的转义可以用</li>
-</ul>
+<li><p><code>range</code> 创建一个纯数字的数组</p>
 </li>
-<li><code>aes</code><ul>
-<li>对称加密算法</li>
-<li>客服端和服务器端共同确定一个用来加密和解密的秘钥。然后客服端在请求服务器是通过该秘钥对数据进行加密，服务器端在接收到请求之后使用该秘钥对数据进行解密。</li>
-<li>服务端和客户端需要公用一个秘钥，不安全。</li>
-</ul>
+<li><p><code>explode</code>,<code>str_split</code> 字符串分割成数组</p>
 </li>
-<li><code>rsa</code><ul>
-<li>非对称加密算法</li>
-<li>服务器端生成公钥和私钥，把公钥发送给客户端。客服端在请求服务器是，通过公钥对数据进行加密。服务器端接收到请求之后，使用私钥对加密的数据进行解密。</li>
-<li>虽然避免了泄露的隐患，但是加密数据较大时，效率低，且需要分段加密处理</li>
-</ul>
+<li><p><code>array_map</code>,<code>array_filter</code> 等数组函数，输入数组，返回新数组</p>
 </li>
 </ul>
-<p>一般来说，签名算法主要是保证数据的唯一性，你可以选用<code>MD5</code>和<code>Base64</code>。<br>一般是一下几种方式</p>
-<ul>
-<li>请求数据拼接</li>
-<li>请求数据排序，一般按字母排序</li>
-<li>请求数据加盐，一般是随机字符串和时间戳，会以明文方式请求服务端 </li>
-<li>请求数据<code>base64</code>编码，防止转义字符</li>
-<li>请求数据<code>md5</code>加密</li>
-</ul>
-<p>数据加密一般通过<code>rsa</code>算法利用公钥<code>rsa_pu</code>生成私钥<code>aes_key</code>，然后通过<code>aes</code>算法利用私钥<code>aes_key</code>对请求参数进行加密得到<code>secret_Data</code>，然后把公钥<code>rsa_pu</code>对私钥<code>aes_key</code>加密得到<code>secret_key</code>, 把<code>secret_Data</code>和<code>secret_key</code>一起发送给服务端，服务端通过私钥解密<code>secret_key</code>得到<code>aes_key</code>，然后通过<code>aes</code>算法利用<code>aes_key</code>解密<code>secret_Data</code>得到请求数据。反过来，服务端要返回保密的请求信息也是差不多的思路，</p>
-<ul>
-<li>利用非对称算法加密对称算法的秘钥生成秘钥密文，通过对称算法用私钥加密数据生成数据密文。</li>
-<li>用非对称算法解密私钥密文得到私钥，通过对称算法用私钥解密数据密文得到加秘数据。</li>
-</ul>
-<h4 id="用户的身份认证-token-Authorization"><a href="#用户的身份认证-token-Authorization" class="headerlink" title="用户的身份认证 - token|Authorization"></a>用户的身份认证 - token|Authorization</h4><p>服务端需要知道发起者的身份信息。<br>这点就不用说了，一般我们会在用户登录之后返回给用户一个<code>token</code>，之后的每一次请求都带上这个<code>token</code>，服务端用过读取<code>token</code> 存取的信息鉴别用户身份。<br>主要的实现方式（我目前所接触到的）：</p>
-<ul>
-<li><code>cache</code><ul>
-<li>把用户的铭感信息存入到缓存中，通过读取缓存信息鉴别用户身份。</li>
-<li>实现简单，用户数据高度保密</li>
-<li>占用缓存资源，可能会滥用缓存，可能会被对手利用，无限制刷缓存</li>
-</ul>
-</li>
-<li><code>jwt</code><ul>
-<li>通过<code>jwt</code>保存用户铭感信息至payload中。读取<code>payload</code>鉴别用户信息</li>
-<li>业界潮流，相关库也比较多</li>
-<li>一旦被抓包，用户数据会被泄露</li>
-</ul>
-</li>
-<li><code>aes</code>等对称加密算法<ul>
-<li>通过对称加密算法，对用户身份信息进行加密，读取解密之后的用户信息</li>
-<li>用户数据保密性高，同时也不消耗服务器资源</li>
-<li>好像没有</li>
-</ul>
-</li>
-</ul>
-<p>选用哪一种好？其实对我来说，以上三种方式都是合格的，因为用户身份认证的核心在于，只要这个<code>token</code> 是我们自己的服务器签发的（无法伪造），就没问题。就拿<code>jwt</code>方式来说，虽然用户的数据（比如用户的<code>id</code>，用户的身份<code>scope</code>等信息）可能会被抓包获取到，但是抓包方无法伪造<code>jwt</code>的活，那就是成功的（你还是要老老实实的请求我们的<code>token</code>接口）.</p>
-<blockquote>
-<p>文章参考：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $range0 = range(<span class="number">1</span>, <span class="number">10</span>, <span class="number">1</span>); <span class="comment">// [1,2,3,4,5,6,7,8,9,10]</span></span><br><span class="line">    $range1 = range(<span class="number">1</span>, <span class="number">10</span>, <span class="number">2</span>); <span class="comment">// [1,3,5,7,9]</span></span><br><span class="line">    $range2 = range(<span class="number">0</span>, <span class="number">10</span>, <span class="number">2</span>); <span class="comment">// [0,2,4,6,8,10]</span></span><br><span class="line">    $range3 = range(<span class="number">1</span>, <span class="number">10</span>, <span class="number">3</span>); <span class="comment">// [1,4,4,7,10]</span></span><br><span class="line"></span><br><span class="line">    $explode = explode(<span class="string">','</span>, <span class="string">'hi,guys'</span>); <span class="comment">// ['hi','guys']</span></span><br><span class="line">    $strSplit = str_split(<span class="string">'what\'s up'</span>, <span class="number">3</span>); <span class="comment">// ['wha', "t's", ' up'];</span></span><br><span class="line"></span><br><span class="line">    $a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line">    $array = array_filter($a, <span class="function"><span class="keyword">function</span> <span class="params">($item)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> $item % <span class="number">2</span> == <span class="number">0</span>;</span><br><span class="line">    &#125;); <span class="comment">// [1 =&gt; 2, 3 =&gt; 4]</span></span><br><span class="line"></span><br><span class="line">    $b = array_map(<span class="function"><span class="keyword">function</span> <span class="params">($item)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> $item * <span class="number">2</span>;</span><br><span class="line">    &#125;, $a); <span class="comment">// [2,4,6,8]</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="常用函数"><a href="#常用函数" class="headerlink" title="常用函数"></a>常用函数</h4><blockquote>
+<p>我们先定义一个数组方便我们操作</p>
 </blockquote>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $data = [</span><br><span class="line">        <span class="number">0</span> =&gt; [<span class="string">'id'</span> =&gt; <span class="number">1</span>, <span class="string">'name'</span> =&gt; <span class="string">'Jack'</span>, <span class="string">'user_id'</span> =&gt; <span class="number">12</span>, <span class="string">'age'</span> =&gt; <span class="number">12</span>],</span><br><span class="line">        <span class="number">1</span> =&gt; [<span class="string">'id'</span> =&gt; <span class="number">2</span>, <span class="string">'name'</span> =&gt; <span class="string">'Tom'</span>, <span class="string">'user_id'</span> =&gt; <span class="number">14</span>, <span class="string">'age'</span> =&gt; <span class="number">18</span>],</span><br><span class="line">        <span class="number">2</span> =&gt; [<span class="string">'id'</span> =&gt; <span class="number">3</span>, <span class="string">'name'</span> =&gt; <span class="string">'James'</span>, <span class="string">'user_id'</span> =&gt; <span class="number">13</span>, <span class="string">'age'</span> =&gt; <span class="number">16</span>],</span><br><span class="line">        <span class="number">3</span> =&gt; [<span class="string">'id'</span> =&gt; <span class="number">4</span>, <span class="string">'name'</span> =&gt; <span class="string">'Jone'</span>, <span class="string">'user_id'</span> =&gt; <span class="number">16</span>, <span class="string">'age'</span> =&gt; <span class="number">15</span>],</span><br><span class="line">        <span class="number">5</span> =&gt; [<span class="string">'id'</span> =&gt; <span class="number">5</span>, <span class="string">'name'</span> =&gt; <span class="string">'Tom'</span>, <span class="string">'user_id'</span> =&gt; <span class="number">14</span>, <span class="string">'age'</span> =&gt; <span class="number">18</span>],</span><br><span class="line">    ]; <span class="comment">// 后续部分示例会参照这个数组进行操作</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>很多场景下需要用到的函数</p>
+</blockquote>
+<h5 id="二维数组取出某一列-键值对"><a href="#二维数组取出某一列-键值对" class="headerlink" title="二维数组取出某一列(键值对)"></a>二维数组取出某一列(键值对)</h5><p><code>array_column</code> 提供了很完美的解决方法。</p>
 <ul>
-<li><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vUGVya2luc1podS9wLzk3MTM4MzYuaHRtbA==" title="网络请求中常见的加密机制和加密算法理解">网络请求中常见的加密机制和加密算法理解<i class="fa fa-external-link"></i></span></li>
+<li>我们可以在此方法的第二个参数传入要取出的列名，即可以拿到对应的列。</li>
+<li>我们还可传入第三个参数，也是一个列名，作为键名</li>
+<li>我们传入了第三个参数时，甚至可以把第二个参数设为<code>null</code>，这样我们取出了所有列</li>
 </ul>
+<blockquote>
+<p>注意：传入的键名中，如果有重复的键的话，去后者，也就是说会有覆盖的情况所以谨慎行事</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $userIds = array_column($data, <span class="string">'user_id'</span>); <span class="comment">// 取出 user_id 列</span></span><br><span class="line">    $userNameDictByUserId = array_column($data, <span class="string">'name'</span>, <span class="string">'user_id'</span>); <span class="comment">// 取出 name 列，以 user_id 为键</span></span><br><span class="line">    $dataDictByUserId = array_column($data, <span class="keyword">null</span>, <span class="string">'user_id'</span>); <span class="comment">// 取出所有列，并以 user_id 为键，注意如果有相同的键，取后者所以在本列中 id = 2 的 Tom 不会出现（被 id = 5 的数据覆盖）</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="数组去重"><a href="#数组去重" class="headerlink" title="数组去重"></a>数组去重</h5><blockquote>
+<p>如上文中的 <code>$userIds</code> 可以用 <code>array_unique</code> 去重。</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $userIdDict = array_unique($userIds);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="数组索引自然化"><a href="#数组索引自然化" class="headerlink" title="数组索引自然化"></a>数组索引自然化</h5><blockquote>
+<p>如上文中的 <code>$userIdDict</code> 虽然去重了，但是依然保留了原有的键，我们希望键名是数字索引且依次递增的。这时候可以用上 <code>array_value</code></p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $userIdDictReIndex = array_values($userIdDict);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意：<code>array_values</code>并不是改变原数组的索引，而是返回了所有数组的值，所以我们需要一个行的数组来接收它</p>
+</blockquote>
+<h5 id="数组获取键"><a href="#数组获取键" class="headerlink" title="数组获取键"></a>数组获取键</h5><blockquote>
+<p>上文中，我们拿到了不重复的 <code>$userIdDict</code>，我们还可以通过 <code>array_keys</code> 来获取相同的结果</p>
+</blockquote>
+<p><code>array_key</code> 甚至还可以用来搜索键。</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $otherUserIdDict = array_keys($userNameDictByUserId);</span><br><span class="line">    $otherUserIdDictSearch = array_keys($userNameDictByUserId, <span class="string">'13'</span>); <span class="comment">// [2]</span></span><br><span class="line">    $otherUserIdDictStrictSearch = array_keys($userNameDictByUserId, <span class="string">'13'</span>, <span class="keyword">true</span>); <span class="comment">// []</span></span><br><span class="line">    $otherUserIdDictStrictSearch = array_keys($userNameDictByUserId, <span class="number">13</span>, <span class="keyword">true</span>); <span class="comment">// [2]</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="数组判断"><a href="#数组判断" class="headerlink" title="数组判断"></a>数组判断</h5><ul>
+<li>用 <code>array_key_exists</code> 来判断数组的键是否存在，也可以用 <code>isset</code></li>
+<li>用 <code>in_array</code> 来判断某个值是否在数组中</li>
+<li>用 <code>array_search</code> 来查询某个值的键</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    array_key_exists(<span class="number">1</span>, $userIdDictReIndex); <span class="comment">// true</span></span><br><span class="line">    array_key_exists(<span class="number">5</span>, $userIdDictReIndex); <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">isset</span>($userIdDictReIndex[<span class="number">1</span>]); <span class="comment">// true</span></span><br><span class="line">    <span class="keyword">isset</span>($userIdDictReIndex[<span class="number">5</span>]); <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line">    in_array(<span class="number">14</span>, $userIdDictReIndex); <span class="comment">// true</span></span><br><span class="line">    in_array(<span class="number">15</span>, $userIdDictReIndex); <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line">    array_search(<span class="number">16</span>, $userIdDictReIndex); <span class="comment">// 3</span></span><br><span class="line">    array_search(<span class="number">17</span>, $userIdDictReIndex); <span class="comment">// false</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="数组过滤"><a href="#数组过滤" class="headerlink" title="数组过滤"></a>数组过滤</h5><h5 id="数组合并，截取，替换"><a href="#数组合并，截取，替换" class="headerlink" title="数组合并，截取，替换"></a>数组合并，截取，替换</h5><ul>
+<li>用 <code>array_merge</code> 合并数组</li>
+<li>用 <code>array_slice</code> 截取数组</li>
+<li>用 <code>array_splice</code> 替换(移除)数组的部分单元</li>
+<li>用 <code>array_replace</code> 逐个替换数组单元</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $a = [<span class="number">1</span>, <span class="number">2</span>];</span><br><span class="line">    $b = [<span class="number">3</span>, <span class="number">4</span>];</span><br><span class="line"></span><br><span class="line">    $c = array_merge($a, $b); <span class="comment">// [1,2,3,4]</span></span><br><span class="line">    $d = array_slice($c, <span class="number">2</span>, <span class="number">2</span>); <span class="comment">// [3, 4]</span></span><br><span class="line">    $e = array_slice($c, <span class="number">1</span>, <span class="number">2</span>, <span class="keyword">true</span>); <span class="comment">// [1 =&gt; 2, 2 =&gt; 3]</span></span><br><span class="line"></span><br><span class="line">    $f = array_splice($c, <span class="number">1</span>, <span class="number">2</span>, <span class="keyword">null</span>); <span class="comment">// $c = [1, 4], $f = [2, 3]</span></span><br><span class="line">    $j = array_splice($c, <span class="number">1</span>, <span class="number">1</span>, [<span class="number">5</span>, <span class="number">6</span>]);<span class="comment">// $c = [1, 5, 6], $j = [4]</span></span><br><span class="line"></span><br><span class="line">    $h = array_replace($f, [<span class="number">1</span>]); <span class="comment">// $k = [1, 3]</span></span><br><span class="line">    $k = array_replace($f, [<span class="number">1</span>, <span class="number">2</span>]); <span class="comment">// $k = [1, 2]</span></span><br><span class="line">    $l = array_replace($k, [<span class="number">3</span>, <span class="number">4</span>], [<span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>]); <span class="comment">// $j = [5, 6, 7]</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="数组入栈，出栈"><a href="#数组入栈，出栈" class="headerlink" title="数组入栈，出栈"></a>数组入栈，出栈</h5><ul>
+<li>用 <code>array_push</code> 在数组末尾插入(一|多)个单元</li>
+<li>用 <code>array_pop</code> 弹出数组末尾一个单元</li>
+<li>用 <code>array_unshift</code> 在数组开头插入(一|多)个单元</li>
+<li>用 <code>array_shift</code> 弹出数组开头一个单元</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $a = [<span class="number">1</span>, <span class="number">2</span>];</span><br><span class="line">    $b = [<span class="number">3</span>, <span class="number">4</span>];</span><br><span class="line"></span><br><span class="line">    $c = array_merge($a, $b); <span class="comment">// [1,2,3,4]</span></span><br><span class="line">    array_push($c, <span class="number">5</span>); <span class="comment">// $c = [1,2,3,4,5]</span></span><br><span class="line">    $d = array_pop($c); <span class="comment">// $c = [1,2,3,4], $d = 5</span></span><br><span class="line">    $e = array_shift($c); <span class="comment">// $c = [2,3,4], $e = 1</span></span><br><span class="line">    array_unshift($c, <span class="number">10</span>); <span class="comment">// $c = [10,2,3,4]</span></span><br><span class="line">    <span class="comment">// 当然，最简单的入栈是这样的</span></span><br><span class="line">    $c[] = <span class="number">5</span>; <span class="comment">// $c = [10,2,3,4,5]</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="数组的地址变动"><a href="#数组的地址变动" class="headerlink" title="数组的地址变动"></a>数组的地址变动</h5><ul>
+<li>用 <code>current</code> 获取当前单元</li>
+<li>用 <code>next</code> 切换数组地址为数组下一个单元</li>
+<li>用 <code>prev</code> 切换数组地址为数组上一个单元</li>
+<li>用 <code>end</code> 切换数组地址为数组末尾单元</li>
+<li>用 <code>reset</code> 切换数组地址为数组开头单元</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>];</span><br><span class="line"></span><br><span class="line">    $b = current($a)); <span class="comment">// 1</span></span><br><span class="line">    $c = next($a)); <span class="comment">// 2</span></span><br><span class="line">    $d = prev($a)); <span class="comment">// 1</span></span><br><span class="line">    $e = end($a); <span class="comment">// 5</span></span><br><span class="line">    $f = next($a)); <span class="comment">// false</span></span><br><span class="line">    $i = reset($a); <span class="comment">// 1</span></span><br><span class="line">    $j = prev($a); <span class="comment">// false</span></span><br><span class="line">    $k = current($a); <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 可以写成简单的循环</span></span><br><span class="line">    $arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>];</span><br><span class="line">    <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">        $current = current($a);</span><br><span class="line">        <span class="keyword">if</span> ($current) &#123;</span><br><span class="line">            next($a);</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="数组的解构和展开"><a href="#数组的解构和展开" class="headerlink" title="数组的解构和展开"></a>数组的解构和展开</h5><ul>
+<li>用 <code>list</code> 来展开数组(仅限数字索引数组)</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $arr = [<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>];</span><br><span class="line">    <span class="keyword">list</span> ($first, $second, $third) = $arr; <span class="comment">// $first = 1, $second = 3, $third = 5</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>题外话，一个面试题：$a = 1, $b = 2; 用一句话交换两个变量的值，即：$a = 2, $b = 1;</p>
+</blockquote>
+<p>解答：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">list</span>($a, $b) = [$b, $a];</span><br><span class="line"><span class="comment">// [$a, $b] = [$b, $a];</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>用 <code>extract</code> 来解构数组</li>
+</ul>
+<blockquote>
+<p>使用此函数需要保证局部上下文解构变量未命名</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $arr = [</span><br><span class="line">        <span class="string">'a'</span> =&gt; <span class="number">1</span>,</span><br><span class="line">        <span class="string">'b'</span> =&gt; <span class="number">2</span>,</span><br><span class="line">        <span class="string">'c'</span> =&gt; <span class="number">3</span>,</span><br><span class="line">    ];</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 最好写上注释，去除 ide 的报错提示</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@var</span> int $a</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@var</span> int $b</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@var</span> int $c</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    extract($arr);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">echo</span> $a . PHP_EOL; <span class="comment">// 1</span></span><br><span class="line">    <span class="keyword">echo</span> $b . PHP_EOL; <span class="comment">// 2</span></span><br><span class="line">    <span class="keyword">echo</span> $c . PHP_EOL; <span class="comment">// 3</span></span><br><span class="line"></span><br><span class="line">    $f = <span class="number">10</span>;</span><br><span class="line">    $arr1 = [</span><br><span class="line">        <span class="string">'d'</span> =&gt; <span class="number">5</span>,</span><br><span class="line">        <span class="string">'f'</span> =&gt; <span class="number">6</span></span><br><span class="line">    ];</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@var</span> int $d</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@var</span> int $f</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    extract($arr1);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">echo</span> $d . PHP_EOL; <span class="comment">// 5</span></span><br><span class="line">    <span class="keyword">echo</span> $f . PHP_EOL; <span class="comment">// 6 这里覆盖了</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">unset</span>($d);</span><br><span class="line">    $f = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 不覆盖，加入变量前缀</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@var</span> int $d</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@var</span> int $f</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@var</span> int $pre_d</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@var</span> int $pre_f</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    $cc = extract($arr1, EXTR_PREFIX_IF_EXISTS, <span class="string">'pre'</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">echo</span> $d . PHP_EOL; <span class="comment">// 5</span></span><br><span class="line">    <span class="keyword">echo</span> $f . PHP_EOL; <span class="comment">// 20</span></span><br><span class="line">    <span class="keyword">echo</span> $pre_f . PHP_EOL; <span class="comment">// 6</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>用 <code>compact</code> 来创建键值对数组</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $a = <span class="number">1</span>;</span><br><span class="line">    $b = <span class="number">2</span>;</span><br><span class="line">    $c = <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line">    $d = compact(<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>); <span class="comment">// ['a' =&gt; 1, 'b' =&gt; 2, 'c' =&gt; 3]</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="数组统计类函数"><a href="#数组统计类函数" class="headerlink" title="数组统计类函数"></a>数组统计类函数</h5><ul>
+<li><code>array_sum</code> 求和</li>
+<li><code>min</code> 取出最小值</li>
+<li><code>max</code> 取出最大值</li>
+<li><code>count</code> 数组长度</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $arr = [<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">echo</span> array_sum($arr) . PHP_EOL; <span class="comment">// 9</span></span><br><span class="line">    <span class="keyword">echo</span> min($arr) . PHP_EOL; <span class="comment">// 1</span></span><br><span class="line">    <span class="keyword">echo</span> max($arr) . PHP_EOL; <span class="comment">// 5</span></span><br><span class="line">    <span class="keyword">echo</span> count($arr) . PHP_EOL; <span class="comment">// 3</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong><em>To be continue</em></strong></p>
 ]]></content>
       <categories>
         <category>PHP</category>
-        <category>JavaScript</category>
       </categories>
       <tags>
-        <tag>http</tag>
-        <tag>data</tag>
-        <tag>secret</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
-    <title>记markdown语法</title>
-    <url>/2019/06/28/markdown/</url>
-    <content><![CDATA[<p>记一些学习markdown的资料</p>
+    <title>PHP梳理之string</title>
+    <url>/2021/02/08/php-base-string/</url>
+    <content><![CDATA[<blockquote>
+<p>梳理 php 关于 string 的小知识</p>
+</blockquote>
 <a id="more"></a>
 
-<h3 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h3><p>标题的语法： <code>#</code>，标题的数量代表级别(如：<code>##</code>代表二级标题)，你可以类比<code>html</code>里面的<code>h1~h6</code>.<br>示例：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#一级标题</span><br><span class="line">##二级标题</span><br><span class="line">###三级标题</span><br><span class="line">####四级标题</span><br><span class="line">#####五级标题</span><br><span class="line">######六级标题</span><br></pre></td></tr></table></figure>
-
-<p>效果：</p>
-<blockquote>
-<h1 id="一级标题"><a href="#一级标题" class="headerlink" title="一级标题"></a>一级标题</h1><h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><h5 id="五级标题"><a href="#五级标题" class="headerlink" title="五级标题"></a>五级标题</h5><h6 id="六级标题"><a href="#六级标题" class="headerlink" title="六级标题"></a>六级标题</h6></blockquote>
-<hr>
-<h3 id="字体"><a href="#字体" class="headerlink" title="字体"></a>字体</h3><ul>
-<li><h4 id="斜体"><a href="#斜体" class="headerlink" title="斜体"></a>斜体</h4>在你要倾斜的字体左右用一个<code>*</code>包起来;</li>
-<li><h4 id="加粗"><a href="#加粗" class="headerlink" title="加粗"></a>加粗</h4>在你要加粗的字体左右用两个<code>*</code>包起来;</li>
-<li><h4 id="斜体加粗"><a href="#斜体加粗" class="headerlink" title="斜体加粗"></a>斜体加粗</h4>没错，用三个<code>*</code>包起来的字体即可斜体加粗;</li>
-<li><h4 id="删除线"><a href="#删除线" class="headerlink" title="删除线"></a>删除线</h4>在你要删除线的字体左右用两个<code>~</code>包起来;</li>
-</ul>
-<p>示例：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">这是**加粗**，这是*斜体*，***斜体加粗***，以及~~删除线~~</span><br></pre></td></tr></table></figure>
-
-<p>效果：</p>
-<blockquote>
-<p>这是<strong>加粗</strong>，这是<em>斜体</em>，<strong><em>斜体加粗</em></strong>，以及<del>删除线</del></p>
-</blockquote>
-<hr>
-<h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><p>在你要引用的文字前加<code>&gt;</code>即可；</p>
-<p>示例：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt;引用一</span><br><span class="line">&gt;&gt;引用二</span><br><span class="line">&gt;&gt;&gt;&gt;&gt;&gt;引用n</span><br></pre></td></tr></table></figure>
-
-<p>效果：</p>
-<blockquote>
-<p>引用一</p>
-<blockquote>
-<p>引用二</p>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>引用n</p>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-<hr>
-<h4 id="分割线"><a href="#分割线" class="headerlink" title="分割线"></a>分割线</h4><p>用三个（或更多）<code>*</code>或者<code>-</code></p>
-<p>示例：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">***</span><br><span class="line">---</span><br><span class="line">****</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-
-<p>效果：</p>
-<hr>
-<hr>
-<hr>
-<hr>
-<h4 id="图片与链接"><a href="#图片与链接" class="headerlink" title="图片与链接"></a>图片与链接</h4><p>链接语法：<code>[链接名](链接 &quot;链接title&quot;)</code><br>图片语法：<code>![图片alt](图片地址 &quot;图片title&quot;)</code></p>
-<blockquote>
-<p><strong><em>注意：中间有一个空格</em></strong></p>
-</blockquote>
-<p>示例：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[才先の博客](https://jaychoumylove.github.io &quot;才先の博客&quot;)</span><br><span class="line">![这里是alt](https://jaychoumylove.github.io/images/avatar.gif &quot;这里是title&quot;)</span><br></pre></td></tr></table></figure>
-
-<p>效果：<br><a href="https://jaychoumylove.github.io" title="才先の博客">才先の博客</a><br><img src="/images/avatar.gif" alt="这里是alt" title="这里是title"></p>
-<hr>
-<h4 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h4><p><strong>无序列表</strong>用 <code>-</code> <code>+</code> <code>*</code> 任何一种都可以，可以在列表后加<code>[]</code>标识是否勾选（<em>注意空格</em>）等</p>
-<blockquote>
-<p>注意 <code>*</code> <code>+</code> <code>-</code> 与内容之间要有一个空格</p>
-</blockquote>
-<p>示例：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">- 1</span><br><span class="line">- 2</span><br><span class="line">- 3</span><br><span class="line"></span><br><span class="line">+ a</span><br><span class="line">+ b</span><br><span class="line">+ c</span><br><span class="line"></span><br><span class="line">* [ ]  A </span><br><span class="line">* [ ]  B </span><br><span class="line">* [x]  C</span><br></pre></td></tr></table></figure>
-
-<p>效果：</p>
-<blockquote>
+<h4 id="拼接"><a href="#拼接" class="headerlink" title="拼接"></a>拼接</h4><p>两种方式：</p>
 <ul>
-<li>1</li>
-<li>2</li>
-<li>3</li>
+<li>普通字符串拼接</li>
+<li>运用<code>sprintf</code></li>
 </ul>
-</blockquote>
-<blockquote>
-<ul>
-<li>a</li>
-<li>b</li>
-<li>c</li>
-</ul>
-</blockquote>
-<ul>
-<li><input disabled type="checkbox"> A</li>
-<li><input disabled type="checkbox"> B</li>
-<li><input checked disabled type="checkbox"> C</li>
-</ul>
-<p><strong>有序列表</strong>的语法是数字加点</p>
-<p>示例：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1. A</span><br><span class="line">2. B</span><br><span class="line">3. C</span><br></pre></td></tr></table></figure>
+<p>第一种方式在<a href="/2021/02/08/php-base-types/" title="PHP基础笔记之类型">PHP基础笔记之类型</a>有提到，示例主要针对 <code>sprintf</code> 函数:</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $name = <span class="string">'Jack'</span>;</span><br><span class="line">    $age = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">echo</span> sprintf(<span class="string">'His name is %s.'</span>, $name);<span class="comment">// His name is Jack.</span></span><br><span class="line"></span><br><span class="line">    printf(<span class="string">'His name is %s, and he is %s.'</span>, $name, $age);<span class="comment">// His name is Jack, and he is 10.</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
-<p>效果：</p>
-<blockquote>
-<ol>
-<li>A</li>
-<li>B</li>
-<li>C</li>
-</ol>
+<h4 id="格式化"><a href="#格式化" class="headerlink" title="格式化"></a>格式化</h4><ul>
+<li><code>number_format</code> - 以千位分隔符方式格式化一个数字</li>
+<li>如果要替换点千位分隔符需要加参数</li>
+<li><code>ucfirst</code>,<code>lcfirst</code> 首字母大|小写</li>
+<li><code>trim</code> 过滤掉字符串前后无用字符(空格，换行，缩进等)</li>
+<li><code>ltrim</code> 作用同上，但是只过滤字符串前面的无用字符</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $numberFormat = <span class="string">'2387484'</span></span><br><span class="line">    <span class="keyword">echo</span> number_format($numberFormat, <span class="number">2</span>);<span class="comment">// 2,387,484.00</span></span><br><span class="line">    <span class="keyword">echo</span> number_format($numberFormat, <span class="number">2</span>, <span class="string">'.'</span>, <span class="string">''</span>);<span class="comment">// 2387484.00</span></span><br><span class="line">    <span class="keyword">echo</span> ucfirst(<span class="string">'it\'s me!'</span>); <span class="comment">// It's me!</span></span><br><span class="line">    <span class="keyword">echo</span> lcfirst(<span class="string">'Hi!'</span>); <span class="comment">// hi!</span></span><br><span class="line">    <span class="keyword">echo</span> trim(<span class="string">' Hi!</span></span><br><span class="line"><span class="string">    '</span>); <span class="comment">// Hi!</span></span><br><span class="line">    <span class="keyword">echo</span> ltrim(<span class="string">'</span></span><br><span class="line"><span class="string">    Hi!'</span>); <span class="comment">// Hi!</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="转化"><a href="#转化" class="headerlink" title="转化"></a>转化</h4><blockquote>
+<p>这里只提及简单转化，不深入</p>
 </blockquote>
-<p><strong>列表嵌套</strong><br>如果想要列表嵌套的话，上一级和下一级之间要有三个空格</p>
-<p>示例：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">- 1</span><br><span class="line">   1. A</span><br><span class="line">      + a</span><br><span class="line">         * 45</span><br><span class="line">         * 23</span><br><span class="line">         * 8989</span><br><span class="line">      + b</span><br><span class="line">   2. B</span><br><span class="line">      * !</span><br><span class="line">      * @</span><br><span class="line">- 2</span><br><span class="line">- 3</span><br></pre></td></tr></table></figure>
+<h5 id="数字"><a href="#数字" class="headerlink" title="数字"></a>数字</h5><ul>
+<li><code>floatval</code> 提取浮点值</li>
+<li><code>intval</code> 获取变量整数值</li>
+<li>除此之外，你还可以用 <code>settype</code> 来转换</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $a = <span class="string">'3.14158额'</span>;</span><br><span class="line">    $b = <span class="string">'1个'</span>;</span><br><span class="line">    $c = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">echo</span> floatval($a); <span class="comment">// 3.14158</span></span><br><span class="line">    <span class="keyword">echo</span> intval($b); <span class="comment">// 1</span></span><br><span class="line">    settype($c, <span class="string">'string'</span>);</span><br><span class="line">    <span class="keyword">echo</span> $c; <span class="comment">// 1</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
-<p>效果：</p>
-<blockquote>
-<ul>
-<li>1<ol>
-<li>A<ul>
-<li>a<ul>
-<li>45</li>
-<li>23</li>
-<li>8989</li>
+<h5 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h5><ul>
+<li><code>explode</code> 按照特定字符分割成数组</li>
+<li><code>str_split</code> 按照步长分割数组</li>
+<li><code>implode</code> 可以把数组转化为字符串</li>
 </ul>
-</li>
-<li>b</li>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $a = <span class="string">'hello,world'</span>;</span><br><span class="line">    $b = explode(<span class="string">','</span>, $a); <span class="comment">// [’hello‘, 'world']</span></span><br><span class="line">    $c = str_split($a, <span class="number">2</span>); <span class="comment">// ['he', 'll', 'o,', 'wo', 'rl', 'd']</span></span><br><span class="line"></span><br><span class="line">    $d = implode(<span class="string">','</span>, $b); <span class="comment">// 'hello,world'</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="查询字符串中特定的值"><a href="#查询字符串中特定的值" class="headerlink" title="查询字符串中特定的值"></a>查询字符串中特定的值</h4><ul>
+<li>简单的字符串匹配</li>
 </ul>
-</li>
-<li>B<ul>
-<li>!</li>
-<li>@</li>
-</ul>
-</li>
-</ol>
-</li>
-<li>2</li>
-<li>3</li>
-</ul>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $content = <span class="string">'我竟无语凝噎'</span>;</span><br><span class="line">    $search = <span class="string">'无语'</span>;</span><br><span class="line"></span><br><span class="line">    $strpos = <span class="keyword">false</span> !== strpos($content, $search); <span class="comment">// true</span></span><br><span class="line">    $strstr = <span class="keyword">false</span> === strstr($search, $content); <span class="comment">// true</span></span><br><span class="line">    $strchr = <span class="keyword">false</span> === strchr($search, $content); <span class="comment">// true</span></span><br><span class="line">    <span class="comment">// strchr is alias of strstr</span></span><br><span class="line">    $regx = <span class="string">"/(无语)/"</span>;</span><br><span class="line">    $preg = (bool)preg_match($regx, $content); <span class="comment">// true</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="替换"><a href="#替换" class="headerlink" title="替换"></a>替换</h4><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="comment">// 搜索替换</span></span><br><span class="line">    <span class="keyword">echo</span> str_replace(<span class="string">'言'</span>, <span class="string">'颜'</span>, <span class="string">'我竟无言以对'</span>); <span class="comment">// 我竟无颜以对</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 截取替换</span></span><br><span class="line">    <span class="keyword">echo</span> substr_replace(<span class="string">'hello,world'</span>, <span class="string">'hi'</span>, <span class="number">0</span>, <span class="number">5</span>); <span class="comment">// hi,world</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="截取"><a href="#截取" class="headerlink" title="截取"></a>截取</h4><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">  <span class="keyword">echo</span> substr(<span class="string">'hello,world'</span>, <span class="number">0</span>, <span class="number">5</span>); <span class="comment">// hello</span></span><br><span class="line">  <span class="keyword">echo</span> substr(<span class="string">'hello,world'</span>, <span class="number">5</span>, <span class="number">1</span>); <span class="comment">// ,</span></span><br><span class="line">  <span class="keyword">echo</span> substr(<span class="string">'hello,world'</span>, <span class="number">6</span>, <span class="number">5</span>); <span class="comment">// world</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="重复"><a href="#重复" class="headerlink" title="重复"></a>重复</h4><blockquote>
+<p>纯属个人喜好发现的好玩意</p>
 </blockquote>
-<hr>
-<h4 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h4><p>这个解释比较麻烦，直接上示例吧</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">|这是你的表头|表头|表头|</span><br><span class="line">|---|:---:|---:|</span><br><span class="line">|这是你的内容|内容|内容|</span><br><span class="line">|我是居左的|我是居中的|我是居右的|</span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">  <span class="keyword">echo</span> str_repeat(<span class="string">'说了多少遍了，不要做六边形战士！'</span>, <span class="number">3</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
-<p>效果：</p>
-<table>
-<thead>
-<tr>
-<th>这是你的表头</th>
-<th align="center">表头</th>
-<th align="right">表头</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>这是你的内容</td>
-<td align="center">内容</td>
-<td align="right">内容</td>
-</tr>
-<tr>
-<td>我是居左的</td>
-<td align="center">我是居中的</td>
-<td align="right">我是居右的</td>
-</tr>
-</tbody></table>
-<hr>
-<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><p>语法：用反引号把你的代码包起来,单行代码用一个即可，代码块用三个</p>
-<blockquote>
-<p><em>注意，以下示例为了防止转义将反引号用()包起来了，实际上是没有的</em></p>
-</blockquote>
-<p>示例：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(`) create user page (`) </span><br><span class="line"></span><br><span class="line">(```)</span><br><span class="line">function foo() &#123;</span><br><span class="line">    return &quot;bar&quot;</span><br><span class="line">&#125;</span><br><span class="line">foo();</span><br><span class="line">(```)</span><br></pre></td></tr></table></figure>
-
-<p>效果：</p>
-<p><code>create user page</code></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">function foo() &#123;</span><br><span class="line">    return &quot;bar&quot;</span><br><span class="line">&#125;</span><br><span class="line">foo();</span><br></pre></td></tr></table></figure>
-
-<hr>
+<p><strong><em>To be continue</em></strong></p>
 ]]></content>
       <categories>
-        <category>MarkDown</category>
+        <category>PHP</category>
+      </categories>
+      <tags>
+        <tag>notes</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PHP基础笔记之类型</title>
+    <url>/2021/02/08/php-base-types/</url>
+    <content><![CDATA[<blockquote>
+<p>最近巩固下自己的 php，故而整理了下 php 相关的技术点，不求大而全，只求能离 php 更近一点。<br>本文为<code>php基础</code>的开篇，只介绍类型基本信息及一些小技巧，不深入，后续专门写这几种类型的文章。</p>
+</blockquote>
+<h4 id="Basis-基本情况"><a href="#Basis-基本情况" class="headerlink" title="Basis 基本情况"></a>Basis 基本情况</h4><p>参考 <span class="exturl" data-url="aHR0cHM6Ly93d3cucGhwLm5ldC9tYW51YWwvemgvbGFuZ3VhZ2UudHlwZXMuaW50cm8ucGhw" title="php手册 - 类型">php 手册 - 类型<i class="fa fa-external-link"></i></span></p>
+<a id="more"></a>
+
+<h4 id="Boolean-布尔"><a href="#Boolean-布尔" class="headerlink" title="Boolean - 布尔"></a>Boolean - 布尔</h4><p>基本用于判断，也是最大的最简洁的使用。</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $action = <span class="number">2</span>;</span><br><span class="line">    var_dump(($action) ? <span class="keyword">true</span>: <span class="keyword">false</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="转换"><a href="#转换" class="headerlink" title="转换"></a>转换</h5><p>你可以用 <code>(bool)</code> 或者 <code>(boolean)</code> 把一个值转换成 <code>boolean</code> 类型。当然大多数情况你不需要强制转换。</p>
+<blockquote>
+<p>当运算符，函数或者流程控制结构需要一个 boolean 参数时，该值会被自动转换。</p>
+</blockquote>
+<p>以下情况会转化成 <code>false</code> :</p>
+<ul>
+<li>布尔值 <code>FALSE</code> 本身</li>
+<li>整型值 <code>0</code>（零）</li>
+<li>浮点型值 <code>0.0</code>（零）</li>
+<li>空字符串<code>&quot;&quot;</code>，以及字符串 <code>&quot;0&quot;</code></li>
+<li>不包括任何元素的数组<code>array()</code>，<code>[]</code></li>
+<li>特殊类型 <code>null</code>（包括尚未赋值的变量<code>undefined</code>）</li>
+<li>从空标记生成的 <code>SimpleXML</code> 对象</li>
+</ul>
+<p>除开以上情况外，<strong><em>其他值都视为 <code>true</code></em></strong></p>
+<p>引用手册的示例：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    var_dump((bool) <span class="string">""</span>);        <span class="comment">// bool(false)</span></span><br><span class="line">    var_dump((bool) <span class="number">1</span>);         <span class="comment">// bool(true)</span></span><br><span class="line">    var_dump((bool) <span class="number">-2</span>);        <span class="comment">// bool(true)</span></span><br><span class="line">    var_dump((bool) <span class="string">"foo"</span>);     <span class="comment">// bool(true)</span></span><br><span class="line">    var_dump((bool) <span class="number">2.3e5</span>);     <span class="comment">// bool(true)</span></span><br><span class="line">    var_dump((bool) <span class="keyword">array</span>(<span class="number">12</span>)); <span class="comment">// bool(true)</span></span><br><span class="line">    var_dump((bool) <span class="keyword">array</span>());   <span class="comment">// bool(false)</span></span><br><span class="line">    var_dump((bool) <span class="string">"false"</span>);   <span class="comment">// bool(true)</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Integer-整型"><a href="#Integer-整型" class="headerlink" title="Integer - 整型"></a>Integer - 整型</h4><p>是集合 <code>ℤ = {..., -2, -1, 0, 1, 2, ...}</code> 中的某个数。<br>可以使用十进制，十六进制，八进制或二进制（<code>php 5.4.0+</code>）表示，前面可以加上可选的符号（<code>-</code> 或者 <code>+</code>）。</p>
+<p>引用手册的表达示例:</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $a = <span class="number">1234</span>; <span class="comment">// 十进制数</span></span><br><span class="line">    $a = <span class="number">-123</span>; <span class="comment">// 负数</span></span><br><span class="line">    $a = <span class="number">0123</span>; <span class="comment">// 八进制数 (等于十进制 83),数字前必须加上 0（零）</span></span><br><span class="line">    $a = <span class="number">0x1A</span>; <span class="comment">// 十六进制数 (等于十进制 26),数字前必须加上 0x。</span></span><br><span class="line">    $a = <span class="number">0b11111111</span>; <span class="comment">// 二进制数字 (等于十进制 255),数字前必须加上 0b。</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="溢出"><a href="#溢出" class="headerlink" title="溢出"></a>溢出</h5><p>给定的一个数超出了 <code>integer</code> 的范围，将会被解释为 <code>float</code>。同样如果执行的运算结果超出了 <code>integer</code> 范围，也会返回 <code>float</code>。</p>
+<h4 id="String-字符串"><a href="#String-字符串" class="headerlink" title="String 字符串"></a>String 字符串</h4><p>由一系列的字符组成，其中每个字符等同于一个字节。详见<span class="exturl" data-url="aHR0cHM6Ly93d3cucGhwLm5ldC9tYW51YWwvemgvbGFuZ3VhZ2UudHlwZXMuc3RyaW5nLnBocCNsYW5ndWFnZS50eXBlcy5zdHJpbmcuZGV0YWlscw==" title="https://www.php.net/manual/zh/language.types.string.php#language.types.string.details">字符串类型详解<i class="fa fa-external-link"></i></span>。</p>
+<p>可以用<code>&quot;</code>或者<code>&#39;</code>来定义。</p>
+<blockquote>
+<p>如果想使用其它转义序列例如 <code>\r</code> 或者 <code>\n</code>，使用反斜线 <code>\</code> 来防止转义</p>
+</blockquote>
+<p>示例：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'this is a simple string'</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 可以录入多行</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'You can also have embedded newlines in</span></span><br><span class="line"><span class="string">    strings this way as it is</span></span><br><span class="line"><span class="string">    okay to do'</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 输出： Arnold once said: "I'll be back"</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'Arnold once said: "I\'ll be back"'</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 输出： You deleted C:\*.*?</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'You deleted C:\\*.*?'</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 输出： You deleted C:\*.*?</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'You deleted C:\*.*?'</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 输出： This will not expand: \n a newline</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'This will not expand: \n a newline'</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 输出： Variables do not $expand $either</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'Variables do not $expand $either'</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="解析变量"><a href="#解析变量" class="headerlink" title="解析变量"></a>解析变量</h5><p>早双引号的定义下可以可以解析变量，数组和对象也可以解析。替代的方案 - 变量拼接</p>
+<blockquote>
+<p>在遇到数组对象的索引是<code>string</code>类型时，需要用到<code>{}</code>解析，如果找不到数组的索引或者找不到对象的属性 or 方法，不会解析。<br>如何不希望解析对象，数组，变量时，添加反引号 <code>\</code> 防止转义</p>
+</blockquote>
+<p>如：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">People</span> </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> $john = <span class="string">"John Smith"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    $b = <span class="keyword">new</span> People();</span><br><span class="line">    $a = [</span><br><span class="line">        <span class="number">1</span> =&gt; <span class="number">2</span>,</span><br><span class="line">        <span class="string">"a"</span> =&gt; <span class="number">3</span></span><br><span class="line">    ];</span><br><span class="line">    var_dump(<span class="string">"is a $a[1], $&#123;a['a']&#125;, $b-&gt;john "</span>);</span><br><span class="line">    var_dump(<span class="string">"is a $a['a'], $b-&gt;johns "</span>); <span class="comment">// Won't work</span></span><br><span class="line">    var_dump(<span class="string">"is a "</span> . $a[<span class="string">'a'</span>]); <span class="comment">// 拼接变量</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Array-数组"><a href="#Array-数组" class="headerlink" title="Array 数组"></a>Array 数组</h4><p>是一个有序映射。映射是一种把 <code>values</code> 关联到 <code>keys</code> 的类型。</p>
+<h5 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h5><p>可以用 <code>array()</code> 语言结构或者 <code>[]</code> (<code>PHP 5.4.0+</code>) 来新建一个数组。它接受任意数量用逗号分隔的<code>键（key） =&gt; 值（value）</code>对。</p>
+<p><code>key</code> 可以是 <code>integer</code> 或者 <code>string</code>。</p>
+<p><code>value</code> 可以是任意类型。</p>
+<p>此外 <code>key</code> 会有如下的强制转换：</p>
+<ul>
+<li>包含有合法整型值的字符串会被转换为整型。例如键名 <code>&quot;8&quot;</code> 实际会被储存为 <code>8</code>。但是 <code>&quot;08&quot;</code> 则不会强制转换，因为其不是一个合法的十进制数值。</li>
+<li>浮点数也会被转换为整型，意味着其小数部分会被舍去。例如键名 <code>8</code>.<code>7</code> 实际会被储存为 <code>8</code>。</li>
+<li>布尔值也会被转换成整型。即键名 <code>true</code> 实际会被储存为 <code>1</code> 而键名 <code>false</code> 会被储存为 <code>0</code>。</li>
+<li><code>Null</code> 会被转换为空字符串，即键名 <code>null</code> 实际会被储存为 <code>&quot;&quot;</code>。</li>
+</ul>
+<blockquote>
+<p>数组和对象不能被用为键名, 坚持这么做会导致警告：<code>Illegal offset type</code>。<br>如果在数组定义中多个单元都使用了同一个键名，则只使用了最后一个，之前的都被覆盖了。</p>
+</blockquote>
+<p>示例：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $array = <span class="keyword">array</span>(</span><br><span class="line">        <span class="number">1</span>    =&gt; <span class="string">"a"</span>,</span><br><span class="line">        <span class="string">"1"</span>  =&gt; <span class="string">"b"</span>,</span><br><span class="line">        <span class="number">1.5</span>  =&gt; <span class="string">"c"</span>,</span><br><span class="line">        <span class="keyword">true</span> =&gt; <span class="string">"d"</span>,</span><br><span class="line">    );</span><br><span class="line">    var_dump($array);</span><br><span class="line">    <span class="comment">// will output</span></span><br><span class="line">    <span class="comment">// array(1) &#123;</span></span><br><span class="line">    <span class="comment">//    [1]=&gt;</span></span><br><span class="line">    <span class="comment">//    string(1) "d"</span></span><br><span class="line">    <span class="comment">// &#125;</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Object-对象"><a href="#Object-对象" class="headerlink" title="Object 对象"></a>Object 对象</h4><p>要创建一个新的对象 <code>object</code>，使用 <code>new</code> 语句实例化.</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">foo</span></span></span><br><span class="line"><span class="class">    </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> $bar = <span class="string">'bar'</span>;</span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">do_foo</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"Doing foo."</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $bar = <span class="keyword">new</span> foo;</span><br><span class="line">    $bar-&gt;do_foo();</span><br><span class="line">    var_dump($bar-&gt;bar);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="转化"><a href="#转化" class="headerlink" title="转化"></a>转化</h5><p>如果将一个对象转换成对象，它将不会有任何变化。<br>如果其它任何类型的值被转换成对象，将会创建一个内置类 <code>stdClass</code> 的实例。<br>如果该值为 <code>NULL</code>，则新的实例为空。<br><code>array</code> 转换成 <code>object</code> 将使键名成为属性名并具有相对应的值。</p>
+<blockquote>
+<p>注意：使用 PHP 7.2.0 之前的版本，数字键只能通过迭代访问。</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $obj = (object) <span class="keyword">array</span>(<span class="string">'1'</span> =&gt; <span class="string">'foo'</span>);</span><br><span class="line">    var_dump(<span class="keyword">isset</span>($obj-&gt;&#123;<span class="string">'1'</span>&#125;)); <span class="comment">// PHP 7.2.0 后输出 'bool(true)'，之前版本会输出 'bool(false)'</span></span><br><span class="line">    var_dump(key($obj)); <span class="comment">// PHP 7.2.0 后输出 'string(1) "1"'，之前版本输出  'int(1)'</span></span><br><span class="line">    $obj = (object) <span class="string">'ciao'</span>;</span><br><span class="line">    <span class="keyword">echo</span> $obj-&gt;scalar;  <span class="comment">// outputs 'ciao'</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Resource-资源"><a href="#Resource-资源" class="headerlink" title="Resource 资源"></a>Resource 资源</h4><p>这个就不介绍了，参考<span class="exturl" data-url="aHR0cHM6Ly93d3cucGhwLm5ldC9tYW51YWwvemgvbGFuZ3VhZ2UudHlwZXMucmVzb3VyY2UucGhw" title="Resource 资源类型">Resource 资源类型<i class="fa fa-external-link"></i></span>。</p>
+<h4 id="Null"><a href="#Null" class="headerlink" title="Null"></a>Null</h4><p>特殊的 <code>NULL</code> 值表示一个变量没有值。<code>NULL</code> 类型唯一可能的值就是 <code>NULL</code>。</p>
+<p>在下列情况下一个变量被认为是 <code>NULL</code>：</p>
+<ul>
+<li>被赋值为 <code>NULL</code>。</li>
+<li>尚未被赋值。</li>
+<li>被 <code>unset()</code>。</li>
+</ul>
+<h4 id="Callback-Callable-php-5-4-0"><a href="#Callback-Callable-php-5-4-0" class="headerlink" title="Callback / Callable php 5.4.0+"></a>Callback / Callable <code>php 5.4.0+</code></h4><p>一些函数如 <code>call_user_func()</code> 或 <code>usort()</code> 可以接受用户自定义的回调函数作为参数。回调函数不止可以是简单函数，还可以是对象的方法，包括静态类方法。</p>
+<p>示例：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="comment">// Our closure</span></span><br><span class="line">    $double = <span class="function"><span class="keyword">function</span><span class="params">($a)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> $a * <span class="number">2</span>;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// This is our range of numbers</span></span><br><span class="line">    $numbers = range(<span class="number">1</span>, <span class="number">5</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Use the closure as a callback here to</span></span><br><span class="line">    <span class="comment">// double the size of each element in our</span></span><br><span class="line">    <span class="comment">// range</span></span><br><span class="line">    $new_numbers = array_map($double, $numbers);</span><br><span class="line">    <span class="keyword">print</span> implode(<span class="string">' '</span>, $new_numbers);</span><br><span class="line">    <span class="comment">// will output</span></span><br><span class="line">    <span class="comment">// 2 4 6 8 10</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="类型转化"><a href="#类型转化" class="headerlink" title="类型转化"></a>类型转化</h4><p>以上就是<code>php类型</code>的基本信息。下面罗列些允许的强制类型转换：</p>
+<ul>
+<li><code>(int)</code>, <code>(integer)</code> - 转换为整形 <code>integer</code></li>
+<li><code>(bool)</code>, <code>(boolean)</code> - 转换为布尔类型 <code>boolean</code></li>
+<li><code>(float)</code>, <code>(double)</code>, <code>(real)</code> - 转换为浮点型 <code>float</code></li>
+<li><code>(string)</code> - 转换为字符串 <code>string</code></li>
+<li><code>(array)</code> - 转换为数组 <code>array</code></li>
+<li><code>(object)</code> - 转换为对象 <code>object</code></li>
+<li><code>(unset)</code> - 转换为 <code>NULL</code> <em><code>(PHP 5)</code></em></li>
+</ul>
+<h4 id="有效判断"><a href="#有效判断" class="headerlink" title="有效判断"></a>有效判断</h4><p>在<code>PHP</code>里面，我习惯用<code>empty</code>和<code>isset</code>作为判断依据，其中，</p>
+<ul>
+<li><code>isset</code> 判断是否定义</li>
+<li><code>empty</code> 判断是否有效，也有<code>isset</code>的作用</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $arr = [<span class="string">'a'</span> =&gt; <span class="number">1</span>, <span class="string">'b'</span> =&gt; <span class="string">'c'</span>];</span><br><span class="line">    $class = <span class="keyword">new</span> stdClass();</span><br><span class="line">    $class-&gt;a = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    var_dump(<span class="keyword">isset</span>($arr[<span class="string">'a'</span>])); <span class="comment">// true</span></span><br><span class="line">    var_dump(<span class="keyword">isset</span>($arr[<span class="string">'c'</span>])); <span class="comment">// false</span></span><br><span class="line">    var_dump(<span class="keyword">isset</span>($class-&gt;a)); <span class="comment">// true</span></span><br><span class="line">    var_dump(<span class="keyword">isset</span>($class-&gt;b)); <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line">    var_dump(<span class="keyword">empty</span>($arr[<span class="string">'a'</span>])); <span class="comment">// false</span></span><br><span class="line">    var_dump(<span class="keyword">empty</span>($arr[<span class="string">'c'</span>])); <span class="comment">// true</span></span><br><span class="line">    var_dump(<span class="keyword">empty</span>($class-&gt;a)); <span class="comment">// false</span></span><br><span class="line">    var_dump(<span class="keyword">empty</span>($class-&gt;b)); <span class="comment">// true</span></span><br><span class="line">    var_dump(<span class="keyword">empty</span>(<span class="number">0</span>)); <span class="comment">// true</span></span><br><span class="line">    var_dump(<span class="keyword">empty</span>(<span class="number">0.00</span>)); <span class="comment">// true</span></span><br><span class="line">    var_dump(<span class="keyword">empty</span>(<span class="keyword">false</span>)); <span class="comment">// true</span></span><br><span class="line">    var_dump(<span class="keyword">empty</span>(<span class="string">'0'</span>)); <span class="comment">// true</span></span><br><span class="line">    var_dump(<span class="keyword">empty</span>(<span class="string">'0.00'</span>)); <span class="comment">// false</span></span><br><span class="line">    var_dump(<span class="keyword">empty</span>(<span class="keyword">null</span>)); <span class="comment">// true</span></span><br><span class="line">    var_dump(<span class="keyword">empty</span>(<span class="string">''</span>)); <span class="comment">// true</span></span><br><span class="line">    var_dump(<span class="keyword">empty</span>([])); <span class="comment">// true</span></span><br><span class="line">    var_dump(<span class="keyword">empty</span>(<span class="keyword">new</span> stdClass())); <span class="comment">// false</span></span><br><span class="line">    var_dump(<span class="keyword">empty</span>($undefined)); <span class="comment">// true</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>使用<code>empty</code>判断的时候一定要注意转化类型，比如字符串和数字</p>
+</blockquote>
+<p><strong>enjoy and happy coding!</strong></p>
+]]></content>
+      <categories>
+        <category>PHP</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -651,7 +976,7 @@
 <a id="more"></a>
 
 <h4 id="验证器的简单使用"><a href="#验证器的简单使用" class="headerlink" title="验证器的简单使用"></a>验证器的简单使用</h4><p>安装：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">composer require symfony/validator</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">composer require symfony/validator</span><br></pre></td></tr></table></figure>
 
 <p>我们可以在控制器中使用简单的验证器来验证数据，像这样的：</p>
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// src/controll/Word</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Controller</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Symfony</span>\<span class="title">Component</span>\<span class="title">HttpFoundation</span>\<span class="title">Response</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Symfony</span>\<span class="title">Component</span>\<span class="title">Routing</span>\<span class="title">Annotation</span>\<span class="title">Route</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Symfony</span>\<span class="title">Component</span>\<span class="title">Validator</span>\<span class="title">Validation</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Symfony</span>\<span class="title">Component</span>\<span class="title">Validator</span>\<span class="title">Constraints</span> <span class="title">as</span> <span class="title">Assert</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Exception</span>\<span class="title">Parameter</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Exception</span>\<span class="title">Success</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Route</span>("/hello")</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Word</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Route</span>("/word",methods=&#123;"GET"&#125;)</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $validator = Validation::createValidator();</span><br><span class="line">        $violations = $validator-&gt;validate([</span><br><span class="line">            <span class="string">'num'</span> =&gt; <span class="number">12</span></span><br><span class="line">        ], <span class="keyword">new</span> Assert\Collection([</span><br><span class="line">            <span class="string">'num'</span> =&gt; <span class="keyword">new</span> Assert\GreaterThan([</span><br><span class="line">                <span class="string">'value'</span> =&gt; <span class="number">10</span>,</span><br><span class="line">            ])</span><br><span class="line">        ]))</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">0</span> !== count($violations)) &#123;</span><br><span class="line">            <span class="keyword">foreach</span> ($res <span class="keyword">as</span> $item) &#123;</span><br><span class="line">                $prefix = <span class="keyword">empty</span>($message) ? <span class="string">''</span>: <span class="string">';'</span>;</span><br><span class="line">                $message .= $prefix . $item-&gt;getMessage();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> Parameter([<span class="string">'message'</span> =&gt; $message]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Success();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -663,7 +988,7 @@
 </ul>
 <h4 id="自定义验证器"><a href="#自定义验证器" class="headerlink" title="自定义验证器"></a>自定义验证器</h4><p>上面我们已经能够成功使用验证器了，但是距离我们的预期太远了。如果多几个数据，多几个约束，光是一个数据的校验就几十行代码，可读性极差，不能重用，日后维护也很困难</p>
 <p><strong><em>我们需要构建自己的验证器</em></strong>。<code>App\Validator\Base</code>代码实现：</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Validator</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Exception</span>\<span class="title">Parameter</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Symfony</span>\<span class="title">Component</span>\<span class="title">Validator</span>\<span class="title">Constraints</span>\<span class="title">Collection</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Symfony</span>\<span class="title">Component</span>\<span class="title">Validator</span>\<span class="title">Validation</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Symfony</span>\<span class="title">Component</span>\<span class="title">Validator</span>\<span class="title">Validator</span>\<span class="title">ValidatorInterface</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Class Base</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@package</span> App\Validator</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@var</span> Collection</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">protected</span> $collection;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@var</span> ValidatorInterface</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">static</span> $validator;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Base constructor.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="keyword">self</span>::getValidator() <span class="keyword">instanceof</span> ValidatorInterface)) &#123;</span><br><span class="line">            <span class="keyword">self</span>::setValidator();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">static</span>::setCollection();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> array $input</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> \Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">check</span> <span class="params">(array $input)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $violations = <span class="keyword">self</span>::getValidator()-&gt;validate($input, <span class="keyword">self</span>::getCollection());</span><br><span class="line">        $message = <span class="string">''</span>;</span><br><span class="line">        <span class="keyword">foreach</span> ($violations <span class="keyword">as</span> $$violation) &#123;</span><br><span class="line">            $prefix = <span class="keyword">empty</span>($message) ? <span class="string">''</span>: <span class="string">';'</span>;</span><br><span class="line">            $message .= $prefix . $$violation-&gt;getMessage();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> ($message) <span class="keyword">throw</span> <span class="keyword">new</span> Parameter([<span class="string">'message'</span> =&gt; $message]);</span><br><span class="line">    &#125;</span><br><span class="line">    ...getter <span class="keyword">or</span> setter</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Validator</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Exception</span>\<span class="title">Parameter</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Symfony</span>\<span class="title">Component</span>\<span class="title">Validator</span>\<span class="title">Constraints</span>\<span class="title">Collection</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Symfony</span>\<span class="title">Component</span>\<span class="title">Validator</span>\<span class="title">Validation</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Symfony</span>\<span class="title">Component</span>\<span class="title">Validator</span>\<span class="title">Validator</span>\<span class="title">ValidatorInterface</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Class Base</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@package</span> App\Validator</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@var</span> Collection</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">protected</span> $collection;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@var</span> ValidatorInterface</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">static</span> $validator;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Base constructor.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="keyword">self</span>::getValidator() <span class="keyword">instanceof</span> ValidatorInterface)) &#123;</span><br><span class="line">            <span class="keyword">self</span>::setValidator();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">static</span>::setCollection();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> array $input</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> \Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">check</span> <span class="params">(array $input)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $violations = <span class="keyword">self</span>::getValidator()-&gt;validate($input, <span class="keyword">self</span>::getCollection());</span><br><span class="line">        $message = <span class="string">''</span>;</span><br><span class="line">        <span class="keyword">foreach</span> ($violations <span class="keyword">as</span> $$violation) &#123;</span><br><span class="line">            $prefix = <span class="keyword">empty</span>($message) ? <span class="string">''</span>: <span class="string">';'</span>;</span><br><span class="line">            $message .= $prefix . $$violation-&gt;getMessage();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> ($message) <span class="keyword">throw</span> <span class="keyword">new</span> Parameter([<span class="string">'message'</span> =&gt; $message]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// ...getter or setter</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>上面的代码中，我们构建了自己的验证器基类。<br>只要验证不通过，就会抛出参数异常的错误(<code>Parameter</code>)；<br>子类只需要实现<code>setCollection</code>定义约束就可以使用了。</p>
 <h4 id="自定义验证器的使用"><a href="#自定义验证器的使用" class="headerlink" title="自定义验证器的使用"></a>自定义验证器的使用</h4><p>我们来构建一个子类<code>App\Validator\Example</code>：</p>
@@ -677,10 +1002,10 @@
 <p>上面我们虽然实现了自定义验证器。但是用的规则还是<code>symfony/validation</code>里面的，当需要验证特殊字段的时候(比如验证手机号码)，我们还是需要自己定义的规则。</p>
 </blockquote>
 <p>下面我们就来实现一下验证手机号码的规则。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">php bin/console make:validator Mobile</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">php bin/console make:validator Mobile</span><br></pre></td></tr></table></figure>
 
 <p>上面的代码中，我们使用<code>makebundle</code>帮我们自动生成了<code>App\Validator\Mobile</code>和<code>App\Validator\MobileValidator</code>，如果你没有安装<code>makebundle</code>的话，执行以下命令：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">composer require symfony/maker-bundle --dev</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">composer require symfony/maker-bundle --dev</span><br></pre></td></tr></table></figure>
 
 <p>下面我们来实现<code>App\Validator\Mobile</code>和<code>App\Validator\MobileValidator</code></p>
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Validator</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Symfony</span>\<span class="title">Component</span>\<span class="title">Validator</span>\<span class="title">Constraint</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Annotation</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Mobile</span> <span class="keyword">extends</span> <span class="title">Constraint</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $message = <span class="string">'电话号码错误'</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -704,7 +1029,7 @@
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Make</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Symfony</span>\<span class="title">Bundle</span>\<span class="title">MakerBundle</span>\<span class="title">ConsoleStyle</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Symfony</span>\<span class="title">Bundle</span>\<span class="title">MakerBundle</span>\<span class="title">DependencyBuilder</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Symfony</span>\<span class="title">Bundle</span>\<span class="title">MakerBundle</span>\<span class="title">Generator</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Symfony</span>\<span class="title">Bundle</span>\<span class="title">MakerBundle</span>\<span class="title">InputConfiguration</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Symfony</span>\<span class="title">Bundle</span>\<span class="title">MakerBundle</span>\<span class="title">Maker</span>\<span class="title">AbstractMaker</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Symfony</span>\<span class="title">Bundle</span>\<span class="title">MakerBundle</span>\<span class="title">Str</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Symfony</span>\<span class="title">Component</span>\<span class="title">Console</span>\<span class="title">Command</span>\<span class="title">Command</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Symfony</span>\<span class="title">Component</span>\<span class="title">Console</span>\<span class="title">Input</span>\<span class="title">InputArgument</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Symfony</span>\<span class="title">Component</span>\<span class="title">Console</span>\<span class="title">Input</span>\<span class="title">InputInterface</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Symfony</span>\<span class="title">Component</span>\<span class="title">Validator</span>\<span class="title">Validation</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Class Rule</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@package</span> App\Make</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Rule</span> <span class="keyword">extends</span> <span class="title">AbstractMaker</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> string</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">getCommandName</span> <span class="params">()</span>: <span class="title">string</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'make:rule'</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> Command            $command</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> InputConfiguration $inputConfig</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">configureCommand</span> <span class="params">(Command $command, InputConfiguration $inputConfig)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $command</span><br><span class="line">            -&gt;setDescription(<span class="string">'Creates a new validator and constraint class'</span>)</span><br><span class="line">            -&gt;addArgument(<span class="string">'name'</span>, InputArgument::OPTIONAL, <span class="string">'The name of the validator class (e.g. &lt;fg=yellow&gt;EnabledValidator&lt;/&gt;)'</span>)</span><br><span class="line">            -&gt;setHelp(file_get_contents(<span class="keyword">__DIR__</span>.<span class="string">'/../../vendor/symfony/maker-bundle/src/Resources/help/MakeValidator.txt'</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> InputInterface $input</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> ConsoleStyle   $io</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> Generator      $generator</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> \Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">generate</span> <span class="params">(InputInterface $input, ConsoleStyle $io, Generator $generator)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $validatorClassNameDetails = $generator-&gt;createClassNameDetails(</span><br><span class="line">            $input-&gt;getArgument(<span class="string">'name'</span>),</span><br><span class="line">            <span class="string">'Rule\\'</span>,</span><br><span class="line">            <span class="string">'Validator'</span></span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        $constraintFullClassName = Str::removeSuffix($validatorClassNameDetails-&gt;getFullName(), <span class="string">'Validator'</span>);</span><br><span class="line"></span><br><span class="line">        $generator-&gt;generateClass(</span><br><span class="line">            $validatorClassNameDetails-&gt;getFullName(),</span><br><span class="line">            <span class="string">'validator/Validator.tpl.php'</span>,</span><br><span class="line">            [</span><br><span class="line">                <span class="string">'constraint_class_name'</span> =&gt; $constraintFullClassName,</span><br><span class="line">            ]</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        $generator-&gt;generateClass(</span><br><span class="line">            $constraintFullClassName,</span><br><span class="line">            <span class="string">'validator/Constraint.tpl.php'</span>,</span><br><span class="line">            []</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        $generator-&gt;writeChanges();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">$this</span>-&gt;writeSuccessMessage($io);</span><br><span class="line"></span><br><span class="line">        $io-&gt;text([</span><br><span class="line">            <span class="string">'Next: Open your new constraint &amp; validators and add your logic.'</span>,</span><br><span class="line">            <span class="string">'Find the documentation at &lt;fg=yellow&gt;http://symfony.com/doc/current/validation/custom_constraint.html&lt;/&gt;'</span>,</span><br><span class="line">        ]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> DependencyBuilder $dependencies</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">configureDependencies</span> <span class="params">(DependencyBuilder $dependencies)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $dependencies-&gt;addClassDependency(</span><br><span class="line">            Validation::class,</span><br><span class="line">            <span class="string">'validator'</span></span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>这样，我们就可以通过自己的命令创建规则了。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">php bin/console make:rule [rulename]</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">php bin/console make:rule [rulename]</span><br></pre></td></tr></table></figure>
 
 <p>以后创建的规则都定义在<code>App\Rule</code>下，不用担心验证器和规则重名的问题。</p>
 <p>由此，我们构建了自己的数据校验层，它十分简洁，分工明确，维护简单。</p>
@@ -716,6 +1041,185 @@
       <tags>
         <tag>restful</tag>
         <tag>symfony</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>记markdown语法</title>
+    <url>/2019/06/28/markdown/</url>
+    <content><![CDATA[<p>记一些学习 markdown 的资料</p>
+<a id="more"></a>
+
+<h3 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h3><p>标题的语法： <code>#</code>，标题的数量代表级别(如：<code>##</code>代表二级标题)，你可以类比<code>html</code>里面的<code>h1~h6</code>.<br>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#一级标题</span><br><span class="line">##二级标题</span><br><span class="line">###三级标题</span><br><span class="line">####四级标题</span><br><span class="line">#####五级标题</span><br><span class="line">######六级标题</span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<blockquote>
+<h1 id="一级标题"><a href="#一级标题" class="headerlink" title="一级标题"></a>一级标题</h1><h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><h5 id="五级标题"><a href="#五级标题" class="headerlink" title="五级标题"></a>五级标题</h5><h6 id="六级标题"><a href="#六级标题" class="headerlink" title="六级标题"></a>六级标题</h6></blockquote>
+<hr>
+<h3 id="字体"><a href="#字体" class="headerlink" title="字体"></a>字体</h3><ul>
+<li><h4 id="斜体"><a href="#斜体" class="headerlink" title="斜体"></a>斜体</h4>在你要倾斜的字体左右用一个<code>*</code>包起来;</li>
+<li><h4 id="加粗"><a href="#加粗" class="headerlink" title="加粗"></a>加粗</h4>在你要加粗的字体左右用两个<code>*</code>包起来;</li>
+<li><h4 id="斜体加粗"><a href="#斜体加粗" class="headerlink" title="斜体加粗"></a>斜体加粗</h4>没错，用三个<code>*</code>包起来的字体即可斜体加粗;</li>
+<li><h4 id="删除线"><a href="#删除线" class="headerlink" title="删除线"></a>删除线</h4>在你要删除线的字体左右用两个<code>~</code>包起来;</li>
+</ul>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">这是**加粗**，这是*斜体*，***斜体加粗***，以及~~删除线~~</span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<blockquote>
+<p>这是<strong>加粗</strong>，这是<em>斜体</em>，<strong><em>斜体加粗</em></strong>，以及<del>删除线</del></p>
+</blockquote>
+<hr>
+<h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><p>在你要引用的文字前加<code>&gt;</code>即可；</p>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt;引用一</span><br><span class="line">&gt;&gt;引用二</span><br><span class="line">&gt;&gt;&gt;&gt;&gt;&gt;引用n</span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<blockquote>
+<p>引用一</p>
+<blockquote>
+<p>引用二</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>引用 n</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<hr>
+<h4 id="分割线"><a href="#分割线" class="headerlink" title="分割线"></a>分割线</h4><p>用三个（或更多）<code>*</code>或者<code>-</code></p>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">***</span><br><span class="line">---</span><br><span class="line">****</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<hr>
+<hr>
+<hr>
+<hr>
+<h4 id="图片与链接"><a href="#图片与链接" class="headerlink" title="图片与链接"></a>图片与链接</h4><p>链接语法：<code>[链接名](链接 &quot;链接title&quot;)</code><br>图片语法：<code>![图片alt](图片地址 &quot;图片title&quot;)</code></p>
+<blockquote>
+<p><strong><em>注意：中间有一个空格</em></strong></p>
+</blockquote>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[才先の博客](https://jaychoumylove.github.io &quot;才先の博客&quot;)</span><br><span class="line">![这里是alt](https://jaychoumylove.github.io/images/avatar.gif &quot;这里是title&quot;)</span><br></pre></td></tr></table></figure>
+
+<p>效果：<br><a href="https://jaychoumylove.github.io" title="才先の博客">才先の博客</a><br><img src="/images/avatar.gif" alt="这里是alt" title="这里是title"></p>
+<hr>
+<h4 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h4><p><strong>无序列表</strong>用 <code>-</code> <code>+</code> <code>*</code> 任何一种都可以，可以在列表后加<code>[]</code>标识是否勾选（_注意空格_）等</p>
+<blockquote>
+<p>注意 <code>*</code> <code>+</code> <code>-</code> 与内容之间要有一个空格</p>
+</blockquote>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">- 1</span><br><span class="line">- 2</span><br><span class="line">- 3</span><br><span class="line"></span><br><span class="line">+ a</span><br><span class="line">+ b</span><br><span class="line">+ c</span><br><span class="line"></span><br><span class="line">* [ ]  A</span><br><span class="line">* [ ]  B</span><br><span class="line">* [x]  C</span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<blockquote>
+<ul>
+<li>1</li>
+<li>2</li>
+<li>3</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>a</li>
+<li>b</li>
+<li>c</li>
+</ul>
+</blockquote>
+<ul>
+<li><input disabled type="checkbox"> A</li>
+<li><input disabled type="checkbox"> B</li>
+<li><input checked disabled type="checkbox"> C</li>
+</ul>
+<p><strong>有序列表</strong>的语法是数字加点</p>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1. A</span><br><span class="line">2. B</span><br><span class="line">3. C</span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<blockquote>
+<ol>
+<li>A</li>
+<li>B</li>
+<li>C</li>
+</ol>
+</blockquote>
+<p><strong>列表嵌套</strong><br>如果想要列表嵌套的话，上一级和下一级之间要有三个空格</p>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">- 1</span><br><span class="line">   1. A</span><br><span class="line">      + a</span><br><span class="line">         * 45</span><br><span class="line">         * 23</span><br><span class="line">         * 8989</span><br><span class="line">      + b</span><br><span class="line">   2. B</span><br><span class="line">      * !</span><br><span class="line">      * @</span><br><span class="line">- 2</span><br><span class="line">- 3</span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<blockquote>
+<ul>
+<li>1<ol>
+<li>A<ul>
+<li>a<ul>
+<li>45</li>
+<li>23</li>
+<li>8989</li>
+</ul>
+</li>
+<li>b</li>
+</ul>
+</li>
+<li>B<ul>
+<li>!</li>
+<li>@</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>2</li>
+<li>3</li>
+</ul>
+</blockquote>
+<hr>
+<h4 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h4><p>这个解释比较麻烦，直接上示例吧</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">|这是你的表头|表头|表头|</span><br><span class="line">|---|:---:|---:|</span><br><span class="line">|这是你的内容|内容|内容|</span><br><span class="line">|我是居左的|我是居中的|我是居右的|</span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<table>
+<thead>
+<tr>
+<th>这是你的表头</th>
+<th align="center">表头</th>
+<th align="right">表头</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>这是你的内容</td>
+<td align="center">内容</td>
+<td align="right">内容</td>
+</tr>
+<tr>
+<td>我是居左的</td>
+<td align="center">我是居中的</td>
+<td align="right">我是居右的</td>
+</tr>
+</tbody></table>
+<hr>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><p>语法：用反引号把你的代码包起来,单行代码用一个即可，代码块用三个</p>
+<blockquote>
+<p><em>注意，以下示例为了防止转义将反引号用()包起来了，实际上是没有的</em></p>
+</blockquote>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(`) create user page (`)</span><br><span class="line"></span><br><span class="line">(```)</span><br><span class="line">function foo() &#123;</span><br><span class="line">    return &quot;bar&quot;</span><br><span class="line">&#125;</span><br><span class="line">foo();</span><br><span class="line">(```)</span><br></pre></td></tr></table></figure>
+
+<p>效果：</p>
+<p><code>create user page</code></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"bar"</span></span><br><span class="line">&#125;</span><br><span class="line">foo();</span><br></pre></td></tr></table></figure>
+
+<hr>
+]]></content>
+      <categories>
+        <category>MarkDown</category>
+      </categories>
+      <tags>
+        <tag>notes</tag>
       </tags>
   </entry>
 </search>

@@ -58,19 +58,19 @@
   };
 </script>
 
-  <meta name="description" content="梳理 php 关于 string 的小知识  拼接两种方式：  普通字符串拼接 运用sprintf  第一种方式在PHP基础笔记之类型有提到，示例主要针对 sprintf 函数: 12345&amp;lt;?php    $a = &apos;Jack&apos;;    echo sprintf(&apos;his\&apos;s name is &quot;%s&quot;.&apos;, $a);// his&apos;s name is Jack.?&amp;gt;  格式化 nu">
+  <meta name="description" content="此为sql语句的开篇记录，作为我多次维护数据的应用笔记，以求日后方便。  统计类的查询大多是统计类的函数的运用，主要有：  COUNT(): 计数 SUM(): 求和 AVG()：求平均值 MIN()：取最小值 MAX()：取最大值  12345select sum(`field`) as [alias] from [table] where [where case];select count(">
 <meta name="keywords" content="notes">
 <meta property="og:type" content="article">
-<meta property="og:title" content="PHP基础笔记之string">
-<meta property="og:url" content="https://jaychoumylove.github.io/2019/10/18/php-base-string/index.html">
+<meta property="og:title" content="sql语句之query笔记">
+<meta property="og:url" content="https://jaychoumylove.github.io/2021/02/22/database-query/index.html">
 <meta property="og:site_name" content="simker">
-<meta property="og:description" content="梳理 php 关于 string 的小知识  拼接两种方式：  普通字符串拼接 运用sprintf  第一种方式在PHP基础笔记之类型有提到，示例主要针对 sprintf 函数: 12345&amp;lt;?php    $a = &apos;Jack&apos;;    echo sprintf(&apos;his\&apos;s name is &quot;%s&quot;.&apos;, $a);// his&apos;s name is Jack.?&amp;gt;  格式化 nu">
+<meta property="og:description" content="此为sql语句的开篇记录，作为我多次维护数据的应用笔记，以求日后方便。  统计类的查询大多是统计类的函数的运用，主要有：  COUNT(): 计数 SUM(): 求和 AVG()：求平均值 MIN()：取最小值 MAX()：取最大值  12345select sum(`field`) as [alias] from [table] where [where case];select count(">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2021-01-13T03:55:08.343Z">
+<meta property="og:updated_time" content="2021-02-22T06:50:42.125Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="PHP基础笔记之string">
-<meta name="twitter:description" content="梳理 php 关于 string 的小知识  拼接两种方式：  普通字符串拼接 运用sprintf  第一种方式在PHP基础笔记之类型有提到，示例主要针对 sprintf 函数: 12345&amp;lt;?php    $a = &apos;Jack&apos;;    echo sprintf(&apos;his\&apos;s name is &quot;%s&quot;.&apos;, $a);// his&apos;s name is Jack.?&amp;gt;  格式化 nu">
-  <link rel="canonical" href="https://jaychoumylove.github.io/2019/10/18/php-base-string/">
+<meta name="twitter:title" content="sql语句之query笔记">
+<meta name="twitter:description" content="此为sql语句的开篇记录，作为我多次维护数据的应用笔记，以求日后方便。  统计类的查询大多是统计类的函数的运用，主要有：  COUNT(): 计数 SUM(): 求和 AVG()：求平均值 MIN()：取最小值 MAX()：取最大值  12345select sum(`field`) as [alias] from [table] where [where case];select count(">
+  <link rel="canonical" href="https://jaychoumylove.github.io/2021/02/22/database-query/">
 
 
 <script id="page-configurations">
@@ -84,7 +84,7 @@
   };
 </script>
 
-  <title>PHP基础笔记之string | simker</title><meta name="robots" content="noindex">
+  <title>sql语句之query笔记 | simker</title>
   
 
 
@@ -274,7 +274,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jaychoumylove.github.io/2019/10/18/php-base-string/">
+    <link itemprop="mainEntityOfPage" href="https://jaychoumylove.github.io/2021/02/22/database-query/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Cai xian">
@@ -286,7 +286,7 @@
       <meta itemprop="name" content="simker">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">PHP基础笔记之string
+        <h2 class="post-title" itemprop="name headline">sql语句之query笔记
 
           
         </h2>
@@ -302,19 +302,11 @@
                 
               
 
-              <time title="创建时间：2019-10-18 17:10:23" itemprop="dateCreated datePublished" datetime="2019-10-18T17:10:23+08:00">2019-10-18</time>
+              <time title="创建时间：2021-02-22 14:50:35 / 修改时间：14:50:42" itemprop="dateCreated datePublished" datetime="2021-02-22T14:50:35+08:00">2021-02-22</time>
             </span>
           
             
 
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-13 11:55:08" itemprop="dateModified" datetime="2021-01-13T11:55:08+08:00">2021-01-13</time>
-              </span>
             
           
             <span class="post-meta-item">
@@ -323,7 +315,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/PHP/" itemprop="url" rel="index"><span itemprop="name">PHP</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/SQL/" itemprop="url" rel="index"><span itemprop="name">SQL</span></a></span>
 
                 
                 
@@ -350,7 +342,7 @@
       
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2019/10/18/php-base-string/#comments" itemprop="discussionUrl"><span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/18/php-base-string/" itemprop="commentCount"></span></a>
+    <a title="disqus" href="/2021/02/22/database-query/#comments" itemprop="discussionUrl"><span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/02/22/database-query/" itemprop="commentCount"></span></a>
   </span>
   
   
@@ -362,7 +354,7 @@
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span>474</span>
+              <span>1.5k</span>
             </span>
           
             <span class="post-meta-item" title="阅读时长">
@@ -386,30 +378,54 @@
 
       
         <blockquote>
-<p>梳理 php 关于 string 的小知识</p>
+<p>此为<code>sql</code>语句的开篇记录，作为我多次维护数据的应用笔记，以求日后方便。</p>
 </blockquote>
-<h4 id="拼接"><a href="#拼接" class="headerlink" title="拼接"></a>拼接</h4><p>两种方式：</p>
+<h4 id="统计类的查询"><a href="#统计类的查询" class="headerlink" title="统计类的查询"></a>统计类的查询</h4><p>大多是统计类的函数的运用，主要有：</p>
 <ul>
-<li>普通字符串拼接</li>
-<li>运用<code>sprintf</code></li>
+<li>COUNT(): 计数</li>
+<li>SUM(): 求和</li>
+<li>AVG()：求平均值</li>
+<li>MIN()：取最小值</li>
+<li>MAX()：取最大值</li>
 </ul>
-<p>第一种方式在<a href="/2019/10/14/php-base-types/" title="PHP基础笔记之类型">PHP基础笔记之类型</a>有提到，示例主要针对 <code>sprintf</code> 函数:</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $a = <span class="string">'Jack'</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">echo</span> sprintf(<span class="string">'his\'s name is "%s".'</span>, $a);<span class="comment">// his's name is Jack.</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">sum</span>(<span class="string">`field`</span>) <span class="keyword">as</span> [<span class="keyword">alias</span>] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">count</span>(<span class="number">1</span>) <span class="keyword">as</span> [<span class="keyword">alias</span>] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">avg</span>(<span class="string">`field`</span>) <span class="keyword">as</span> [<span class="keyword">alias</span>] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">min</span>(<span class="string">`field`</span>) <span class="keyword">as</span> [<span class="keyword">alias</span>] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">max</span>(<span class="string">`field`</span>) <span class="keyword">as</span> [<span class="keyword">alias</span>] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br></pre></td></tr></table></figure>
 
-<h4 id="格式化"><a href="#格式化" class="headerlink" title="格式化"></a>格式化</h4><ul>
-<li><code>number_format</code> - 以千位分隔符方式格式化一个数字</li>
-</ul>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $numberFormat = <span class="string">'2387484'</span></span><br><span class="line">    <span class="keyword">echo</span> number_format($numberFormat, <span class="number">2</span>);<span class="comment">// 23874.84</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>count 里面一般传一个字段或者是一个数值，个人喜欢传 <code>1</code></p>
+</blockquote>
+<h4 id="数据过滤"><a href="#数据过滤" class="headerlink" title="数据过滤"></a>数据过滤</h4><p>某种情况下你需要过滤某些数据，普遍的情况下，我们会用<code>where</code>语句来过滤。</p>
+<h5 id="所有数据"><a href="#所有数据" class="headerlink" title="所有数据"></a>所有数据</h5><p>一般的查询来说，拿到所有数据，根本不需要<code>where</code>，就可以拿到所有语句。<br>但是我们要更新所有语句，或者快速删除所有数据(保留自增键)的时候，如果不写入<code>where</code>条件的话，执行语句会报错，提示必须要有<code>where</code>条件。<br>这里有一个小技巧。</p>
+<p>既然必须要有<code>where</code>,那我们就写一个一个条件，比如<code>1=1</code>,<code>1&gt;0</code>,<code>1&lt;2</code>,<code>foo&lt;&gt;bar</code>等等.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">where 1 = 1</span><br><span class="line">where 1 &gt; 0</span><br><span class="line">where 1 &lt; 2</span><br><span class="line">where 'foo' &lt;&gt; 'bar'</span><br></pre></td></tr></table></figure>
 
-<h4 id="转化"><a href="#转化" class="headerlink" title="转化"></a>转化</h4><ul>
-<li><code>floatval</code> 提取浮点值</li>
-<li><code>intval</code> 获取变量整数值</li>
-<li>除此之外，你还可以用 <code>settype</code> 来转换，</li>
+<p>然后我们的语句大概就是这个样子</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> [<span class="keyword">field</span>] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">update</span> [<span class="keyword">table</span>] <span class="keyword">set</span> [<span class="keyword">field</span>] = <span class="string">'some value'</span> <span class="keyword">where</span> <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> <span class="literal">true</span>;</span><br></pre></td></tr></table></figure>
+
+<h5 id="去重"><a href="#去重" class="headerlink" title="去重"></a>去重</h5><ul>
+<li><code>distinct</code> 可以支持多个字段去重</li>
+<li><code>group by</code> 这个主要应用在聚合统计场景中，但是也可以去重</li>
 </ul>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $a = <span class="string">'3.14158额'</span>;</span><br><span class="line">    $b = <span class="string">'1个'</span>;</span><br><span class="line">    $true = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">echo</span> floatval($a); <span class="comment">// 3.14159</span></span><br><span class="line">    <span class="keyword">echo</span> intval($b); <span class="comment">// 1</span></span><br><span class="line">    settype($true, <span class="string">'string'</span>);</span><br><span class="line">    <span class="keyword">echo</span> $true; <span class="comment">// 1</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">distinct</span> [<span class="keyword">field</span>], [other <span class="keyword">field</span>] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"><span class="keyword">select</span> [<span class="keyword">field</span>] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>] <span class="keyword">group</span> <span class="keyword">by</span> [<span class="keyword">field</span>];</span><br></pre></td></tr></table></figure>
+
+<h5 id="筛选重复数据"><a href="#筛选重复数据" class="headerlink" title="筛选重复数据"></a>筛选重复数据</h5><ul>
+<li><code>count</code> 通过计数来筛选数据(计数值大于 1 的就是重复值，反之就是唯一值)</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">count</span>(<span class="number">1</span>) <span class="keyword">as</span> _c <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>] <span class="keyword">group</span> <span class="keyword">by</span> [<span class="keyword">field</span>];</span><br></pre></td></tr></table></figure>
+
+<h5 id="查询子语句"><a href="#查询子语句" class="headerlink" title="查询子语句"></a>查询子语句</h5><ul>
+<li>有些时候加入查询子语句更方便理解，如上面的查询就可以改写成这样的</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> (<span class="keyword">select</span> <span class="keyword">count</span>(<span class="number">1</span>) <span class="keyword">as</span> _c <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>] <span class="keyword">group</span> <span class="keyword">by</span> [<span class="keyword">field</span>]) b <span class="keyword">where</span> b._c &gt; <span class="number">1</span>;</span><br><span class="line"><span class="comment"># b._c = 1;</span></span><br></pre></td></tr></table></figure>
+
+<p>是不是清晰多了。</p>
+<blockquote>
+<p>题外话，一个面试题：请从数据库(<code>people</code>)中取出随机的五条数据（有效数据量不断会上升）。</p>
+</blockquote>
+<p>解答：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1 先拿到最小id和最大id</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">min</span>(<span class="keyword">id</span>) <span class="keyword">as</span> minId <span class="keyword">from</span> perple;</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">max</span>(<span class="keyword">id</span>) <span class="keyword">as</span> maxId <span class="keyword">from</span> perple;</span><br><span class="line"><span class="comment"># 2 然后拿到一个随机id(介于最小，最大之间)</span></span><br><span class="line"><span class="comment"># 3 再拿到一条记录</span></span><br><span class="line"><span class="keyword">select</span> [<span class="keyword">field</span>] <span class="keyword">from</span> people <span class="keyword">where</span> <span class="keyword">id</span> &gt; <span class="keyword">round</span>(<span class="keyword">rand</span>() * ([maxId] - [minId]) + [minId]) <span class="keyword">limit</span> <span class="number">1</span>;</span><br><span class="line"><span class="comment"># 然后重复 5 次 2 ~ 3 操作</span></span><br></pre></td></tr></table></figure>
 
 <p><strong><em>To be continue</em></strong></p>
-<!-- flag of hidden posts -->
+
     </div>
 
     
@@ -454,6 +470,22 @@
 
         
 
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2021/02/22/database-update/" rel="next" title="sql语句之update笔记">
+                  <i class="fa fa-chevron-left"></i> sql语句之update笔记
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+            </div>
+          </div>
+        
       </footer>
     
   </div>
@@ -515,7 +547,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">18</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -546,7 +578,9 @@
         
           
         
-        <span class="site-state-item-count">7</span>
+          
+        
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">分类</span>
         </a>
       </div>
@@ -625,7 +659,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#拼接"><span class="nav-number">1.</span> <span class="nav-text">拼接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#格式化"><span class="nav-number">2.</span> <span class="nav-text">格式化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#转化"><span class="nav-number">3.</span> <span class="nav-text">转化</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#统计类的查询"><span class="nav-number">1.</span> <span class="nav-text">统计类的查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据过滤"><span class="nav-number">2.</span> <span class="nav-text">数据过滤</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#所有数据"><span class="nav-number">2.1.</span> <span class="nav-text">所有数据</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#去重"><span class="nav-number">2.2.</span> <span class="nav-text">去重</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#筛选重复数据"><span class="nav-number">2.3.</span> <span class="nav-text">筛选重复数据</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#查询子语句"><span class="nav-number">2.4.</span> <span class="nav-text">查询子语句</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -652,12 +686,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">32k</span>
+    <span title="站点总字数">49k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">29 分钟</span>
+    <span title="站点阅读时长">44 分钟</span>
 </div>
   <div class="powered-by">由 <span class="exturl theme-link" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> 强力驱动 v3.9.0</div>
   <span class="post-meta-divider">|</span>
@@ -780,9 +814,9 @@
 </script>
 <script>
   function disqus_config() {
-    this.page.url = "https://jaychoumylove.github.io/2019/10/18/php-base-string/";
-    this.page.identifier = "2019/10/18/php-base-string/";
-    this.page.title = 'PHP基础笔记之string';};
+    this.page.url = "https://jaychoumylove.github.io/2021/02/22/database-query/";
+    this.page.identifier = "2021/02/22/database-query/";
+    this.page.title = 'sql语句之query笔记';};
   function loadComments() {
     if (window.DISQUS) {
       DISQUS.reset({

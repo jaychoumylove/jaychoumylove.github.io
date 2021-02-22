@@ -2,6 +2,76 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://jaychoumylove.github.io/2021/02/22/database-update/</loc>
+    
+    <lastmod>2021-02-22T06:50:45.467Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://jaychoumylove.github.io/2021/02/22/database-query/</loc>
+    
+    <lastmod>2021-02-22T06:50:42.125Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://jaychoumylove.github.io/2021/02/08/php-base-array/</loc>
+    
+    <lastmod>2021-02-13T12:19:29.126Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://jaychoumylove.github.io/2021/02/08/php-base-string/</loc>
+    
+    <lastmod>2021-02-10T04:42:04.156Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://jaychoumylove.github.io/2021/02/08/php-base-control-structures/</loc>
+    
+    <lastmod>2021-02-09T08:41:57.310Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://jaychoumylove.github.io/about/index.html</loc>
+    
+    <lastmod>2021-02-09T07:18:02.705Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://jaychoumylove.github.io/2019/06/28/markdown/</loc>
+    
+    <lastmod>2021-02-09T07:14:32.189Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://jaychoumylove.github.io/2021/02/08/php-base-types/</loc>
+    
+    <lastmod>2021-02-08T10:47:26.287Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://jaychoumylove.github.io/2019/09/20/symfony-validator/</loc>
+    
+    <lastmod>2021-01-14T03:06:33.598Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://jaychoumylove.github.io/2019/10/26/curl-request/</loc>
+    
+    <lastmod>2021-01-14T02:07:25.382Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://jaychoumylove.github.io/2019/12/04/git-revert/</loc>
     
     <lastmod>2021-01-13T06:50:53.264Z</lastmod>
@@ -19,13 +89,6 @@
     <loc>https://jaychoumylove.github.io/2019/11/09/git-cancel-update/</loc>
     
     <lastmod>2021-01-13T06:42:11.892Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://jaychoumylove.github.io/2019/10/26/curl-request/</loc>
-    
-    <lastmod>2021-01-13T06:41:37.024Z</lastmod>
     
   </url>
   
@@ -51,23 +114,9 @@
   </url>
   
   <url>
-    <loc>https://jaychoumylove.github.io/2019/09/20/symfony-validator/</loc>
-    
-    <lastmod>2021-01-13T03:55:08.384Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://jaychoumylove.github.io/2020/06/28/http-request/</loc>
     
     <lastmod>2020-06-28T08:21:36.840Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://jaychoumylove.github.io/2019/06/28/markdown/</loc>
-    
-    <lastmod>2020-05-03T07:32:50.427Z</lastmod>
     
   </url>
   
@@ -96,13 +145,6 @@
     <loc>https://jaychoumylove.github.io/categories/index.html</loc>
     
     <lastmod>2019-10-08T01:39:20.489Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://jaychoumylove.github.io/about/index.html</loc>
-    
-    <lastmod>2019-10-06T02:22:22.789Z</lastmod>
     
   </url>
   

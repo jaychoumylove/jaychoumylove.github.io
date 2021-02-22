@@ -1,6 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://jaychoumylove.github.io/2021/02/22/database-update/</loc>
+    <lastmod>2021-02-22</lastmod>
+  </url>
+  <url>
+    <loc>https://jaychoumylove.github.io/2021/02/22/database-query/</loc>
+    <lastmod>2021-02-22</lastmod>
+  </url>
+  <url>
+    <loc>https://jaychoumylove.github.io/2021/02/08/php-base-array/</loc>
+    <lastmod>2021-02-13</lastmod>
+  </url>
+  <url>
+    <loc>https://jaychoumylove.github.io/2021/02/08/php-base-string/</loc>
+    <lastmod>2021-02-10</lastmod>
+  </url>
+  <url>
+    <loc>https://jaychoumylove.github.io/2021/02/08/php-base-control-structures/</loc>
+    <lastmod>2021-02-09</lastmod>
+  </url>
+  <url>
+    <loc>https://jaychoumylove.github.io/2019/06/28/markdown/</loc>
+    <lastmod>2021-02-09</lastmod>
+  </url>
+  <url>
+    <loc>https://jaychoumylove.github.io/2021/02/08/php-base-types/</loc>
+    <lastmod>2021-02-08</lastmod>
+  </url>
+  <url>
+    <loc>https://jaychoumylove.github.io/2019/09/20/symfony-validator/</loc>
+    <lastmod>2021-01-14</lastmod>
+  </url>
+  <url>
+    <loc>https://jaychoumylove.github.io/2019/10/26/curl-request/</loc>
+    <lastmod>2021-01-14</lastmod>
+  </url>
+  <url>
     <loc>https://jaychoumylove.github.io/2019/12/04/git-revert/</loc>
     <lastmod>2021-01-13</lastmod>
   </url>
@@ -10,10 +46,6 @@
   </url>
   <url>
     <loc>https://jaychoumylove.github.io/2019/11/09/git-cancel-update/</loc>
-    <lastmod>2021-01-13</lastmod>
-  </url>
-  <url>
-    <loc>https://jaychoumylove.github.io/2019/10/26/curl-request/</loc>
     <lastmod>2021-01-13</lastmod>
   </url>
   <url>
@@ -29,16 +61,8 @@
     <lastmod>2021-01-13</lastmod>
   </url>
   <url>
-    <loc>https://jaychoumylove.github.io/2019/09/20/symfony-validator/</loc>
-    <lastmod>2021-01-13</lastmod>
-  </url>
-  <url>
     <loc>https://jaychoumylove.github.io/2020/06/28/http-request/</loc>
     <lastmod>2020-06-28</lastmod>
-  </url>
-  <url>
-    <loc>https://jaychoumylove.github.io/2019/06/28/markdown/</loc>
-    <lastmod>2020-05-03</lastmod>
   </url>
   <url>
     <loc>https://jaychoumylove.github.io/2019/10/26/git-reset-message/</loc>
