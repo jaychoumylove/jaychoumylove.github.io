@@ -2,16 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://jaychoumylove.github.io/2021/02/22/database-update/</loc>
+    <loc>https://jaychoumylove.github.io/2021/02/22/database-query/</loc>
     
-    <lastmod>2021-02-22T06:50:45.467Z</lastmod>
+    <lastmod>2021-02-22T06:53:55.093Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://jaychoumylove.github.io/2021/02/22/database-query/</loc>
+    <loc>https://jaychoumylove.github.io/2021/02/22/database-update/</loc>
     
-    <lastmod>2021-02-22T06:50:42.125Z</lastmod>
+    <lastmod>2021-02-22T06:53:41.594Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://jaychoumylove.github.io/2021/02/08/php-base-string/</loc>
+    
+    <lastmod>2021-02-22T06:52:48.805Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://jaychoumylove.github.io/2021/02/08/php-base-types/</loc>
+    
+    <lastmod>2021-02-22T06:52:42.957Z</lastmod>
     
   </url>
   
@@ -19,13 +33,6 @@
     <loc>https://jaychoumylove.github.io/2021/02/08/php-base-array/</loc>
     
     <lastmod>2021-02-13T12:19:29.126Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://jaychoumylove.github.io/2021/02/08/php-base-string/</loc>
-    
-    <lastmod>2021-02-10T04:42:04.156Z</lastmod>
     
   </url>
   
@@ -47,13 +54,6 @@
     <loc>https://jaychoumylove.github.io/2019/06/28/markdown/</loc>
     
     <lastmod>2021-02-09T07:14:32.189Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://jaychoumylove.github.io/2021/02/08/php-base-types/</loc>
-    
-    <lastmod>2021-02-08T10:47:26.287Z</lastmod>
     
   </url>
   

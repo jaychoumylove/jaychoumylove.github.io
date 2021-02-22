@@ -301,7 +301,7 @@
                 
               
 
-              <time title="创建时间：2021-02-22 14:50:35 / 修改时间：14:50:42" itemprop="dateCreated datePublished" datetime="2021-02-22T14:50:35+08:00">2021-02-22</time>
+              <time title="创建时间：2021-02-22 14:50:35 / 修改时间：14:53:55" itemprop="dateCreated datePublished" datetime="2021-02-22T14:50:35+08:00">2021-02-22</time>
             </span>
           
             
@@ -371,52 +371,15 @@
           <blockquote>
 <p>此为<code>sql</code>语句的开篇记录，作为我多次维护数据的应用笔记，以求日后方便。</p>
 </blockquote>
-<h4 id="统计类的查询"><a href="#统计类的查询" class="headerlink" title="统计类的查询"></a>统计类的查询</h4><p>大多是统计类的函数的运用，主要有：</p>
-<ul>
-<li>COUNT(): 计数</li>
-<li>SUM(): 求和</li>
-<li>AVG()：求平均值</li>
-<li>MIN()：取最小值</li>
-<li>MAX()：取最大值</li>
-</ul>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">sum</span>(<span class="string">`field`</span>) <span class="keyword">as</span> [<span class="keyword">alias</span>] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">count</span>(<span class="number">1</span>) <span class="keyword">as</span> [<span class="keyword">alias</span>] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">avg</span>(<span class="string">`field`</span>) <span class="keyword">as</span> [<span class="keyword">alias</span>] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">min</span>(<span class="string">`field`</span>) <span class="keyword">as</span> [<span class="keyword">alias</span>] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">max</span>(<span class="string">`field`</span>) <span class="keyword">as</span> [<span class="keyword">alias</span>] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>count 里面一般传一个字段或者是一个数值，个人喜欢传 <code>1</code></p>
-</blockquote>
-<h4 id="数据过滤"><a href="#数据过滤" class="headerlink" title="数据过滤"></a>数据过滤</h4><p>某种情况下你需要过滤某些数据，普遍的情况下，我们会用<code>where</code>语句来过滤。</p>
-<h5 id="所有数据"><a href="#所有数据" class="headerlink" title="所有数据"></a>所有数据</h5><p>一般的查询来说，拿到所有数据，根本不需要<code>where</code>，就可以拿到所有语句。<br>但是我们要更新所有语句，或者快速删除所有数据(保留自增键)的时候，如果不写入<code>where</code>条件的话，执行语句会报错，提示必须要有<code>where</code>条件。<br>这里有一个小技巧。</p>
-<p>既然必须要有<code>where</code>,那我们就写一个一个条件，比如<code>1=1</code>,<code>1&gt;0</code>,<code>1&lt;2</code>,<code>foo&lt;&gt;bar</code>等等.</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">where 1 = 1</span><br><span class="line">where 1 &gt; 0</span><br><span class="line">where 1 &lt; 2</span><br><span class="line">where 'foo' &lt;&gt; 'bar'</span><br></pre></td></tr></table></figure>
-
-<p>然后我们的语句大概就是这个样子</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> [<span class="keyword">field</span>] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">update</span> [<span class="keyword">table</span>] <span class="keyword">set</span> [<span class="keyword">field</span>] = <span class="string">'some value'</span> <span class="keyword">where</span> <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> <span class="literal">true</span>;</span><br></pre></td></tr></table></figure>
-
-<h5 id="去重"><a href="#去重" class="headerlink" title="去重"></a>去重</h5><ul>
-<li><code>distinct</code> 可以支持多个字段去重</li>
-<li><code>group by</code> 这个主要应用在聚合统计场景中，但是也可以去重</li>
-</ul>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">distinct</span> [<span class="keyword">field</span>], [other <span class="keyword">field</span>] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"><span class="keyword">select</span> [<span class="keyword">field</span>] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>] <span class="keyword">group</span> <span class="keyword">by</span> [<span class="keyword">field</span>];</span><br></pre></td></tr></table></figure>
-
-<h5 id="筛选重复数据"><a href="#筛选重复数据" class="headerlink" title="筛选重复数据"></a>筛选重复数据</h5><ul>
-<li><code>count</code> 通过计数来筛选数据(计数值大于 1 的就是重复值，反之就是唯一值)</li>
-</ul>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">count</span>(<span class="number">1</span>) <span class="keyword">as</span> _c <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>] <span class="keyword">group</span> <span class="keyword">by</span> [<span class="keyword">field</span>];</span><br></pre></td></tr></table></figure>
-
-<h5 id="查询子语句"><a href="#查询子语句" class="headerlink" title="查询子语句"></a>查询子语句</h5><ul>
-<li>有些时候加入查询子语句更方便理解，如上面的查询就可以改写成这样的</li>
-</ul>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> (<span class="keyword">select</span> <span class="keyword">count</span>(<span class="number">1</span>) <span class="keyword">as</span> _c <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>] <span class="keyword">group</span> <span class="keyword">by</span> [<span class="keyword">field</span>]) b <span class="keyword">where</span> b._c &gt; <span class="number">1</span>;</span><br><span class="line"><span class="comment"># b._c = 1;</span></span><br></pre></td></tr></table></figure>
-
-<p>是不是清晰多了。</p>
-<blockquote>
-<p>题外话，一个面试题：请从数据库(<code>people</code>)中取出随机的五条数据（有效数据量不断会上升）。</p>
-</blockquote>
-<p>解答：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1 先拿到最小id和最大id</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">min</span>(<span class="keyword">id</span>) <span class="keyword">as</span> minId <span class="keyword">from</span> perple;</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">max</span>(<span class="keyword">id</span>) <span class="keyword">as</span> maxId <span class="keyword">from</span> perple;</span><br><span class="line"><span class="comment"># 2 然后拿到一个随机id(介于最小，最大之间)</span></span><br><span class="line"><span class="comment"># 3 再拿到一条记录</span></span><br><span class="line"><span class="keyword">select</span> [<span class="keyword">field</span>] <span class="keyword">from</span> people <span class="keyword">where</span> <span class="keyword">id</span> &gt; <span class="keyword">round</span>(<span class="keyword">rand</span>() * ([maxId] - [minId]) + [minId]) <span class="keyword">limit</span> <span class="number">1</span>;</span><br><span class="line"><span class="comment"># 然后重复 5 次 2 ~ 3 操作</span></span><br></pre></td></tr></table></figure>
-
-<p><strong><em>To be continue</em></strong></p>
-
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2021/02/22/database-query/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
         
       
     </div>
@@ -471,7 +434,7 @@
                 
               
 
-              <time title="创建时间：2021-02-22 14:50:35 / 修改时间：14:50:45" itemprop="dateCreated datePublished" datetime="2021-02-22T14:50:35+08:00">2021-02-22</time>
+              <time title="创建时间：2021-02-22 14:50:35 / 修改时间：14:53:41" itemprop="dateCreated datePublished" datetime="2021-02-22T14:50:35+08:00">2021-02-22</time>
             </span>
           
             
@@ -545,48 +508,15 @@
 <li>基本赋值更新</li>
 </ul>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> [<span class="keyword">table</span>] <span class="keyword">set</span> [<span class="keyword">field</span>] = [<span class="keyword">value</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>自增、自减等</li>
-</ul>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> [<span class="keyword">table</span>] <span class="keyword">set</span> [<span class="keyword">field</span>] = [<span class="keyword">field</span>] + <span class="number">1</span> <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"><span class="keyword">update</span> [<span class="keyword">table</span>] <span class="keyword">set</span> [<span class="keyword">field</span>] = [<span class="keyword">field</span>] - <span class="number">1</span> <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"><span class="keyword">update</span> [<span class="keyword">table</span>] <span class="keyword">set</span> [<span class="keyword">field</span>] = [<span class="keyword">field</span>] * <span class="number">1</span> <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"><span class="keyword">update</span> [<span class="keyword">table</span>] <span class="keyword">set</span> [<span class="keyword">field</span>] = [<span class="keyword">field</span>] / <span class="number">1</span> <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">update</span> [<span class="keyword">table</span>] <span class="keyword">set</span> [<span class="keyword">field</span>] = [<span class="keyword">field</span>] + [an other <span class="keyword">field</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>更新多个字段</li>
-</ul>
-<blockquote>
-<p>在<code>set</code>后面用逗号隔开便可</p>
-</blockquote>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> [<span class="keyword">table</span>] <span class="keyword">set</span> [<span class="keyword">field</span>] = [<span class="keyword">field</span>] + <span class="number">1</span>, [field2] = <span class="number">2</span> <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>更新记录数量限制等</li>
-</ul>
-<blockquote>
-<p>和查询一样，更新也是可以接收 <code>order by</code>, <code>limit</code> 的;</p>
-</blockquote>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> [<span class="keyword">table</span>] <span class="keyword">set</span> [<span class="keyword">field</span>] = [<span class="keyword">field</span>] + <span class="number">1</span>, [field2] = <span class="number">2</span> <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>] <span class="keyword">order</span> <span class="keyword">by</span> [<span class="keyword">field</span>] <span class="keyword">limit</span> [<span class="keyword">limit</span>] <span class="keyword">offset</span> [<span class="keyword">offset</span>];</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>替换更新</li>
-</ul>
-<blockquote>
-<p>写入了记录发现要批量更新，但是只能更新字段的一部分，这时候就可以用替换了</p>
-</blockquote>
-<p>以下是清理图片后缀的语句.</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> [<span class="keyword">table</span>] <span class="keyword">set</span> <span class="string">`image`</span> = <span class="keyword">REPLACE</span>(<span class="string">`image`</span>, <span class="string">'.png'</span>, <span class="string">''</span>)<span class="keyword">where</span> <span class="string">`image`</span> <span class="keyword">LIKE</span> <span class="string">'%.png%'</span>;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>字符串合并</li>
-</ul>
-<blockquote>
-<p>这个很少会用到，一般是在存储过程里面使用</p>
-</blockquote>
-<p>以下是我当初维护数据时，为了清除重复数据做出的标记改动，以便我新增唯一索引</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> [<span class="keyword">table</span>] <span class="keyword">set</span> union_data = <span class="keyword">concat</span>(<span class="string">`union_data`</span>,<span class="string">'-'</span>,<span class="string">`id`</span>) <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br></pre></td></tr></table></figure>
-
-<p><strong><em>To be continue</em></strong></p>
-
+          <!--noindex-->
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2021/02/22/database-update/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          
+          <!--/noindex-->
         
       
     </div>
@@ -934,7 +864,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-02-10 12:42:04" itemprop="dateModified" datetime="2021-02-10T12:42:04+08:00">2021-02-10</time>
+                <time title="修改时间：2021-02-22 14:52:48" itemprop="dateModified" datetime="2021-02-22T14:52:48+08:00">2021-02-22</time>
               </span>
             
           
@@ -1064,11 +994,19 @@
                 
               
 
-              <time title="创建时间：2021-02-08 15:34:23 / 修改时间：18:47:26" itemprop="dateCreated datePublished" datetime="2021-02-08T15:34:23+08:00">2021-02-08</time>
+              <time title="创建时间：2021-02-08 15:34:23" itemprop="dateCreated datePublished" datetime="2021-02-08T15:34:23+08:00">2021-02-08</time>
             </span>
           
             
 
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-22 14:52:42" itemprop="dateModified" datetime="2021-02-22T14:52:42+08:00">2021-02-22</time>
+              </span>
             
           
             <span class="post-meta-item">
