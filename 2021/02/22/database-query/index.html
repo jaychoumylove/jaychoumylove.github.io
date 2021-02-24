@@ -66,7 +66,7 @@
 <meta property="og:site_name" content="simker">
 <meta property="og:description" content="此为sql语句的开篇记录，作为我多次维护数据的应用笔记，以求日后方便。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2021-02-22T06:53:55.093Z">
+<meta property="og:updated_time" content="2021-02-24T07:15:21.378Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="sql语句之query笔记">
 <meta name="twitter:description" content="此为sql语句的开篇记录，作为我多次维护数据的应用笔记，以求日后方便。">
@@ -302,11 +302,19 @@
                 
               
 
-              <time title="创建时间：2021-02-22 14:50:35 / 修改时间：14:53:55" itemprop="dateCreated datePublished" datetime="2021-02-22T14:50:35+08:00">2021-02-22</time>
+              <time title="创建时间：2021-02-22 14:50:35" itemprop="dateCreated datePublished" datetime="2021-02-22T14:50:35+08:00">2021-02-22</time>
             </span>
           
             
 
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-24 15:15:21" itemprop="dateModified" datetime="2021-02-24T15:15:21+08:00">2021-02-24</time>
+              </span>
             
           
             <span class="post-meta-item">
@@ -354,7 +362,7 @@
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span>1.5k</span>
+              <span>3.1k</span>
             </span>
           
             <span class="post-meta-item" title="阅读时长">
@@ -364,7 +372,7 @@
               
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               
-              <span>1 分钟</span>
+              <span>3 分钟</span>
             </span>
           
 
@@ -425,6 +433,9 @@
 </blockquote>
 <p>解答：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1 先拿到最小id和最大id</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">min</span>(<span class="keyword">id</span>) <span class="keyword">as</span> minId <span class="keyword">from</span> perple;</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">max</span>(<span class="keyword">id</span>) <span class="keyword">as</span> maxId <span class="keyword">from</span> perple;</span><br><span class="line"><span class="comment"># 2 然后拿到一个随机id(介于最小，最大之间)</span></span><br><span class="line"><span class="comment"># 3 再拿到一条记录</span></span><br><span class="line"><span class="keyword">select</span> [<span class="keyword">field</span>] <span class="keyword">from</span> people <span class="keyword">where</span> <span class="keyword">id</span> &gt; <span class="keyword">round</span>(<span class="keyword">rand</span>() * ([maxId] - [minId]) + [minId]) <span class="keyword">limit</span> <span class="number">1</span>;</span><br><span class="line"><span class="comment"># 然后重复 5 次 2 ~ 3 操作</span></span><br></pre></td></tr></table></figure>
+
+<p>这里以<code>PHP</code>代码示例:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by PhpStorm.</span></span><br><span class="line"><span class="comment"> * User: caixian</span></span><br><span class="line"><span class="comment"> * Date: 2099/8/12</span></span><br><span class="line"><span class="comment"> * Time: 14:47</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Controller</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> ...;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Route</span>("/user")</span></span><br><span class="line"><span class="comment"> * Class User</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@package</span> App\Controller</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">extends</span> <span class="title">AbstractController</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@var</span> UserRepository</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> $userRepository;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@var</span> EntityManagerInterface</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> $entityManager;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * User constructor.</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> UserRepository              $userRepository</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> EntityManagerInterface      $entityManager</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span> <span class="params">(UserRepository $userRepository,</span></span></span><br><span class="line"><span class="function"><span class="params">                                 EntityManagerInterface $entityManager)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;userRepository = $userRepository;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;entityManager  = $entityManager;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Route</span>("/info/rand", methods=&#123;"GET"&#125;, name="randInfo")</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> NonUniqueResultException</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">randInfo</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $qb = <span class="keyword">$this</span>-&gt;userRepository-&gt;createQueryBuilder(<span class="string">'t'</span>);</span><br><span class="line"></span><br><span class="line">        $minId = $qb-&gt;select(<span class="string">'min(t.id)'</span>)-&gt;getQuery()-&gt;getSingleScalarResult();</span><br><span class="line">        $maxId = $qb-&gt;select(<span class="string">'max(t.id)'</span>)-&gt;getQuery()-&gt;getSingleScalarResult();</span><br><span class="line"></span><br><span class="line">        $randNum = <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line">        $results = [];</span><br><span class="line">        $randQb = <span class="keyword">$this</span>-&gt;userRepository-&gt;createQueryBuilder(<span class="string">'r'</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">            $randItem = $randQb-&gt;where(<span class="string">'r.id &gt;= round(rand() * :randNum + :minId)'</span>)</span><br><span class="line">                -&gt;setParameters([</span><br><span class="line">                    <span class="string">'randNum'</span> =&gt; bcsub($maxId, $minId),</span><br><span class="line">                    <span class="string">'minId'</span> =&gt; $minId</span><br><span class="line">                ])</span><br><span class="line">                -&gt;setMaxResults(<span class="number">1</span>)</span><br><span class="line">                -&gt;getQuery()</span><br><span class="line">                -&gt;getOneOrNullResult();</span><br><span class="line"></span><br><span class="line">            $id = $randItem-&gt;getId();</span><br><span class="line">            <span class="keyword">if</span> (in_array($id, $results)) <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line">            array_push($results, $id);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (count($results) &gt;= $randNum) <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Success([<span class="string">'data'</span> =&gt; $results]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><strong><em>To be continue</em></strong></p>
 
@@ -688,12 +699,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">49k</span>
+    <span title="站点总字数">50k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">44 分钟</span>
+    <span title="站点阅读时长">46 分钟</span>
 </div>
   <div class="powered-by">由 <span class="exturl theme-link" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> 强力驱动 v3.9.0</div>
   <span class="post-meta-divider">|</span>
