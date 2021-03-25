@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://jaychoumylove.github.io/2021/03/25/fontend-interview-js/</loc>
+    <lastmod>2021-03-25</lastmod>
+  </url>
+  <url>
+    <loc>https://jaychoumylove.github.io/2021/03/25/fontend-interview-css/</loc>
+    <lastmod>2021-03-25</lastmod>
+  </url>
+  <url>
+    <loc>https://jaychoumylove.github.io/2019/10/26/curl-request/</loc>
+    <lastmod>2021-03-25</lastmod>
+  </url>
+  <url>
+    <loc>https://jaychoumylove.github.io/2019/09/19/symfony-init/</loc>
+    <lastmod>2021-03-25</lastmod>
+  </url>
+  <url>
     <loc>https://jaychoumylove.github.io/2021/03/19/react-subscribe-publish/</loc>
     <lastmod>2021-03-19</lastmod>
   </url>
@@ -37,10 +53,6 @@
     <lastmod>2021-01-14</lastmod>
   </url>
   <url>
-    <loc>https://jaychoumylove.github.io/2019/10/26/curl-request/</loc>
-    <lastmod>2021-01-14</lastmod>
-  </url>
-  <url>
     <loc>https://jaychoumylove.github.io/2019/12/04/git-revert/</loc>
     <lastmod>2021-01-13</lastmod>
   </url>
@@ -50,10 +62,6 @@
   </url>
   <url>
     <loc>https://jaychoumylove.github.io/2019/11/09/git-cancel-update/</loc>
-    <lastmod>2021-01-13</lastmod>
-  </url>
-  <url>
-    <loc>https://jaychoumylove.github.io/2019/09/19/symfony-init/</loc>
     <lastmod>2021-01-13</lastmod>
   </url>
   <url>
