@@ -58,16 +58,19 @@
   };
 </script>
 
-  <meta name="keywords" content="程序员,技术分享,php,javascript,react,typescript">
+  <meta name="description" content="Your browser does not support the audio tag.  记录一次关于用typescript封装restful api碰到的问题  这是我在 learn_koa 里面遇到的一个问题. 场景复现： 我需要封装Error到一个基类上面，然后后续所有自定义的异常全部继承这个基类，以后处理业务的时候就可以争对性处理。以下是js 的实现。 12345678910111213">
+<meta name="keywords" content="typescript">
 <meta property="og:type" content="article">
-<meta property="og:title" content="year-2019">
-<meta property="og:url" content="https://jaychoumylove.github.io/2020/01/24/year-2019/index.html">
+<meta property="og:title" content="记一次关于extends的bug">
+<meta property="og:url" content="https://jaychoumylove.github.io/2021/09/29/fixed-typescript-extends-error/index.html">
 <meta property="og:site_name" content="simker">
+<meta property="og:description" content="Your browser does not support the audio tag.  记录一次关于用typescript封装restful api碰到的问题  这是我在 learn_koa 里面遇到的一个问题. 场景复现： 我需要封装Error到一个基类上面，然后后续所有自定义的异常全部继承这个基类，以后处理业务的时候就可以争对性处理。以下是js 的实现。 12345678910111213">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-02-10T14:52:28.914Z">
+<meta property="og:updated_time" content="2021-09-29T15:54:23.897Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="year-2019">
-  <link rel="canonical" href="https://jaychoumylove.github.io/2020/01/24/year-2019/">
+<meta name="twitter:title" content="记一次关于extends的bug">
+<meta name="twitter:description" content="Your browser does not support the audio tag.  记录一次关于用typescript封装restful api碰到的问题  这是我在 learn_koa 里面遇到的一个问题. 场景复现： 我需要封装Error到一个基类上面，然后后续所有自定义的异常全部继承这个基类，以后处理业务的时候就可以争对性处理。以下是js 的实现。 12345678910111213">
+  <link rel="canonical" href="https://jaychoumylove.github.io/2021/09/29/fixed-typescript-extends-error/">
 
 
 <script id="page-configurations">
@@ -81,7 +84,7 @@
   };
 </script>
 
-  <title>year-2019 | simker</title><meta name="robots" content="noindex">
+  <title>记一次关于extends的bug | simker</title>
   
 
 
@@ -271,7 +274,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jaychoumylove.github.io/2020/01/24/year-2019/">
+    <link itemprop="mainEntityOfPage" href="https://jaychoumylove.github.io/2021/09/29/fixed-typescript-extends-error/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Cai xian">
@@ -283,7 +286,7 @@
       <meta itemprop="name" content="simker">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">year-2019
+        <h2 class="post-title" itemprop="name headline">记一次关于extends的bug
 
           
         </h2>
@@ -299,19 +302,11 @@
                 
               
 
-              <time title="创建时间：2020-01-24 13:56:37" itemprop="dateCreated datePublished" datetime="2020-01-24T13:56:37+08:00">2020-01-24</time>
+              <time title="创建时间：2021-09-29 22:28:58 / 修改时间：23:54:23" itemprop="dateCreated datePublished" datetime="2021-09-29T22:28:58+08:00">2021-09-29</time>
             </span>
           
             
 
-            
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-02-10 22:52:28" itemprop="dateModified" datetime="2020-02-10T22:52:28+08:00">2020-02-10</time>
-              </span>
             
           
 
@@ -334,7 +329,7 @@
       
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2020/01/24/year-2019/#comments" itemprop="discussionUrl"><span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/01/24/year-2019/" itemprop="commentCount"></span></a>
+    <a title="disqus" href="/2021/09/29/fixed-typescript-extends-error/#comments" itemprop="discussionUrl"><span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/09/29/fixed-typescript-extends-error/" itemprop="commentCount"></span></a>
   </span>
   
   
@@ -346,7 +341,7 @@
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span>0</span>
+              <span>2.2k</span>
             </span>
           
             <span class="post-meta-item" title="阅读时长">
@@ -356,7 +351,7 @@
               
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
               
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
           
 
@@ -369,7 +364,35 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <!-- flag of hidden posts -->
+        <p><audio src="/music/y2mate.com - Canon in D Pachelbels Canon  Cello  Piano BEST WEDDING VERSION.mp3" style="max-height :100%; max-width: 100%; display: block; margin-left: auto; margin-right: auto;" controls="controls" loop="loop" preload="meta">Your browser does not support the audio tag.</audio></p>
+<blockquote>
+<p>记录一次关于用<code>typescript</code>封装<code>restful</code> <code>api</code>碰到的问题</p>
+</blockquote>
+<p>这是我在 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2pheWNob3VteWxvdmUvbGVhcm5fa29h" title="learn_kao">learn_koa<i class="fa fa-external-link"></i></span> 里面遇到的一个问题.</p>
+<p>场景复现：</p>
+<p>我需要封装<code>Error</code>到一个基类上面，然后后续所有自定义的异常全部继承这个基类，以后处理业务的时候就可以争对性处理。以下是<code>js</code> 的实现。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BaseError</span> <span class="keyword">extends</span> <span class="title">Error</span> </span>&#123;</span><br><span class="line">    errorCode = <span class="number">0</span></span><br><span class="line">    </span><br><span class="line">    construct(errorCode = <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">super</span>()</span><br><span class="line">        <span class="keyword">if</span> (errorCode) &#123;</span><br><span class="line">            <span class="keyword">this</span>.errorCode = errorCode;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CustomError</span> <span class="keyword">extends</span> <span class="title">BaseError</span> </span>&#123;</span><br><span class="line">    errorCode = <span class="number">100001</span></span><br><span class="line"></span><br><span class="line">    construct(errorCode = <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">super</span>()</span><br><span class="line">        <span class="keyword">if</span> (errorCode) &#123;</span><br><span class="line">            <span class="keyword">this</span>.errorCode = errorCode;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">start</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> success = <span class="built_in">Math</span>.random() &gt; <span class="number">0.5</span>;</span><br><span class="line">        <span class="keyword">if</span> (success) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> CustomError();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">        <span class="keyword">if</span> (e <span class="keyword">instanceof</span> BaseError) &#123;</span><br><span class="line">            <span class="comment">// 出现了一个已知的错误</span></span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'出错了！'</span>)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 出现一个未知的错误</span></span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'出错了！！！！'</span>)</span><br><span class="line">            <span class="comment">// 通知维护人员，处理业务出现未知错误</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">start();</span><br></pre></td></tr></table></figure>
+
+<p>如上，我用了一个随机数来模拟处理业务出错的情况，在碰到已知的错误时我们可以用已有的逻辑来处理，比如参数校验错误了，直接通知前端错误，请求第三方出错了，就通知系统的维护人员。本质上的核心代码就是这一句：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">new</span> CustomError()) <span class="keyword">instanceof</span> BaseError; <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>在这里面的示例是可以返回<code>true</code>的，但是我在迁移到<code>ts</code>的时候。发现：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">new</span> CustomError()) <span class="keyword">instanceof</span> BaseError; <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<p>你没有看错，是<code>false</code>，当然这只在<code>tsconfig</code> 设置 <code>compilerOptions</code> 打包至<code>es5</code>的情况下，<code>es6</code>不存在以上的问题，但是目前大部分项目还是要降级到<code>es5</code>。</p>
+<p>那么，这是为什么呢？我们可以通过两个原型链来看看。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log((<span class="keyword">new</span> CustomError()).__proto__) <span class="comment">// Error &#123;&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>如此，我们可以清楚的看到我们自定义的对象实例的本质是<code>Error</code>对象，并不是<code>BaseError</code>， 所以我们使用<code>instanceof</code>的时候是<code>false</code>。</p>
+<p>那，有什么办法可以改变实例后的原型链么？</p>
+<p>其实<code>TS</code>官方已经给出了<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21pY3Jvc29mdC9UeXBlU2NyaXB0L3dpa2kvRkFRI3doeS1kb2VzbnQtZXh0ZW5kaW5nLWJ1aWx0LWlucy1saWtlLWVycm9yLWFycmF5LWFuZC1tYXAtd29yaw==" title="FAQ#why-doesnt-extending-built-ins-like-error-array-and-map-work">答案<i class="fa fa-external-link"></i></span>，只需要在构造函数下加入下面一句就可以了</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span>.setPrototypeOf(<span class="keyword">this</span>, <span class="keyword">new</span>.target.prototype);</span><br></pre></td></tr></table></figure>
+
+<p>完整实例如下：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">class</span> BaseError <span class="keyword">extends</span> <span class="built_in">Error</span> &#123;</span><br><span class="line">    errorCode: <span class="built_in">number</span> = <span class="number">0</span></span><br><span class="line">    </span><br><span class="line">    construct(errorCode: <span class="built_in">number</span> = <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">super</span>()</span><br><span class="line">        <span class="built_in">Object</span>.setPrototypeOf(<span class="keyword">this</span>, <span class="keyword">new</span>.target.prototype);</span><br><span class="line">        <span class="keyword">if</span> (errorCode) &#123;</span><br><span class="line">            <span class="keyword">this</span>.errorCode = errorCode;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> CustomError <span class="keyword">extends</span> BaseError &#123;</span><br><span class="line">    errorCode: <span class="built_in">number</span> = <span class="number">100001</span></span><br><span class="line"></span><br><span class="line">    construct(errorCode: <span class="built_in">number</span> = <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">super</span>()</span><br><span class="line">        <span class="keyword">if</span> (errorCode) &#123;</span><br><span class="line">            <span class="keyword">this</span>.errorCode = errorCode;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">start</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> success = <span class="built_in">Math</span>.random() &gt; <span class="number">0.5</span>;</span><br><span class="line">        <span class="keyword">if</span> (success) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> CustomError();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">        <span class="keyword">if</span> (e <span class="keyword">instanceof</span> BaseError) &#123;</span><br><span class="line">            <span class="comment">// 出现了一个已知的错误</span></span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'出错了！'</span>)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 出现一个未知的错误</span></span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'出错了！！！！'</span>)</span><br><span class="line">            <span class="comment">// 通知维护人员，处理业务出现未知错误</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">start();</span><br></pre></td></tr></table></figure>
+
+<p>我曾经被这个问题困扰了很久，于是把这个记录下来，以方便后续查看。</p>
+
     </div>
 
     
@@ -402,9 +425,34 @@
       
 
       <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/tags/typescript/" rel="tag"># typescript</a>
+            
+          </div>
+        
 
         
 
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2021/03/25/fontend-interview-js/" rel="next" title="前端面试题整理之JS篇">
+                  <i class="fa fa-chevron-left"></i> 前端面试题整理之JS篇
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+            </div>
+          </div>
+        
       </footer>
     
   </div>
@@ -719,9 +767,9 @@
 </script>
 <script>
   function disqus_config() {
-    this.page.url = "https://jaychoumylove.github.io/2020/01/24/year-2019/";
-    this.page.identifier = "2020/01/24/year-2019/";
-    this.page.title = 'year-2019';};
+    this.page.url = "https://jaychoumylove.github.io/2021/09/29/fixed-typescript-extends-error/";
+    this.page.identifier = "2021/09/29/fixed-typescript-extends-error/";
+    this.page.title = '记一次关于extends的bug';};
   function loadComments() {
     if (window.DISQUS) {
       DISQUS.reset({
