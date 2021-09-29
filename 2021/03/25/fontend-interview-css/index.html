@@ -67,7 +67,7 @@
 <meta property="og:description" content="整理关于前端面试中CSS相关的面试题">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://developers.google.com/web/fundamentals/performance/critical-rendering-path/images/render-tree-construction.png?hl=zh-cn">
-<meta property="og:updated_time" content="2021-03-25T12:08:01.645Z">
+<meta property="og:updated_time" content="2021-03-29T03:29:29.506Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="前端面试题整理之CSS篇">
 <meta name="twitter:description" content="整理关于前端面试中CSS相关的面试题">
@@ -304,11 +304,19 @@
                 
               
 
-              <time title="创建时间：2021-03-25 15:25:51 / 修改时间：20:08:01" itemprop="dateCreated datePublished" datetime="2021-03-25T15:25:51+08:00">2021-03-25</time>
+              <time title="创建时间：2021-03-25 15:25:51" itemprop="dateCreated datePublished" datetime="2021-03-25T15:25:51+08:00">2021-03-25</time>
             </span>
           
             
 
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-03-29 11:29:29" itemprop="dateModified" datetime="2021-03-29T11:29:29+08:00">2021-03-29</time>
+              </span>
             
           
             <span class="post-meta-item">
@@ -356,7 +364,7 @@
               
                 <span class="post-meta-item-text">本文字数：</span>
               
-              <span>641</span>
+              <span>759</span>
             </span>
           
             <span class="post-meta-item" title="阅读时长">
@@ -410,6 +418,8 @@
 <p>上图来自<span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXJzLmdvb2dsZS5jb20vd2ViL2Z1bmRhbWVudGFscy9wZXJmb3JtYW5jZS9jcml0aWNhbC1yZW5kZXJpbmctcGF0aC9yZW5kZXItdHJlZS1jb25zdHJ1Y3Rpb24/aGw9emgtY24=" title="渲染树构建、布局及绘制">渲染树构建、布局及绘制<i class="fa fa-external-link"></i></span></p>
 </blockquote>
 <p><span class="exturl" data-url="aHR0cHM6Ly9zZWdtZW50ZmF1bHQuY29tL2EvMTE5MDAwMDAxNzMyOTk4MA==" title="你真的了解回流和重绘吗">参考这片文章<i class="fa fa-external-link"></i></span></p>
+<h5 id="offsetWidth，clientWidth，scrollWidth"><a href="#offsetWidth，clientWidth，scrollWidth" class="headerlink" title="offsetWidth，clientWidth，scrollWidth"></a>offsetWidth，clientWidth，scrollWidth</h5><p><span class="exturl" data-url="aHR0cHM6Ly9zdGFja292ZXJmbG93LmNvbS9xdWVzdGlvbnMvMjEwNjQxMDEvdW5kZXJzdGFuZGluZy1vZmZzZXR3aWR0aC1jbGllbnR3aWR0aC1zY3JvbGx3aWR0aC1hbmQtaGVpZ2h0LXJlc3BlY3RpdmVseQ==" title="Understanding offsetWidth, clientWidth, scrollWidth and -Height, respectively">Understanding offsetWidth, clientWidth, scrollWidth and -Height, respectively<i class="fa fa-external-link"></i></span></p>
+<p><span class="exturl" data-url="aHR0cDovL2pzZmlkZGxlLm5ldC95OFkzMi8yNS8=" title="jsfiddle">参考示例 Jsfiddle<i class="fa fa-external-link"></i></span></p>
 
     </div>
 
@@ -658,7 +668,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#清除浮动"><span class="nav-number">1.</span> <span class="nav-text">清除浮动</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#来源"><span class="nav-number">2.</span> <span class="nav-text">来源</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#清除方法"><span class="nav-number">3.</span> <span class="nav-text">清除方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#BFC"><span class="nav-number">4.</span> <span class="nav-text">BFC</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#如何创建-BFC"><span class="nav-number">4.1.</span> <span class="nav-text">如何创建 BFC</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#文档重绘"><span class="nav-number">5.</span> <span class="nav-text">文档重绘</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#清除浮动"><span class="nav-number">1.</span> <span class="nav-text">清除浮动</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#来源"><span class="nav-number">2.</span> <span class="nav-text">来源</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#清除方法"><span class="nav-number">3.</span> <span class="nav-text">清除方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#BFC"><span class="nav-number">4.</span> <span class="nav-text">BFC</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#如何创建-BFC"><span class="nav-number">4.1.</span> <span class="nav-text">如何创建 BFC</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#文档重绘"><span class="nav-number">5.</span> <span class="nav-text">文档重绘</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#offsetWidth，clientWidth，scrollWidth"><span class="nav-number">6.</span> <span class="nav-text">offsetWidth，clientWidth，scrollWidth</span></a></li></ol></div>
             
 
           </div>

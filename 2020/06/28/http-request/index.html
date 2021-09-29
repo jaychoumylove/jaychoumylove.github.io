@@ -66,7 +66,7 @@
 <meta property="og:site_name" content="simker">
 <meta property="og:description" content="最近在做服务请求加密相关的工作，于此记录下一些资料。  引言网络中的请求安全问题一般有两个方面：  请求安全性：即服务端收到你的请求时，需要鉴别请求是否有效 数据保密性：请求数据可能会被抓包，为避免用户敏感数据被窃取，需要进行数据加密。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-06-28T08:21:36.840Z">
+<meta property="og:updated_time" content="2021-04-27T14:13:13.834Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浅谈前后端请求加密与签名">
 <meta name="twitter:description" content="最近在做服务请求加密相关的工作，于此记录下一些资料。  引言网络中的请求安全问题一般有两个方面：  请求安全性：即服务端收到你的请求时，需要鉴别请求是否有效 数据保密性：请求数据可能会被抓包，为避免用户敏感数据被窃取，需要进行数据加密。">
@@ -302,11 +302,19 @@
                 
               
 
-              <time title="创建时间：2020-06-28 14:28:48 / 修改时间：16:21:36" itemprop="dateCreated datePublished" datetime="2020-06-28T14:28:48+08:00">2020-06-28</time>
+              <time title="创建时间：2020-06-28 14:28:48" itemprop="dateCreated datePublished" datetime="2020-06-28T14:28:48+08:00">2020-06-28</time>
             </span>
           
             
 
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-27 22:13:13" itemprop="dateModified" datetime="2021-04-27T22:13:13+08:00">2021-04-27</time>
+              </span>
             
           
             <span class="post-meta-item">
@@ -428,7 +436,7 @@
 <ul>
 <li>请求数据拼接</li>
 <li>请求数据排序，一般按字母排序</li>
-<li>请求数据加盐，一般是随机字符串和时间戳，会以明文方式请求服务端 </li>
+<li>请求数据加盐，一般是随机字符串和时间戳，会以明文方式请求服务端</li>
 <li>请求数据<code>base64</code>编码，防止转义字符</li>
 <li>请求数据<code>md5</code>加密</li>
 </ul>
@@ -446,7 +454,7 @@
 </ul>
 </li>
 <li><code>jwt</code><ul>
-<li>通过<code>jwt</code>保存用户铭感信息至payload中。读取<code>payload</code>鉴别用户信息</li>
+<li>通过<code>jwt</code>保存用户铭感信息至 payload 中。读取<code>payload</code>鉴别用户信息</li>
 <li>业界潮流，相关库也比较多</li>
 <li>一旦被抓包，用户数据会被泄露</li>
 </ul>
