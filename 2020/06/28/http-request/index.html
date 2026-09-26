@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="google381a53d35b8b50db.html">
+  <meta name="msvalidate.01" content="true">
+  <meta name="baidu-site-verification" content="F4UoV99kc0">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" integrity="sha256-4Lad8m4ZWW1Lgb9+sMVLYEfnIh7BjV1NQMEe79Pviks=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"jaychoumylove.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.29.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="最近在做服务请求加密相关的工作，于此记录下一些资料。  引言网络中的请求安全问题一般有两个方面：  请求安全性：即服务端收到你的请求时，需要鉴别请求是否有效 数据保密性：请求数据可能会被抓包，为避免用户敏感数据被窃取，需要进行数据加密。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅谈前后端请求加密与签名">
+<meta property="og:url" content="https://jaychoumylove.github.io/2020/06/28/http-request/index.html">
+<meta property="og:site_name" content="simker">
+<meta property="og:description" content="最近在做服务请求加密相关的工作，于此记录下一些资料。  引言网络中的请求安全问题一般有两个方面：  请求安全性：即服务端收到你的请求时，需要鉴别请求是否有效 数据保密性：请求数据可能会被抓包，为避免用户敏感数据被窃取，需要进行数据加密。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-06-28T06:28:48.000Z">
+<meta property="article:modified_time" content="2021-04-27T14:13:13.834Z">
+<meta property="article:author" content="Alex">
+<meta property="article:tag" content="http">
+<meta property="article:tag" content="data">
+<meta property="article:tag" content="secret">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://jaychoumylove.github.io/2020/06/28/http-request/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://jaychoumylove.github.io/2020/06/28/http-request/","path":"2020/06/28/http-request/","title":"浅谈前后端请求加密与签名"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>浅谈前后端请求加密与签名 | simker</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-search popup-trigger" aria-label="搜索" role="button">
+      <i class="fa fa-search fa-fw fa-lg"></i>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">simker</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Life is too short, just make it.</p>
+  </div>
+
+  <div class="site-nav-toggle" aria-label="切换导航栏" role="button">
+      <i class="fa fa-ellipsis fa-fw fa-lg"></i>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-layer-group fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-song"><a href="/song/index.html" rel="section"><i class="fa fa-headphones fa-fw"></i>音乐</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  
+  <template id="search-popup-template"><div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div></template>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%95%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%B7%E6%B1%82%E5%94%AF%E4%B8%80%E6%80%A7-once-time-timestamp"><span class="nav-number">2.</span> <span class="nav-text">请求唯一性 - once, time|timestamp</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%B7%E6%B1%82%E4%B8%80%E8%87%B4%E6%80%A7-%E6%95%B0%E6%8D%AE%E5%AE%89%E5%85%A8-sign"><span class="nav-number">3.</span> <span class="nav-text">请求一致性|数据安全 - sign</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E7%9A%84%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81-token-Authorization"><span class="nav-number">4.</span> <span class="nav-text">用户的身份认证 - token|Authorization</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Alex"
+      src="/images/avatar@kikyo.jpeg">
+  <p class="site-author-name" itemprop="name">Alex</p>
+  <div class="site-description" itemprop="description">A super nice guy!</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/jaychoumylove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;jaychoumylove" rel="noopener me" target="_blank"><i class="github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:hulilang7517520@gmail.com" title="E-Mail → mailto:hulilang7517520@gmail.com" rel="noopener me" target="_blank"><i class="envelope fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://jaychoumylove.github.io/2020/06/28/http-request/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar@kikyo.jpeg">
+      <meta itemprop="name" content="Alex">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="simker">
+      <meta itemprop="description" content="A super nice guy!">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="浅谈前后端请求加密与签名 | simker">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          浅谈前后端请求加密与签名
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-06-28 14:28:48" itemprop="dateCreated datePublished" datetime="2020-06-28T14:28:48+08:00">2020-06-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2021-04-27 22:13:13" itemprop="dateModified" datetime="2021-04-27T22:13:13+08:00">2021-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/PHP/" itemprop="url" rel="index"><span itemprop="name">PHP</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/PHP/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2020/06/28/http-request/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/06/28/http-request/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-lines"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>最近在做服务请求加密相关的工作，于此记录下一些资料。</p>
+</blockquote>
+<h4 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h4><p>网络中的请求安全问题一般有两个方面：</p>
+<ul>
+<li>请求安全性：即服务端收到你的请求时，需要鉴别请求是否有效</li>
+<li>数据保密性：请求数据可能会被抓包，为避免用户敏感数据被窃取，需要进行数据加密。</li>
+</ul>
+<span id="more"></span>
+
+<h4 id="请求唯一性-once-time-timestamp"><a href="#请求唯一性-once-time-timestamp" class="headerlink" title="请求唯一性 - once, time|timestamp"></a>请求唯一性 - once, time|timestamp</h4><p>这个主要是为了防止无限制重复请求。<br>我们可以给请求加一个<code>once</code>字段(<code>一个随机&#123;数|字符串&#125;</code>)，每次接受请求时，检查<code>once</code>是否存在，不存在直接拒绝。如果存在的话，我们把这个<code>once</code>拿到缓存库去找，找得到，说明已经被使用过，拒绝该次请求；找不到，记录请求信息，把<code>once</code>写入到缓存中，正常执行。</p>
+<p>但是这样无限制的往缓存里面塞请求数据信息的话，对于流量大的网站，是不能接受的，总不能让缓存崩掉吧。所以每一个<code>once</code>缓存都会设置过期时间，这个时间根据你的并发量决定(比如<code>5 mins</code>)，并发量高设置的时间就短，反之就长一点。</p>
+<p>依靠缓存的自动过期还是很单一的，所以我们会在请求加上<code>time|timestamp</code>字段<code>一个时间戳</code>，服务器接收这个请求的时候，取出<code>time</code>，如果服务端的当前时间戳与<code>time</code>的差值大于过期时间的话，就直接拒绝该次请求；否则就进行下一步处理，如检查<code>once</code>。</p>
+<h4 id="请求一致性-数据安全-sign"><a href="#请求一致性-数据安全-sign" class="headerlink" title="请求一致性|数据安全 - sign"></a>请求一致性|数据安全 - sign</h4><p>主要用于数据防串改。<br>服务端和客户端约定一个签名生成算法，客户端请求前，调用签名算法，生成<code>sign</code>，并且把<code>sign</code>和请求参数一起发送给服务器。服务器拿到请求的时候，把<code>sign</code>单独提取出来，用签名算法对其他请求参数进行签名，如果生成的签名和<code>sign</code>一致，说明数据没有被串改，可以进行下一步处理。<br>主要的算法：</p>
+<ul>
+<li><code>MD5</code><ul>
+<li>是信息摘要算法，<strong><em>不是加密算法</em></strong></li>
+<li>加密算法是可以解密的，换言之，我加密之后我是需要知道加密的内容的（可解密）。</li>
+<li>但是<code>MD5</code>是不可逆的，没哟解密的说法，所以<code>MD5</code>是可以用来生成唯一数据，校验数据是否被串改的（<code>sha-1</code>类似）。</li>
+</ul>
+</li>
+<li><code>Base64</code><ul>
+<li>是编码规范，<strong><em>不是加密算法</em></strong></li>
+<li>这货主要是为了处理网咯传输里面不支持和不可见字符的问题。（比如前端用<code>JavaScript</code>转义请求参数中空格的转义和后端某些语言对空格的转义不一致，这时候就会用到）</li>
+<li>换言之，签名算法里面对数据的转义可以用</li>
+</ul>
+</li>
+<li><code>aes</code><ul>
+<li>对称加密算法</li>
+<li>客服端和服务器端共同确定一个用来加密和解密的秘钥。然后客服端在请求服务器是通过该秘钥对数据进行加密，服务器端在接收到请求之后使用该秘钥对数据进行解密。</li>
+<li>服务端和客户端需要公用一个秘钥，不安全。</li>
+</ul>
+</li>
+<li><code>rsa</code><ul>
+<li>非对称加密算法</li>
+<li>服务器端生成公钥和私钥，把公钥发送给客户端。客服端在请求服务器是，通过公钥对数据进行加密。服务器端接收到请求之后，使用私钥对加密的数据进行解密。</li>
+<li>虽然避免了泄露的隐患，但是加密数据较大时，效率低，且需要分段加密处理</li>
+</ul>
+</li>
+</ul>
+<p>一般来说，签名算法主要是保证数据的唯一性，你可以选用<code>MD5</code>和<code>Base64</code>。<br>一般是一下几种方式</p>
+<ul>
+<li>请求数据拼接</li>
+<li>请求数据排序，一般按字母排序</li>
+<li>请求数据加盐，一般是随机字符串和时间戳，会以明文方式请求服务端</li>
+<li>请求数据<code>base64</code>编码，防止转义字符</li>
+<li>请求数据<code>md5</code>加密</li>
+</ul>
+<p>数据加密一般通过<code>rsa</code>算法利用公钥<code>rsa_pu</code>生成私钥<code>aes_key</code>，然后通过<code>aes</code>算法利用私钥<code>aes_key</code>对请求参数进行加密得到<code>secret_Data</code>，然后把公钥<code>rsa_pu</code>对私钥<code>aes_key</code>加密得到<code>secret_key</code>, 把<code>secret_Data</code>和<code>secret_key</code>一起发送给服务端，服务端通过私钥解密<code>secret_key</code>得到<code>aes_key</code>，然后通过<code>aes</code>算法利用<code>aes_key</code>解密<code>secret_Data</code>得到请求数据。反过来，服务端要返回保密的请求信息也是差不多的思路，</p>
+<ul>
+<li>利用非对称算法加密对称算法的秘钥生成秘钥密文，通过对称算法用私钥加密数据生成数据密文。</li>
+<li>用非对称算法解密私钥密文得到私钥，通过对称算法用私钥解密数据密文得到加秘数据。</li>
+</ul>
+<h4 id="用户的身份认证-token-Authorization"><a href="#用户的身份认证-token-Authorization" class="headerlink" title="用户的身份认证 - token|Authorization"></a>用户的身份认证 - token|Authorization</h4><p>服务端需要知道发起者的身份信息。<br>这点就不用说了，一般我们会在用户登录之后返回给用户一个<code>token</code>，之后的每一次请求都带上这个<code>token</code>，服务端用过读取<code>token</code> 存取的信息鉴别用户身份。<br>主要的实现方式（我目前所接触到的）：</p>
+<ul>
+<li><code>cache</code><ul>
+<li>把用户的铭感信息存入到缓存中，通过读取缓存信息鉴别用户身份。</li>
+<li>实现简单，用户数据高度保密</li>
+<li>占用缓存资源，可能会滥用缓存，可能会被对手利用，无限制刷缓存</li>
+</ul>
+</li>
+<li><code>jwt</code><ul>
+<li>通过<code>jwt</code>保存用户铭感信息至 payload 中。读取<code>payload</code>鉴别用户信息</li>
+<li>业界潮流，相关库也比较多</li>
+<li>一旦被抓包，用户数据会被泄露</li>
+</ul>
+</li>
+<li><code>aes</code>等对称加密算法<ul>
+<li>通过对称加密算法，对用户身份信息进行加密，读取解密之后的用户信息</li>
+<li>用户数据保密性高，同时也不消耗服务器资源</li>
+<li>好像没有</li>
+</ul>
+</li>
+</ul>
+<p>选用哪一种好？其实对我来说，以上三种方式都是合格的，因为用户身份认证的核心在于，只要这个<code>token</code> 是我们自己的服务器签发的（无法伪造），就没问题。就拿<code>jwt</code>方式来说，虽然用户的数据（比如用户的<code>id</code>，用户的身份<code>scope</code>等信息）可能会被抓包获取到，但是抓包方无法伪造<code>jwt</code>的活，那就是成功的（你还是要老老实实的请求我们的<code>token</code>接口）.</p>
+<blockquote>
+<p>文章参考：</p>
+</blockquote>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/PerkinsZhu/p/9713836.html" title="网络请求中常见的加密机制和加密算法理解">网络请求中常见的加密机制和加密算法理解</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>请我一杯咖啡吧！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="Alex 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="Alex 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/http/" rel="tag"># http</a>
+              <a href="/tags/data/" rel="tag"># data</a>
+              <a href="/tags/secret/" rel="tag"># secret</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/03/15/javascript-dom-observer/" rel="prev" title="使用JavaScript监听Dom节点变化">
+                  <i class="fa fa-angle-left"></i> 使用JavaScript监听Dom节点变化
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/02/08/php-base-types/" rel="next" title="PHP基础笔记之类型">
+                  PHP基础笔记之类型 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="user"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Alex</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">87k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:19</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"hulilang","count":true,"lazyload":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js" defer></script>
+
+</body>
+</html>

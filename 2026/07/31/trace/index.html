@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="google381a53d35b8b50db.html">
+  <meta name="msvalidate.01" content="true">
+  <meta name="baidu-site-verification" content="F4UoV99kc0">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" integrity="sha256-4Lad8m4ZWW1Lgb9+sMVLYEfnIh7BjV1NQMEe79Pviks=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"jaychoumylove.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.29.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="这个世界是冗余的，膨胀的。  一时有感而发，遂记下。我曾也是个码农，还是最低级的那种，对，就是那个全世界最好的语言编程师。常年为搬砖而生，日常的工作是不断地给公司呈上活动的解决方案，也就是说不断地写 bug，再修正，然后再修正，然后就没有然后了，大概活动的时间到这里就结束了。我那段时间的内心活动 belike：  这活动谁设计的？ 这有人会进来么？ 怎么又有活动？上个活动 3 天前才结束，写这个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="trace">
+<meta property="og:url" content="https://jaychoumylove.github.io/2026/07/31/trace/index.html">
+<meta property="og:site_name" content="simker">
+<meta property="og:description" content="这个世界是冗余的，膨胀的。  一时有感而发，遂记下。我曾也是个码农，还是最低级的那种，对，就是那个全世界最好的语言编程师。常年为搬砖而生，日常的工作是不断地给公司呈上活动的解决方案，也就是说不断地写 bug，再修正，然后再修正，然后就没有然后了，大概活动的时间到这里就结束了。我那段时间的内心活动 belike：  这活动谁设计的？ 这有人会进来么？ 怎么又有活动？上个活动 3 天前才结束，写这个">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-07-30T22:26:51.000Z">
+<meta property="article:modified_time" content="2026-07-31T01:36:36.184Z">
+<meta property="article:author" content="Alex">
+<meta property="article:tag" content="程序员,技术分享,php,javascript,react,typescript">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://jaychoumylove.github.io/2026/07/31/trace/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://jaychoumylove.github.io/2026/07/31/trace/","path":"2026/07/31/trace/","title":"trace"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>trace | simker</title><meta name="robots" content="noindex">
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-search popup-trigger" aria-label="搜索" role="button">
+      <i class="fa fa-search fa-fw fa-lg"></i>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">simker</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Life is too short, just make it.</p>
+  </div>
+
+  <div class="site-nav-toggle" aria-label="切换导航栏" role="button">
+      <i class="fa fa-ellipsis fa-fw fa-lg"></i>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-layer-group fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-song"><a href="/song/index.html" rel="section"><i class="fa fa-headphones fa-fw"></i>音乐</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  
+  <template id="search-popup-template"><div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div></template>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Alex"
+      src="/images/avatar@kikyo.jpeg">
+  <p class="site-author-name" itemprop="name">Alex</p>
+  <div class="site-description" itemprop="description">A super nice guy!</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/jaychoumylove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;jaychoumylove" rel="noopener me" target="_blank"><i class="github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:hulilang7517520@gmail.com" title="E-Mail → mailto:hulilang7517520@gmail.com" rel="noopener me" target="_blank"><i class="envelope fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://jaychoumylove.github.io/2026/07/31/trace/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar@kikyo.jpeg">
+      <meta itemprop="name" content="Alex">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="simker">
+      <meta itemprop="description" content="A super nice guy!">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="trace | simker">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          trace
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-07-31 06:26:51 / 修改时间：09:36:36" itemprop="dateCreated datePublished" datetime="2026-07-31T06:26:51+08:00">2026-07-31</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2026/07/31/trace/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2026/07/31/trace/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-lines"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>这个世界是冗余的，膨胀的。</p>
+</blockquote>
+<p>一时有感而发，遂记下。<br/><br>我曾也是个码农，还是最低级的那种，对，就是那个全世界最好的语言编程师。常年为搬砖而生，日常的工作是不断地给公司呈上活动的解决方案，也就是说不断地写 bug，再修正，然后再修正，然后就没有然后了，大概活动的时间到这里就结束了。我那段时间的内心活动 belike：</p>
+<ul>
+<li>这活动谁设计的？</li>
+<li>这有人会进来么？</li>
+<li>怎么又有活动？上个活动 3 天前才结束，写这个活动，那上个活动的 bug 不用修了吧？嗯。<br></li>
+</ul>
+<p>每天上午和策划撕逼，和 UI 对细节，和客服整用户反馈，和测试复现 bug，对，你没看错我上午几乎没有在编程，如果有的话，那就是我的 deadline 要来了，原计划靠边站。下午进入疯狂模式，因为上午已经把各方面的需求都弄清晰了，接下来就是表演时间了，树立结构，构建逻辑，细节优化，衔接测试，部署上线，一个下午全搞定，你没看错一个全新的活动(甚至一个全新的模块，比如他们要加一个宠物到产品里面去)就这样成型且上线了，天哪，而且程序只有我一个人在编写，你问我是怎么做到的，嘿嘿，我也觉得不可思议啊，完成的瞬间我感觉我可以又一次提起加薪的请求了。然而梁静茹给我的勇气没能持续到第二天，因为那时测试就会发出连串的 bug，浇灭了我的斗志。于是上午就这样在开会和撕逼的气氛中莫名的过去了，下午开始新一轮的战斗。<br>大致每天的工作状态就是这样子，于是可以知道写出来，哦不，复用出来的程序多多少少都有 bug，甚至修复的时候你发现有两个一摸一样的<code>function</code>，不过你真的敢去动它么，或者说你发现又有一个模块需要复用这个逻辑的时候，你敢复用么？稍稍<code>control+F</code>一下，发现有 N 个代码块一样或者复用了，你的头不大么？更有甚者，各种魔法数字在其中穿插，让你目不暇接的同时还可以打击你的心智，我的神呐！<br>所以我在上班的时候怀念昨晚，自然地畅想着今晚，在工作日期盼休息日。我感觉自己像个牛马一样，对，努力且搞笑，哦不，是高效的牛马。当然的你会嘲讽：写成<code>shit</code>那样还好意思说自己高效？搞笑吧。是的，我每天写着<code>shit</code>，之后的每一天还不断在持续输出，但我依然认为我是高效作业的，我也很清楚，如果正经的写一个那样的模块需要的气力和时间，而在我看来写出一个，符合活动业务的代码结构，且语句简单，逻辑清楚，结构优雅，可拓展性高，维护方便的代码，估计在 deadline 那一天只够写出业务量的 1/2，3/4 顶天了，当然，这种代码一般一写出来，基本测试都是一路通关的，如果策划和 UI 不临时改需求的话，如果有那就做好重写业务代码的准备吧。而且活动的内容千变万化，你完全不知道它下一个活动的业务是什么。在我看来，公司某种程度上在内耗我。而在策划看来，公司在内耗他。在公司的角度，要活着就要经得起市场的考验。某种程度上，我们都是时代的苦主，在崩溃的边缘疯狂试探，也许在某个尚未搞清楚状况的时刻爆发。我在每个不能入眠的夜晚想的都是我活着的意义，我活着又是为了什么，如果我真的像一个胶水工一样粘稠着各种业务，那，我又活成了什么了。<br>我知道自己不能再这样下去了，我想要脱离内耗。但是当下的我并没有改变的力量，勇气，时机。我每天应付完工作之后就是身心俱疲的状态，完全提不起给自己提升的那股气。我试着给自己下了一个任务，用一个陌生的的框架做自己想做的东西。试着证明一些自己身上的特质，就像那些旅游的游客，看演唱会的观众，吃饭前的食客，拍照，证明自己来过，体验过。我在之后的很多时候也是这么做的。然而，良知告诉我这些都没有人知道，也没有多少人关注。但我至少做了。<br>然而改变我的是我回到乡下时看到的一副场景。乡间的垃圾成堆，买了乡下街道的一瓶饮料，几个月就快过期了。而我回到家后，家里的情况和我想象中的大不一样了，很多房屋没有人住了，乡间的人们都搬到了附近较大的镇子去了，以前一些大户花了大价钱建的房子被废弃。就像我家一样，花了不少钱安定的家，现在要去镇上住了，这里也即将废弃，恍惚半生，为谁辛苦为谁甜呢？我打开手机，指尖划过一些以前的数据，现在很多都没有人关注了，或者说，它被冗余了。<br>也许我们的理想都是美好的，而现实是那么的残酷，人类的产出不断的冗余，不断地膨胀。</p>
+<!-- flag of hidden posts -->
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>请我一杯咖啡吧！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="Alex 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="Alex 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+
+        
+
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="user"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Alex</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">87k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:19</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"hulilang","count":true,"lazyload":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js" defer></script>
+
+</body>
+</html>

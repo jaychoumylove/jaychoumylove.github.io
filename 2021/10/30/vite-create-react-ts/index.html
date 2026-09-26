@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="google381a53d35b8b50db.html">
+  <meta name="msvalidate.01" content="true">
+  <meta name="baidu-site-verification" content="F4UoV99kc0">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" integrity="sha256-4Lad8m4ZWW1Lgb9+sMVLYEfnIh7BjV1NQMEe79Pviks=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"jaychoumylove.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.29.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="初衷  本篇文章只为记录一次用 vite 搭建react的经历与踩坑。  背景  公司要开发一个新的项目，需要和别的部门合作一起开发，但是我们(当时)目前的技术栈是用CRA搭建的，主要是react管dom，mobx管数据，react-router管路由等，而且大部分组件都还在class组件。算是比较老了。而对方那边的项目则是用vite构建的，而且上了ts。虽然自己当时已经有使用CRA搭建reac">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次用vite搭建react的经历">
+<meta property="og:url" content="https://jaychoumylove.github.io/2021/10/30/vite-create-react-ts/index.html">
+<meta property="og:site_name" content="simker">
+<meta property="og:description" content="初衷  本篇文章只为记录一次用 vite 搭建react的经历与踩坑。  背景  公司要开发一个新的项目，需要和别的部门合作一起开发，但是我们(当时)目前的技术栈是用CRA搭建的，主要是react管dom，mobx管数据，react-router管路由等，而且大部分组件都还在class组件。算是比较老了。而对方那边的项目则是用vite构建的，而且上了ts。虽然自己当时已经有使用CRA搭建reac">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-10-30T05:32:48.000Z">
+<meta property="article:modified_time" content="2021-10-30T11:49:53.474Z">
+<meta property="article:author" content="Alex">
+<meta property="article:tag" content="react">
+<meta property="article:tag" content="vite">
+<meta property="article:tag" content="mobx">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://jaychoumylove.github.io/2021/10/30/vite-create-react-ts/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://jaychoumylove.github.io/2021/10/30/vite-create-react-ts/","path":"2021/10/30/vite-create-react-ts/","title":"记一次用vite搭建react的经历"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>记一次用vite搭建react的经历 | simker</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-search popup-trigger" aria-label="搜索" role="button">
+      <i class="fa fa-search fa-fw fa-lg"></i>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">simker</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Life is too short, just make it.</p>
+  </div>
+
+  <div class="site-nav-toggle" aria-label="切换导航栏" role="button">
+      <i class="fa fa-ellipsis fa-fw fa-lg"></i>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-layer-group fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-song"><a href="/song/index.html" rel="section"><i class="fa fa-headphones fa-fw"></i>音乐</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  
+  <template id="search-popup-template"><div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div></template>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BA"><span class="nav-number">1.</span> <span class="nav-text">开始搭建</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8A%A0%E5%85%A5%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text">加入装饰器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8A%A0%E5%85%A5Mobx"><span class="nav-number">3.</span> <span class="nav-text">加入Mobx</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#mobx%E7%9A%84hooks%E7%89%88%E6%9C%AC"><span class="nav-number">4.</span> <span class="nav-text">mobx的hooks版本</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Alex"
+      src="/images/avatar@kikyo.jpeg">
+  <p class="site-author-name" itemprop="name">Alex</p>
+  <div class="site-description" itemprop="description">A super nice guy!</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/jaychoumylove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;jaychoumylove" rel="noopener me" target="_blank"><i class="github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:hulilang7517520@gmail.com" title="E-Mail → mailto:hulilang7517520@gmail.com" rel="noopener me" target="_blank"><i class="envelope fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://jaychoumylove.github.io/2021/10/30/vite-create-react-ts/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar@kikyo.jpeg">
+      <meta itemprop="name" content="Alex">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="simker">
+      <meta itemprop="description" content="A super nice guy!">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="记一次用vite搭建react的经历 | simker">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          记一次用vite搭建react的经历
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-10-30 13:32:48 / 修改时间：19:49:53" itemprop="dateCreated datePublished" datetime="2021-10-30T13:32:48+08:00">2021-10-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/typescript/" itemprop="url" rel="index"><span itemprop="name">typescript</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/typescript/javascript/" itemprop="url" rel="index"><span itemprop="name">javascript</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2021/10/30/vite-create-react-ts/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/10/30/vite-create-react-ts/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-lines"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>11k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>10 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>初衷</p>
+</blockquote>
+<p>本篇文章只为记录一次用 <code>vite</code> 搭建<code>react</code>的经历与踩坑。</p>
+<blockquote>
+<p>背景</p>
+</blockquote>
+<p>公司要开发一个新的项目，需要和别的部门合作一起开发，但是我们(当时)目前的技术栈是用<code>CRA</code>搭建的，主要是<code>react</code>管dom，<code>mobx</code>管数据，<code>react-router</code>管路由等，而且大部分组件都还在<code>class</code>组件。算是比较老了。<br>而对方那边的项目则是用<code>vite</code>构建的，而且上了<code>ts</code>。虽然自己当时已经有使用<code>CRA</code>搭建<code>react-ts</code>的经验了，但是还是在路上踩了不少坑，以为方便。</p>
+<span id="more"></span>
+
+<h5 id="开始搭建"><a href="#开始搭建" class="headerlink" title="开始搭建"></a>开始搭建</h5><p>首先我们用<code>vite</code>创建项目：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn create vite my-react-ts-app --template react-ts</span><br></pre></td></tr></table></figure>
+
+<p>然后我们进入目录，目录结构是长这样的：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ <span class="built_in">cd</span> my-react-ts-app</span><br><span class="line">➜  my-react-ts-app <span class="built_in">ls</span></span><br><span class="line">index.html     package.json   src            tsconfig.json  vite.config.ts</span><br></pre></td></tr></table></figure>
+<p>然后安装依赖：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  my-react-ts-app yarn</span><br></pre></td></tr></table></figure>
+
+<p>然后我们可以运行<code>yarn dev</code>，这样一个<code>ts-react</code>就起来了。</p>
+<h5 id="加入装饰器"><a href="#加入装饰器" class="headerlink" title="加入装饰器"></a>加入装饰器</h5><p>其实一般的项目到这里也就结束了，感觉也没什么好说的。<br>但是你要上<code>ts</code>肯定就要用上装饰器的。<br>而且我的大部分时间也是卡在了这里，下面我们就用一个例子来说明。<br>首先，准备一个<code>class</code>组件</p>
+<figure class="highlight tsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ./src/MyClassComp.tsx</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">React</span>, &#123; <span class="title class_">Component</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyClassComp</span> <span class="keyword">extends</span> <span class="title class_ inherited__">Component</span>&lt;&#123;&#125;, &#123;&#125;&gt; &#123;</span><br><span class="line">    <span class="title function_">render</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">                My Class Comp</span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title class_">MyClassComp</span>;</span><br></pre></td></tr></table></figure>
+<p>然后，我们来写一个高阶组件。</p>
+<figure class="highlight tsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ./src/MyHOC.tsx</span></span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">ComponentType</span>, useEffect &#125; <span class="keyword">from</span> <span class="string">&quot;react&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title class_">MyHOC</span> = &lt;P <span class="keyword">extends</span> &#123;&#125;&gt;<span class="function">(<span class="params"><span class="title class_">Comp</span>: <span class="title class_">ComponentType</span>&lt;P&gt;</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function">(<span class="params"><span class="attr">props</span>: P</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="title function_">useEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">1</span>);</span><br><span class="line">        &#125;, [])</span><br><span class="line">        <span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">Comp</span> &#123;<span class="attr">...props</span>&#125; /&gt;</span></span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title class_">MyHOC</span>;</span><br></pre></td></tr></table></figure>
+
+<p>上面我们写了一个简单的<code>HOC</code>，用来增强组件，即每次成功渲染之后都打印一个<code>1</code>。</p>
+<p>基本的使用：</p>
+<figure class="highlight tsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ./src/main.tsx</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">React</span> <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">ReactDOM</span> <span class="keyword">from</span> <span class="string">&#x27;react-dom&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;./index.css&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">MyClassComp</span> <span class="keyword">from</span> <span class="string">&#x27;./MyClassComp&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">MyHOC</span> <span class="keyword">from</span> <span class="string">&quot;./MyHOC&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title class_">HOCApp</span> = <span class="title class_">MyHOC</span>(<span class="title class_">MyClassComp</span>);</span><br><span class="line"></span><br><span class="line"><span class="title class_">ReactDOM</span>.<span class="title function_">render</span>(</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">React.StrictMode</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">HOCApp</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">React.StrictMode</span>&gt;</span></span>,</span><br><span class="line">  <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;root&#x27;</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>渲染页面看到打印<code>1</code>就是成功使用了，但是我们不想要这样，因为如果参数过多的话，代码就不是很好看了，再者，从逻辑上说，增强组件的功能在组件内部也有提现，比如像<code>withRouter</code>这样的高阶组件。所以我们还是需要装饰器的写法更为优雅。</p>
+<p>ok, 我们把<code>./src/main.tsx</code> 还原，在<code>./src/MyClassComp.tsx</code>用装饰器试试.</p>
+<figure class="highlight tsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ./src/MyClassComp.tsx</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">React</span>, &#123; <span class="title class_">Component</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="title class_">MyHOC</span> <span class="keyword">from</span> <span class="string">&quot;./MyHOC&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@MyHOC</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyClassComp</span> <span class="keyword">extends</span> <span class="title class_ inherited__">Component</span>&lt;&#123;&#125;, &#123;&#125;&gt; &#123;</span><br><span class="line">    <span class="title function_">render</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">                My Class Comp</span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title class_">MyClassComp</span>;</span><br></pre></td></tr></table></figure>
+
+<p>然后我们运行会发现有一个报错</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[vite] Internal server error: ~/my-react-ts-app/src/App.tsx: Support for the experimental syntax &#x27;decorators-legacy&#x27; isn&#x27;t currently enabled (6:1):</span><br><span class="line">  4 | import MyHOC from &quot;./MyHOC&quot;;</span><br><span class="line">  5 |</span><br><span class="line">&gt; 6 | @MyHOC</span><br><span class="line">    | ^</span><br><span class="line">  7 | function App() &#123;</span><br><span class="line">  8 |   const [count, setCount] = useState(0)</span><br><span class="line">  9 |</span><br><span class="line"> Plugin: vite:react-babel</span><br><span class="line">  File: ~/my-react-ts-app/src/App.tsx</span><br><span class="line">  3  |  import &#x27;./App.css&#x27;</span><br><span class="line">  4  |  import MyHOC from &quot;./MyHOC&quot;;</span><br><span class="line">  5  |  </span><br><span class="line">     |   ^</span><br><span class="line">  6  |  @MyHOC</span><br><span class="line">  7  |  function App() &#123;</span><br></pre></td></tr></table></figure>
+<p>这里是说我们没有装饰器的插件<code>decorators-legacy</code>，而且报错标注了是<code>react-babel</code>的。我们去<code>vite.config.ts</code>配置一下。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vite.config.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&#x27;vite&#x27;</span></span><br><span class="line"><span class="keyword">import</span> react <span class="keyword">from</span> <span class="string">&#x27;@vitejs/plugin-react&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// https://vitejs.dev/config/</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>(&#123;</span><br><span class="line">  <span class="attr">plugins</span>: [<span class="title function_">react</span>(&#123;</span><br><span class="line">    <span class="attr">babel</span>: &#123;</span><br><span class="line">      <span class="attr">parserOpts</span>: &#123; <span class="attr">plugins</span>: [<span class="string">&#x27;decorators-legacy&#x27;</span>, <span class="string">&#x27;classProperties&#x27;</span>]&#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>可以看到这里与<code>CRA</code>不同的点，<code>cra</code>需要你自己安装<code>babel</code>插件来转义，我们这里没有用任何的插件，因为<code>vite</code>内置了，这也是对开发者友好的一个点。</p>
+<p>配置完成之后，你可以看到页面完美运行，且高阶组件也生效了。</p>
+<h5 id="加入Mobx"><a href="#加入Mobx" class="headerlink" title="加入Mobx"></a>加入Mobx</h5><p>因为公司这边是用<code>mobx</code>管理状态的，这边我也花了一点时间在这上面，这里我也记下。</p>
+<p>首先我们准备好<code>mobx</code>。</p>
+<p>安装必要的库。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add mobx mobx-react </span><br></pre></td></tr></table></figure>
+
+<p>准备好一个测试的store:</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ./src/mobx/testStore.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123; observable, action &#125; <span class="keyword">from</span> <span class="string">&quot;mobx&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; delay &#125; <span class="keyword">from</span> <span class="string">&quot;../util&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestStore</span> &#123;</span><br><span class="line">    <span class="meta">@observable</span> num = <span class="number">0</span>;</span><br><span class="line">    <span class="meta">@observable</span> loading = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="title function_">reset</span>()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@action</span>.<span class="property">bound</span></span><br><span class="line">    <span class="title function_">add</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">num</span>++</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@action</span>.<span class="property">bound</span></span><br><span class="line">    <span class="keyword">async</span> <span class="title function_">asyncAdd</span> () &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">loading</span>) <span class="keyword">return</span>;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">loading</span> = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">await</span> <span class="title function_">delay</span>(<span class="number">3000</span>)</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">num</span>++</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">loading</span> = <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@action</span>.<span class="property">bound</span></span><br><span class="line">    <span class="title function_">reset</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">num</span> = <span class="number">0</span>;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">loading</span> = <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">new</span> <span class="title class_">TestStore</span>();</span><br></pre></td></tr></table></figure>
+
+<p>用一个工具文件来存储常用函数：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ./src/util.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">delay</span>(<span class="params"><span class="attr">time</span>: <span class="built_in">number</span></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">setTimeout</span>(resolve, time);</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>准备好<code>reduce</code>,<strong><em>这一步你可能不需要，因为我是从<code>redux</code>先学的，习惯放一个<code>reduce</code></em></strong></p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ./src/mobx/reduce.ts</span></span><br><span class="line"><span class="keyword">import</span> testStore <span class="keyword">from</span> <span class="string">&quot;./testStore&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> store = &#123;</span><br><span class="line">    testStore</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> store</span><br></pre></td></tr></table></figure>
+
+<p>把<code>store</code>应用到<code>react</code>上面</p>
+<figure class="highlight tsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ./src/main.tsx</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">React</span> <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">ReactDOM</span> <span class="keyword">from</span> <span class="string">&#x27;react-dom&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;./index.css&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">App</span> <span class="keyword">from</span> <span class="string">&#x27;./App&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Provider</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;mobx-react&#x27;</span></span><br><span class="line"><span class="keyword">import</span> store <span class="keyword">from</span> <span class="string">&quot;./mobx/reduce&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="title class_">ReactDOM</span>.<span class="title function_">render</span>(</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">React.StrictMode</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">Provider</span> &#123;<span class="attr">...store</span>&#125;&gt;</span></span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;<span class="name">App</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">Provider</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">React.StrictMode</span>&gt;</span></span>,</span><br><span class="line">    <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;root&#x27;</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>以上这些准备工作，你觉得不做过多的解释，需要了解的可以去<a target="_blank" rel="noopener" href="https://mobx.js.org/README.html" title="mobx.js">Mobx.js官网</a>查看</p>
+<p>OK，准备工作做完了，你打算在组件里面运用上<code>mobx</code>的管理。</p>
+<figure class="highlight tsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ./src/MyClassComp.tsx</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">React</span>, &#123; <span class="title class_">Component</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="title class_">MyHOC</span> <span class="keyword">from</span> <span class="string">&quot;./MyHOC&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; inject, observer &#125; <span class="keyword">from</span> <span class="string">&quot;mobx-react&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> testStore <span class="keyword">from</span> <span class="string">&quot;./mobx/testStore&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">IProps</span> &#123;</span><br><span class="line">    <span class="attr">testStore</span>?: <span class="keyword">typeof</span> testStore</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 这里注意：inject在前，observer在后，否则你会抓狂</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@MyHOC</span></span><br><span class="line"><span class="meta">@inject</span>(<span class="string">&#x27;testStore&#x27;</span>) </span><br><span class="line"><span class="meta">@observer</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyClassComp</span> <span class="keyword">extends</span> <span class="title class_ inherited__">Component</span>&lt;<span class="title class_">IProps</span>, &#123;&#125;&gt; &#123;</span><br><span class="line">    <span class="title function_">render</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> &#123;num, loading, add, asyncAdd, reset&#125; = <span class="variable language_">this</span>.<span class="property">props</span>.<span class="property">testStore</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">                My Class Comp</span></span><br><span class="line"><span class="language-xml">                <span class="tag">&lt;<span class="name">p</span>&gt;</span>&#123;num&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">                <span class="tag">&lt;<span class="name">p</span>&gt;</span>&#123;loading ? &#x27;loading&#x27;: null&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">                <span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;()</span> =&gt;</span> add()&#125;&gt;add 1<span class="tag">&lt;/<span class="name">button</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">                <span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;()</span> =&gt;</span> asyncAdd()&#125;&gt;async add 1<span class="tag">&lt;/<span class="name">button</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">                <span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;()</span> =&gt;</span> reset()&#125;&gt;reset num<span class="tag">&lt;/<span class="name">button</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title class_">MyClassComp</span>;</span><br></pre></td></tr></table></figure>
+
+<p>如果你这时候运行的话，页面渲染看起来是没有什么问题的，为什么是看起来没有问题，因为你点击一下<code>add 1</code> 按钮，你就会发现，控制台报错。我能料想到，差不多是这样的：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">action.ts:68 Uncaught TypeError: Cannot read properties of undefined (reading &#x27;num&#x27;)</span><br><span class="line">    at add (testStore.ts:18)</span><br><span class="line">    at executeAction (action.ts:65)</span><br><span class="line">    at add (action.ts:46)</span><br><span class="line">    at onClick (MyClassComp.tsx:22)</span><br><span class="line">    at HTMLUnknownElement.callCallback2 (react-dom.development.js:3945)</span><br><span class="line">    at Object.invokeGuardedCallbackDev (react-dom.development.js:3994)</span><br><span class="line">    at invokeGuardedCallback (react-dom.development.js:4056)</span><br><span class="line">    at invokeGuardedCallbackAndCatchFirstError (react-dom.development.js:4070)</span><br><span class="line">    at executeDispatch (react-dom.development.js:8243)</span><br><span class="line">    at processDispatchQueueItemsInOrder (react-dom.development.js:8275)</span><br></pre></td></tr></table></figure>
+
+<p>你通过了解报错信息发现是读取<code>num</code>这个属性引发的，因为读取的对象是<code>undefined</code>，结合我们点击<code>add 1</code>按钮来看，你觉得应该是<code>15</code>行这里出错了：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">13    @action.bound</span><br><span class="line">14    add() &#123;</span><br><span class="line">^15        this.num++</span><br><span class="line">16    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里的<code>this</code>取不到值，那我们就换成箭头函数，让<code>this</code>不用指向上下文，而是指向<code>store</code>本身。</p>
+<p>换完之后，你再点击的时候就没有报错了。终于正常了，到这里似乎一切还顺利，但是你很快就发现，无论你怎么点击，页面上渲染的值还是<code>0</code>，没有变化。</p>
+<p>不对啊，我们明明在组件上进入了观察者模式才对啊。</p>
+<p>这里需要另外一个<code>api</code>来修复这个了。我们在<code>store</code>的<code>constructor</code>里面加入一句话：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ./src/mobx/testStore.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123; observable, action, makeAutoObservable &#125; <span class="keyword">from</span> <span class="string">&quot;mobx&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; delay &#125; <span class="keyword">from</span> <span class="string">&quot;../util&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestStore</span> &#123;</span><br><span class="line">    <span class="meta">@observable</span> num = <span class="number">0</span>;</span><br><span class="line">    <span class="meta">@observable</span> loading = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="title function_">makeAutoObservable</span>(<span class="variable language_">this</span>)</span><br><span class="line">        <span class="variable language_">this</span>.<span class="title function_">reset</span>()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 此处省略代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>并且我们可以移除所有的<code>@action.bound</code>。</p>
+<p>我们在一次点击的时候你就可以看到页面上的<code>num</code>是正常渲染了。</p>
+<p>但是，这时候细心的你一定还是发现了控制台的警告:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Since strict-mode is enabled, changing (observed) observable values without using an action is not allowed. Tried to modify: TestStore@1.num</span><br></pre></td></tr></table></figure>
+
+<p>你发现这是点击<code>async add</code>引发的问题。查阅官网之后你发现，需要要用这样一个<code>api</code>:</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ./src/mobx/testStore.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123; observable, makeAutoObservable &#125; <span class="keyword">from</span> <span class="string">&quot;mobx&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; delay &#125; <span class="keyword">from</span> <span class="string">&quot;../util&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestStore</span> &#123;</span><br><span class="line">    <span class="comment">// 此处省略代码</span></span><br><span class="line">    asyncAdd = <span class="title function_">async</span> () =&gt; &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">loading</span>) <span class="keyword">return</span>;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">loading</span> = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">await</span> <span class="title function_">delay</span>(<span class="number">3000</span>)</span><br><span class="line">        <span class="title function_">runInAction</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">num</span>++</span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">loading</span> = <span class="literal">false</span></span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 此处省略代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>之后的数据管理终于没有感叹号发生了，大功告成！</p>
+<h5 id="mobx的hooks版本"><a href="#mobx的hooks版本" class="headerlink" title="mobx的hooks版本"></a>mobx的hooks版本</h5><p>上述的一切都是简历在<code>class component</code>上面的，但是与我们一起开发的还有其他的同事，怎么的也得把<code>hooks</code>给支持了吧</p>
+<p>得，你又写了一个<code>function component</code>：</p>
+<figure class="highlight tsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ./src/MyFunctionComp.tsx</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">React</span>, &#123; <span class="title class_">Component</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">MyFunctionComponent</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123;num, loading, add, asyncAdd, reset&#125; = testStore;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">        <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">            My Class Comp</span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;<span class="name">p</span>&gt;</span>&#123;num&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;<span class="name">p</span>&gt;</span>&#123;loading ? &#x27;loading&#x27;: null&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;()</span> =&gt;</span> add()&#125;&gt;add 1<span class="tag">&lt;/<span class="name">button</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;()</span> =&gt;</span> asyncAdd()&#125;&gt;async add 1<span class="tag">&lt;/<span class="name">button</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;()</span> =&gt;</span> reset()&#125;&gt;reset num<span class="tag">&lt;/<span class="name">button</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title class_">MyFunctionComponent</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这里，你知道，运行起来肯定报错，因为<code>testStore</code>都没有定义。怎么拿到自己的<code>store</code>呢？</p>
+<p>查阅官网之后你发现一个解决方案。</p>
+<figure class="highlight tsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ./src/mobx/useStores.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">MobXProviderContext</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;mobx-react&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">React</span> <span class="keyword">from</span> <span class="string">&quot;react&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> reduce <span class="keyword">from</span> <span class="string">&quot;./reduce&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> <span class="title class_">IRootStores</span> = <span class="keyword">typeof</span> reduce</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">function</span> <span class="title function_">useStores</span>(<span class="params"></span>): <span class="title class_">IRootStores</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">React</span>.<span class="title function_">useContext</span>(<span class="title class_">MobXProviderContext</span>) <span class="keyword">as</span> <span class="title class_">IRootStores</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>有了这个<code>hooks</code>,我们就可以在组件里面这样定义<code>store</code>了：</p>
+<figure class="highlight tsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123;testStore&#125; = <span class="title function_">useStores</span>();</span><br><span class="line"><span class="keyword">const</span> &#123;num, loading, add, asyncAdd, reset&#125; = testStore;</span><br></pre></td></tr></table></figure>
+
+<p>运行之后，你发现点击按钮没有反应，页面渲染的<code>num</code>始终是<code>0</code></p>
+<p>这时候，你仔细查看代码发现没有进入观察者模式。于是你加上<code>observer</code>:</p>
+<figure class="highlight tsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ./src/MyFunctionComp.tsx</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">React</span> <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> useStores <span class="keyword">from</span> <span class="string">&quot;./mobx/useStores&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; observer &#125; <span class="keyword">from</span> <span class="string">&quot;mobx-react&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title class_">MyFunctionComponent</span> = <span class="title function_">observer</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; testStore &#125; = <span class="title function_">useStores</span>()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> &#123; num, loading, add, asyncAdd, reset &#125; = testStore;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">        <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">            My Class Comp</span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;<span class="name">p</span>&gt;</span>&#123;testStore.num&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;<span class="name">p</span>&gt;</span>&#123;loading ? &#x27;loading&#x27; : null&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">                <span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;()</span> =&gt;</span> add()&#125;&gt;add 1<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">                <span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;()</span> =&gt;</span> asyncAdd()&#125;&gt;async add 1<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">                <span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;()</span> =&gt;</span> reset()&#125;&gt;reset num<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">    );</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title class_">MyFunctionComponent</span>;</span><br></pre></td></tr></table></figure>
+
+<p>于此，对于<code>hooks</code>也支持了。</p>
+<p>共勉~</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>请我一杯咖啡吧！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="Alex 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="Alex 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/react/" rel="tag"># react</a>
+              <a href="/tags/vite/" rel="tag"># vite</a>
+              <a href="/tags/mobx/" rel="tag"># mobx</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/10/22/hidden-scrollbar/" rel="prev" title="如何用css隐藏scrollbar">
+                  <i class="fa fa-angle-left"></i> 如何用css隐藏scrollbar
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="user"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Alex</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">87k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:19</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"hulilang","count":true,"lazyload":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js" defer></script>
+
+</body>
+</html>

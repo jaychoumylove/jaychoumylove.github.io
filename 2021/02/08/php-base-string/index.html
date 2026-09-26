@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="google381a53d35b8b50db.html">
+  <meta name="msvalidate.01" content="true">
+  <meta name="baidu-site-verification" content="F4UoV99kc0">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" integrity="sha256-4Lad8m4ZWW1Lgb9+sMVLYEfnIh7BjV1NQMEe79Pviks=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"jaychoumylove.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.29.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="梳理 php 关于 string 的小知识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP梳理之string">
+<meta property="og:url" content="https://jaychoumylove.github.io/2021/02/08/php-base-string/index.html">
+<meta property="og:site_name" content="simker">
+<meta property="og:description" content="梳理 php 关于 string 的小知识">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-02-08T09:26:00.000Z">
+<meta property="article:modified_time" content="2021-02-22T06:52:48.805Z">
+<meta property="article:author" content="Alex">
+<meta property="article:tag" content="notes">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://jaychoumylove.github.io/2021/02/08/php-base-string/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://jaychoumylove.github.io/2021/02/08/php-base-string/","path":"2021/02/08/php-base-string/","title":"PHP梳理之string"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>PHP梳理之string | simker</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-search popup-trigger" aria-label="搜索" role="button">
+      <i class="fa fa-search fa-fw fa-lg"></i>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">simker</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Life is too short, just make it.</p>
+  </div>
+
+  <div class="site-nav-toggle" aria-label="切换导航栏" role="button">
+      <i class="fa fa-ellipsis fa-fw fa-lg"></i>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-layer-group fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-song"><a href="/song/index.html" rel="section"><i class="fa fa-headphones fa-fw"></i>音乐</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  
+  <template id="search-popup-template"><div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div></template>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8B%BC%E6%8E%A5"><span class="nav-number">1.</span> <span class="nav-text">拼接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="nav-number">2.</span> <span class="nav-text">格式化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BD%AC%E5%8C%96"><span class="nav-number">3.</span> <span class="nav-text">转化</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%95%B0%E5%AD%97"><span class="nav-number">3.1.</span> <span class="nav-text">数字</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%95%B0%E7%BB%84"><span class="nav-number">3.2.</span> <span class="nav-text">数组</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%89%B9%E5%AE%9A%E7%9A%84%E5%80%BC"><span class="nav-number">4.</span> <span class="nav-text">查询字符串中特定的值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9B%BF%E6%8D%A2"><span class="nav-number">5.</span> <span class="nav-text">替换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%88%AA%E5%8F%96"><span class="nav-number">6.</span> <span class="nav-text">截取</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%87%8D%E5%A4%8D"><span class="nav-number">7.</span> <span class="nav-text">重复</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Alex"
+      src="/images/avatar@kikyo.jpeg">
+  <p class="site-author-name" itemprop="name">Alex</p>
+  <div class="site-description" itemprop="description">A super nice guy!</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/jaychoumylove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;jaychoumylove" rel="noopener me" target="_blank"><i class="github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:hulilang7517520@gmail.com" title="E-Mail → mailto:hulilang7517520@gmail.com" rel="noopener me" target="_blank"><i class="envelope fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://jaychoumylove.github.io/2021/02/08/php-base-string/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar@kikyo.jpeg">
+      <meta itemprop="name" content="Alex">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="simker">
+      <meta itemprop="description" content="A super nice guy!">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="PHP梳理之string | simker">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PHP梳理之string
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-02-08 17:26:00" itemprop="dateCreated datePublished" datetime="2021-02-08T17:26:00+08:00">2021-02-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2021-02-22 14:52:48" itemprop="dateModified" datetime="2021-02-22T14:52:48+08:00">2021-02-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/PHP/" itemprop="url" rel="index"><span itemprop="name">PHP</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2021/02/08/php-base-string/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/02/08/php-base-string/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-lines"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>梳理 php 关于 string 的小知识</p>
+</blockquote>
+<span id="more"></span>
+
+<h4 id="拼接"><a href="#拼接" class="headerlink" title="拼接"></a>拼接</h4><p>两种方式：</p>
+<ul>
+<li>普通字符串拼接</li>
+<li>运用<code>sprintf</code></li>
+</ul>
+<p>第一种方式在<a href="/2021/02/08/php-base-types/" title="PHP基础笔记之类型">PHP基础笔记之类型</a>有提到，示例主要针对 <code>sprintf</code> 函数:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="variable">$name</span> = <span class="string">&#x27;Jack&#x27;</span>;</span><br><span class="line">    <span class="variable">$age</span> = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">echo</span> <span class="title function_ invoke__">sprintf</span>(<span class="string">&#x27;His name is %s.&#x27;</span>, <span class="variable">$name</span>);<span class="comment">// His name is Jack.</span></span><br><span class="line"></span><br><span class="line">    <span class="title function_ invoke__">printf</span>(<span class="string">&#x27;His name is %s, and he is %s.&#x27;</span>, <span class="variable">$name</span>, <span class="variable">$age</span>);<span class="comment">// His name is Jack, and he is 10.</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="格式化"><a href="#格式化" class="headerlink" title="格式化"></a>格式化</h4><ul>
+<li><code>number_format</code> - 以千位分隔符方式格式化一个数字</li>
+<li>如果要替换点千位分隔符需要加参数</li>
+<li><code>ucfirst</code>,<code>lcfirst</code> 首字母大|小写</li>
+<li><code>trim</code> 过滤掉字符串前后无用字符(空格，换行，缩进等)</li>
+<li><code>ltrim</code> 作用同上，但是只过滤字符串前面的无用字符</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="variable">$numberFormat</span> = <span class="string">&#x27;2387484&#x27;</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="title function_ invoke__">number_format</span>(<span class="variable">$numberFormat</span>, <span class="number">2</span>);<span class="comment">// 2,387,484.00</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="title function_ invoke__">number_format</span>(<span class="variable">$numberFormat</span>, <span class="number">2</span>, <span class="string">&#x27;.&#x27;</span>, <span class="string">&#x27;&#x27;</span>);<span class="comment">// 2387484.00</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="title function_ invoke__">ucfirst</span>(<span class="string">&#x27;it\&#x27;s me!&#x27;</span>); <span class="comment">// It&#x27;s me!</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="title function_ invoke__">lcfirst</span>(<span class="string">&#x27;Hi!&#x27;</span>); <span class="comment">// hi!</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="title function_ invoke__">trim</span>(<span class="string">&#x27; Hi!</span></span><br><span class="line"><span class="string">    &#x27;</span>); <span class="comment">// Hi!</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="title function_ invoke__">ltrim</span>(<span class="string">&#x27;</span></span><br><span class="line"><span class="string">    Hi!&#x27;</span>); <span class="comment">// Hi!</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="转化"><a href="#转化" class="headerlink" title="转化"></a>转化</h4><blockquote>
+<p>这里只提及简单转化，不深入</p>
+</blockquote>
+<h5 id="数字"><a href="#数字" class="headerlink" title="数字"></a>数字</h5><ul>
+<li><code>floatval</code> 提取浮点值</li>
+<li><code>intval</code> 获取变量整数值</li>
+<li>除此之外，你还可以用 <code>settype</code> 来转换</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="variable">$a</span> = <span class="string">&#x27;3.14158额&#x27;</span>;</span><br><span class="line">    <span class="variable">$b</span> = <span class="string">&#x27;1个&#x27;</span>;</span><br><span class="line">    <span class="variable">$c</span> = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">echo</span> <span class="title function_ invoke__">floatval</span>(<span class="variable">$a</span>); <span class="comment">// 3.14158</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="title function_ invoke__">intval</span>(<span class="variable">$b</span>); <span class="comment">// 1</span></span><br><span class="line">    <span class="title function_ invoke__">settype</span>(<span class="variable">$c</span>, <span class="string">&#x27;string&#x27;</span>);</span><br><span class="line">    <span class="keyword">echo</span> <span class="variable">$c</span>; <span class="comment">// 1</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h5><ul>
+<li><code>explode</code> 按照特定字符分割成数组</li>
+<li><code>str_split</code> 按照步长分割数组</li>
+<li><code>implode</code> 可以把数组转化为字符串</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="variable">$a</span> = <span class="string">&#x27;hello,world&#x27;</span>;</span><br><span class="line">    <span class="variable">$b</span> = <span class="title function_ invoke__">explode</span>(<span class="string">&#x27;,&#x27;</span>, <span class="variable">$a</span>); <span class="comment">// [’hello‘, &#x27;world&#x27;]</span></span><br><span class="line">    <span class="variable">$c</span> = <span class="title function_ invoke__">str_split</span>(<span class="variable">$a</span>, <span class="number">2</span>); <span class="comment">// [&#x27;he&#x27;, &#x27;ll&#x27;, &#x27;o,&#x27;, &#x27;wo&#x27;, &#x27;rl&#x27;, &#x27;d&#x27;]</span></span><br><span class="line"></span><br><span class="line">    <span class="variable">$d</span> = <span class="title function_ invoke__">implode</span>(<span class="string">&#x27;,&#x27;</span>, <span class="variable">$b</span>); <span class="comment">// &#x27;hello,world&#x27;</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="查询字符串中特定的值"><a href="#查询字符串中特定的值" class="headerlink" title="查询字符串中特定的值"></a>查询字符串中特定的值</h4><ul>
+<li>简单的字符串匹配</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="variable">$content</span> = <span class="string">&#x27;我竟无语凝噎&#x27;</span>;</span><br><span class="line">    <span class="variable">$search</span> = <span class="string">&#x27;无语&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="variable">$strpos</span> = <span class="literal">false</span> !== <span class="title function_ invoke__">strpos</span>(<span class="variable">$content</span>, <span class="variable">$search</span>); <span class="comment">// true</span></span><br><span class="line">    <span class="variable">$strstr</span> = <span class="literal">false</span> === <span class="title function_ invoke__">strstr</span>(<span class="variable">$search</span>, <span class="variable">$content</span>); <span class="comment">// true</span></span><br><span class="line">    <span class="variable">$strchr</span> = <span class="literal">false</span> === <span class="title function_ invoke__">strchr</span>(<span class="variable">$search</span>, <span class="variable">$content</span>); <span class="comment">// true</span></span><br><span class="line">    <span class="comment">// strchr is alias of strstr</span></span><br><span class="line">    <span class="variable">$regx</span> = <span class="string">&quot;/(无语)/&quot;</span>;</span><br><span class="line">    <span class="variable">$preg</span> = (<span class="keyword">bool</span>)<span class="title function_ invoke__">preg_match</span>(<span class="variable">$regx</span>, <span class="variable">$content</span>); <span class="comment">// true</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="替换"><a href="#替换" class="headerlink" title="替换"></a>替换</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="comment">// 搜索替换</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="title function_ invoke__">str_replace</span>(<span class="string">&#x27;言&#x27;</span>, <span class="string">&#x27;颜&#x27;</span>, <span class="string">&#x27;我竟无言以对&#x27;</span>); <span class="comment">// 我竟无颜以对</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 截取替换</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="title function_ invoke__">substr_replace</span>(<span class="string">&#x27;hello,world&#x27;</span>, <span class="string">&#x27;hi&#x27;</span>, <span class="number">0</span>, <span class="number">5</span>); <span class="comment">// hi,world</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="截取"><a href="#截取" class="headerlink" title="截取"></a>截取</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">  <span class="keyword">echo</span> <span class="title function_ invoke__">substr</span>(<span class="string">&#x27;hello,world&#x27;</span>, <span class="number">0</span>, <span class="number">5</span>); <span class="comment">// hello</span></span><br><span class="line">  <span class="keyword">echo</span> <span class="title function_ invoke__">substr</span>(<span class="string">&#x27;hello,world&#x27;</span>, <span class="number">5</span>, <span class="number">1</span>); <span class="comment">// ,</span></span><br><span class="line">  <span class="keyword">echo</span> <span class="title function_ invoke__">substr</span>(<span class="string">&#x27;hello,world&#x27;</span>, <span class="number">6</span>, <span class="number">5</span>); <span class="comment">// world</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="重复"><a href="#重复" class="headerlink" title="重复"></a>重复</h4><blockquote>
+<p>纯属个人喜好发现的好玩意</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">  <span class="keyword">echo</span> <span class="title function_ invoke__">str_repeat</span>(<span class="string">&#x27;说了多少遍了，不要做六边形战士！&#x27;</span>, <span class="number">3</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong><em>To be continue</em></strong></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>请我一杯咖啡吧！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="Alex 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="Alex 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/notes/" rel="tag"># notes</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/02/08/php-base-types/" rel="prev" title="PHP基础笔记之类型">
+                  <i class="fa fa-angle-left"></i> PHP基础笔记之类型
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/02/08/php-base-control-structures/" rel="next" title="PHP流程控制小梳理">
+                  PHP流程控制小梳理 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="user"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Alex</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">87k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:19</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"hulilang","count":true,"lazyload":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js" defer></script>
+
+</body>
+</html>

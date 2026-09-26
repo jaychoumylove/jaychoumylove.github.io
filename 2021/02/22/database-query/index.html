@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="google381a53d35b8b50db.html">
+  <meta name="msvalidate.01" content="true">
+  <meta name="baidu-site-verification" content="F4UoV99kc0">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" integrity="sha256-4Lad8m4ZWW1Lgb9+sMVLYEfnIh7BjV1NQMEe79Pviks=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"jaychoumylove.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.29.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="此为sql语句的开篇记录，作为我多次维护数据的应用笔记，以求日后方便。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sql语句之query笔记">
+<meta property="og:url" content="https://jaychoumylove.github.io/2021/02/22/database-query/index.html">
+<meta property="og:site_name" content="simker">
+<meta property="og:description" content="此为sql语句的开篇记录，作为我多次维护数据的应用笔记，以求日后方便。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-02-22T06:50:35.000Z">
+<meta property="article:modified_time" content="2021-02-24T07:15:21.378Z">
+<meta property="article:author" content="Alex">
+<meta property="article:tag" content="notes">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://jaychoumylove.github.io/2021/02/22/database-query/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://jaychoumylove.github.io/2021/02/22/database-query/","path":"2021/02/22/database-query/","title":"sql语句之query笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>sql语句之query笔记 | simker</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-search popup-trigger" aria-label="搜索" role="button">
+      <i class="fa fa-search fa-fw fa-lg"></i>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">simker</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Life is too short, just make it.</p>
+  </div>
+
+  <div class="site-nav-toggle" aria-label="切换导航栏" role="button">
+      <i class="fa fa-ellipsis fa-fw fa-lg"></i>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-layer-group fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-song"><a href="/song/index.html" rel="section"><i class="fa fa-headphones fa-fw"></i>音乐</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  
+  <template id="search-popup-template"><div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div></template>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%9F%E8%AE%A1%E7%B1%BB%E7%9A%84%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.</span> <span class="nav-text">统计类的查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E8%BF%87%E6%BB%A4"><span class="nav-number">2.</span> <span class="nav-text">数据过滤</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%89%80%E6%9C%89%E6%95%B0%E6%8D%AE"><span class="nav-number">2.1.</span> <span class="nav-text">所有数据</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8E%BB%E9%87%8D"><span class="nav-number">2.2.</span> <span class="nav-text">去重</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AD%9B%E9%80%89%E9%87%8D%E5%A4%8D%E6%95%B0%E6%8D%AE"><span class="nav-number">2.3.</span> <span class="nav-text">筛选重复数据</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E5%AD%90%E8%AF%AD%E5%8F%A5"><span class="nav-number">2.4.</span> <span class="nav-text">查询子语句</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Alex"
+      src="/images/avatar@kikyo.jpeg">
+  <p class="site-author-name" itemprop="name">Alex</p>
+  <div class="site-description" itemprop="description">A super nice guy!</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/jaychoumylove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;jaychoumylove" rel="noopener me" target="_blank"><i class="github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:hulilang7517520@gmail.com" title="E-Mail → mailto:hulilang7517520@gmail.com" rel="noopener me" target="_blank"><i class="envelope fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://jaychoumylove.github.io/2021/02/22/database-query/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar@kikyo.jpeg">
+      <meta itemprop="name" content="Alex">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="simker">
+      <meta itemprop="description" content="A super nice guy!">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="sql语句之query笔记 | simker">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          sql语句之query笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-02-22 14:50:35" itemprop="dateCreated datePublished" datetime="2021-02-22T14:50:35+08:00">2021-02-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2021-02-24 15:15:21" itemprop="dateModified" datetime="2021-02-24T15:15:21+08:00">2021-02-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/SQL/" itemprop="url" rel="index"><span itemprop="name">SQL</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2021/02/22/database-query/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/02/22/database-query/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-lines"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>此为<code>sql</code>语句的开篇记录，作为我多次维护数据的应用笔记，以求日后方便。</p>
+</blockquote>
+<span id="more"></span>
+
+<h4 id="统计类的查询"><a href="#统计类的查询" class="headerlink" title="统计类的查询"></a>统计类的查询</h4><p>大多是统计类的函数的运用，主要有：</p>
+<ul>
+<li>COUNT(): 计数</li>
+<li>SUM(): 求和</li>
+<li>AVG()：求平均值</li>
+<li>MIN()：取最小值</li>
+<li>MAX()：取最大值</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="built_in">sum</span>(`field`) <span class="keyword">as</span> [alias] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"><span class="keyword">select</span> <span class="built_in">count</span>(<span class="number">1</span>) <span class="keyword">as</span> [alias] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"><span class="keyword">select</span> <span class="built_in">avg</span>(`field`) <span class="keyword">as</span> [alias] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"><span class="keyword">select</span> <span class="built_in">min</span>(`field`) <span class="keyword">as</span> [alias] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"><span class="keyword">select</span> <span class="built_in">max</span>(`field`) <span class="keyword">as</span> [alias] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>count 里面一般传一个字段或者是一个数值，个人喜欢传 <code>1</code></p>
+</blockquote>
+<h4 id="数据过滤"><a href="#数据过滤" class="headerlink" title="数据过滤"></a>数据过滤</h4><p>某种情况下你需要过滤某些数据，普遍的情况下，我们会用<code>where</code>语句来过滤。</p>
+<h5 id="所有数据"><a href="#所有数据" class="headerlink" title="所有数据"></a>所有数据</h5><p>一般的查询来说，拿到所有数据，根本不需要<code>where</code>，就可以拿到所有语句。<br>但是我们要更新所有语句，或者快速删除所有数据(保留自增键)的时候，如果不写入<code>where</code>条件的话，执行语句会报错，提示必须要有<code>where</code>条件。<br>这里有一个小技巧。</p>
+<p>既然必须要有<code>where</code>,那我们就写一个一个条件，比如<code>1=1</code>,<code>1&gt;0</code>,<code>1&lt;2</code>,<code>foo&lt;&gt;bar</code>等等.</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">where</span> <span class="number">1</span> <span class="operator">=</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">where</span> <span class="number">1</span> <span class="operator">&gt;</span> <span class="number">0</span></span><br><span class="line"><span class="keyword">where</span> <span class="number">1</span> <span class="operator">&lt;</span> <span class="number">2</span></span><br><span class="line"><span class="keyword">where</span> <span class="string">&#x27;foo&#x27;</span> <span class="operator">&lt;&gt;</span> <span class="string">&#x27;bar&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后我们的语句大概就是这个样子</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> [field] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">update</span> [<span class="keyword">table</span>] <span class="keyword">set</span> [field] <span class="operator">=</span> <span class="string">&#x27;some value&#x27;</span> <span class="keyword">where</span> <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> <span class="literal">true</span>;</span><br></pre></td></tr></table></figure>
+
+<h5 id="去重"><a href="#去重" class="headerlink" title="去重"></a>去重</h5><ul>
+<li><code>distinct</code> 可以支持多个字段去重</li>
+<li><code>group by</code> 这个主要应用在聚合统计场景中，但是也可以去重</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">distinct</span> [field], [other field] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>];</span><br><span class="line"><span class="keyword">select</span> [field] <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>] <span class="keyword">group</span> <span class="keyword">by</span> [field];</span><br></pre></td></tr></table></figure>
+
+<h5 id="筛选重复数据"><a href="#筛选重复数据" class="headerlink" title="筛选重复数据"></a>筛选重复数据</h5><ul>
+<li><code>count</code> 通过计数来筛选数据(计数值大于 1 的就是重复值，反之就是唯一值)</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="built_in">count</span>(<span class="number">1</span>) <span class="keyword">as</span> _c <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>] <span class="keyword">group</span> <span class="keyword">by</span> [field];</span><br></pre></td></tr></table></figure>
+
+<h5 id="查询子语句"><a href="#查询子语句" class="headerlink" title="查询子语句"></a>查询子语句</h5><ul>
+<li>有些时候加入查询子语句更方便理解，如上面的查询就可以改写成这样的</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> (<span class="keyword">select</span> <span class="built_in">count</span>(<span class="number">1</span>) <span class="keyword">as</span> _c <span class="keyword">from</span> [<span class="keyword">table</span>] <span class="keyword">where</span> [<span class="keyword">where</span> <span class="keyword">case</span>] <span class="keyword">group</span> <span class="keyword">by</span> [field]) b <span class="keyword">where</span> b._c <span class="operator">&gt;</span> <span class="number">1</span>;</span><br><span class="line"># b._c <span class="operator">=</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>是不是清晰多了。</p>
+<blockquote>
+<p>题外话，一个面试题：请从数据库(<code>people</code>)中取出随机的五条数据（有效数据量不断会上升）。</p>
+</blockquote>
+<p>解答：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># <span class="number">1</span> 先拿到最小id和最大id</span><br><span class="line"><span class="keyword">select</span> <span class="built_in">min</span>(id) <span class="keyword">as</span> minId <span class="keyword">from</span> perple;</span><br><span class="line"><span class="keyword">select</span> <span class="built_in">max</span>(id) <span class="keyword">as</span> maxId <span class="keyword">from</span> perple;</span><br><span class="line"># <span class="number">2</span> 然后拿到一个随机id(介于最小，最大之间)</span><br><span class="line"># <span class="number">3</span> 再拿到一条记录</span><br><span class="line"><span class="keyword">select</span> [field] <span class="keyword">from</span> people <span class="keyword">where</span> id <span class="operator">&gt;</span> round(rand() <span class="operator">*</span> ([maxId] <span class="operator">-</span> [minId]) <span class="operator">+</span> [minId]) limit <span class="number">1</span>;</span><br><span class="line"># 然后重复 <span class="number">5</span> 次 <span class="number">2</span> <span class="operator">~</span> <span class="number">3</span> 操作</span><br></pre></td></tr></table></figure>
+
+<p>这里以<code>PHP</code>代码示例:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by PhpStorm.</span></span><br><span class="line"><span class="comment"> * User: caixian</span></span><br><span class="line"><span class="comment"> * Date: 2099/8/12</span></span><br><span class="line"><span class="comment"> * Time: 14:47</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">App</span>\<span class="title class_">Controller</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> ...;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Route</span>(&quot;/user&quot;)</span></span><br><span class="line"><span class="comment"> * Class User</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@package</span> App\Controller</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">extends</span> <span class="title">AbstractController</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@var</span> UserRepository</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$userRepository</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@var</span> EntityManagerInterface</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$entityManager</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * User constructor.</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> UserRepository              $userRepository</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> EntityManagerInterface      $entityManager</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span> (<span class="params">UserRepository <span class="variable">$userRepository</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">                                 EntityManagerInterface <span class="variable">$entityManager</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;userRepository = <span class="variable">$userRepository</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;entityManager  = <span class="variable">$entityManager</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Route</span>(&quot;/info/rand&quot;, methods=&#123;&quot;GET&quot;&#125;, name=&quot;randInfo&quot;)</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> NonUniqueResultException</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">randInfo</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$qb</span> = <span class="variable language_">$this</span>-&gt;userRepository-&gt;<span class="title function_ invoke__">createQueryBuilder</span>(<span class="string">&#x27;t&#x27;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="variable">$minId</span> = <span class="variable">$qb</span>-&gt;<span class="title function_ invoke__">select</span>(<span class="string">&#x27;min(t.id)&#x27;</span>)-&gt;<span class="title function_ invoke__">getQuery</span>()-&gt;<span class="title function_ invoke__">getSingleScalarResult</span>();</span><br><span class="line">        <span class="variable">$maxId</span> = <span class="variable">$qb</span>-&gt;<span class="title function_ invoke__">select</span>(<span class="string">&#x27;max(t.id)&#x27;</span>)-&gt;<span class="title function_ invoke__">getQuery</span>()-&gt;<span class="title function_ invoke__">getSingleScalarResult</span>();</span><br><span class="line"></span><br><span class="line">        <span class="variable">$randNum</span> = <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line">        <span class="variable">$results</span> = [];</span><br><span class="line">        <span class="variable">$randQb</span> = <span class="variable language_">$this</span>-&gt;userRepository-&gt;<span class="title function_ invoke__">createQueryBuilder</span>(<span class="string">&#x27;r&#x27;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            <span class="variable">$randItem</span> = <span class="variable">$randQb</span>-&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;r.id &gt;= round(rand() * :randNum + :minId)&#x27;</span>)</span><br><span class="line">                -&gt;<span class="title function_ invoke__">setParameters</span>([</span><br><span class="line">                    <span class="string">&#x27;randNum&#x27;</span> =&gt; <span class="title function_ invoke__">bcsub</span>(<span class="variable">$maxId</span>, <span class="variable">$minId</span>),</span><br><span class="line">                    <span class="string">&#x27;minId&#x27;</span> =&gt; <span class="variable">$minId</span></span><br><span class="line">                ])</span><br><span class="line">                -&gt;<span class="title function_ invoke__">setMaxResults</span>(<span class="number">1</span>)</span><br><span class="line">                -&gt;<span class="title function_ invoke__">getQuery</span>()</span><br><span class="line">                -&gt;<span class="title function_ invoke__">getOneOrNullResult</span>();</span><br><span class="line"></span><br><span class="line">            <span class="variable">$id</span> = <span class="variable">$randItem</span>-&gt;<span class="title function_ invoke__">getId</span>();</span><br><span class="line">            <span class="keyword">if</span> (<span class="title function_ invoke__">in_array</span>(<span class="variable">$id</span>, <span class="variable">$results</span>)) <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line">            <span class="title function_ invoke__">array_push</span>(<span class="variable">$results</span>, <span class="variable">$id</span>);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (<span class="title function_ invoke__">count</span>(<span class="variable">$results</span>) &gt;= <span class="variable">$randNum</span>) <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Success</span>([<span class="string">&#x27;data&#x27;</span> =&gt; <span class="variable">$results</span>]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong><em>To be continue</em></strong></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>请我一杯咖啡吧！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="Alex 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="Alex 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/notes/" rel="tag"># notes</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/02/22/database-update/" rel="prev" title="sql语句之update笔记">
+                  <i class="fa fa-angle-left"></i> sql语句之update笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/03/19/react-subscribe-publish/" rel="next" title="订阅发布设计模式">
+                  订阅发布设计模式 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="user"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Alex</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">87k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:19</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"hulilang","count":true,"lazyload":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js" defer></script>
+
+</body>
+</html>

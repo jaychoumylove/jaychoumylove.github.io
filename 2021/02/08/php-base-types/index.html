@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 5.4.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="google381a53d35b8b50db.html">
+  <meta name="msvalidate.01" content="true">
+  <meta name="baidu-site-verification" content="F4UoV99kc0">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" integrity="sha256-4Lad8m4ZWW1Lgb9+sMVLYEfnIh7BjV1NQMEe79Pviks=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"jaychoumylove.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.29.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="最近巩固下自己的 php，故而整理了下 php 相关的技术点，不求大而全，只求能离 php 更近一点。本文为php基础的开篇，只介绍类型基本信息及一些小技巧，不深入，后续专门写这几种类型的文章。  Basis 基本情况参考 php 手册 - 类型">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP基础笔记之类型">
+<meta property="og:url" content="https://jaychoumylove.github.io/2021/02/08/php-base-types/index.html">
+<meta property="og:site_name" content="simker">
+<meta property="og:description" content="最近巩固下自己的 php，故而整理了下 php 相关的技术点，不求大而全，只求能离 php 更近一点。本文为php基础的开篇，只介绍类型基本信息及一些小技巧，不深入，后续专门写这几种类型的文章。  Basis 基本情况参考 php 手册 - 类型">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-02-08T07:34:23.000Z">
+<meta property="article:modified_time" content="2021-02-22T06:52:42.957Z">
+<meta property="article:author" content="Alex">
+<meta property="article:tag" content="notes">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://jaychoumylove.github.io/2021/02/08/php-base-types/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://jaychoumylove.github.io/2021/02/08/php-base-types/","path":"2021/02/08/php-base-types/","title":"PHP基础笔记之类型"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>PHP基础笔记之类型 | simker</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-search popup-trigger" aria-label="搜索" role="button">
+      <i class="fa fa-search fa-fw fa-lg"></i>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">simker</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Life is too short, just make it.</p>
+  </div>
+
+  <div class="site-nav-toggle" aria-label="切换导航栏" role="button">
+      <i class="fa fa-ellipsis fa-fw fa-lg"></i>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-layer-group fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-song"><a href="/song/index.html" rel="section"><i class="fa fa-headphones fa-fw"></i>音乐</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  
+  <template id="search-popup-template"><div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div></template>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Basis-%E5%9F%BA%E6%9C%AC%E6%83%85%E5%86%B5"><span class="nav-number">1.</span> <span class="nav-text">Basis 基本情况</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Boolean-%E5%B8%83%E5%B0%94"><span class="nav-number">2.</span> <span class="nav-text">Boolean - 布尔</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%BD%AC%E6%8D%A2"><span class="nav-number">2.1.</span> <span class="nav-text">转换</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Integer-%E6%95%B4%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">Integer - 整型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%BA%A2%E5%87%BA"><span class="nav-number">3.1.</span> <span class="nav-text">溢出</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#String-%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">4.</span> <span class="nav-text">String 字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%A7%A3%E6%9E%90%E5%8F%98%E9%87%8F"><span class="nav-number">4.1.</span> <span class="nav-text">解析变量</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Array-%E6%95%B0%E7%BB%84"><span class="nav-number">5.</span> <span class="nav-text">Array 数组</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">5.1.</span> <span class="nav-text">定义</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Object-%E5%AF%B9%E8%B1%A1"><span class="nav-number">6.</span> <span class="nav-text">Object 对象</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%BD%AC%E5%8C%96"><span class="nav-number">6.1.</span> <span class="nav-text">转化</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Resource-%E8%B5%84%E6%BA%90"><span class="nav-number">7.</span> <span class="nav-text">Resource 资源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Null"><span class="nav-number">8.</span> <span class="nav-text">Null</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Callback-Callable-php-5-4-0"><span class="nav-number">9.</span> <span class="nav-text">Callback &#x2F; Callable php 5.4.0+</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E8%BD%AC%E5%8C%96"><span class="nav-number">10.</span> <span class="nav-text">类型转化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%89%E6%95%88%E5%88%A4%E6%96%AD"><span class="nav-number">11.</span> <span class="nav-text">有效判断</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Alex"
+      src="/images/avatar@kikyo.jpeg">
+  <p class="site-author-name" itemprop="name">Alex</p>
+  <div class="site-description" itemprop="description">A super nice guy!</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/jaychoumylove" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;jaychoumylove" rel="noopener me" target="_blank"><i class="github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:hulilang7517520@gmail.com" title="E-Mail → mailto:hulilang7517520@gmail.com" rel="noopener me" target="_blank"><i class="envelope fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://jaychoumylove.github.io/2021/02/08/php-base-types/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar@kikyo.jpeg">
+      <meta itemprop="name" content="Alex">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="simker">
+      <meta itemprop="description" content="A super nice guy!">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="PHP基础笔记之类型 | simker">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PHP基础笔记之类型
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-02-08 15:34:23" itemprop="dateCreated datePublished" datetime="2021-02-08T15:34:23+08:00">2021-02-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2021-02-22 14:52:42" itemprop="dateModified" datetime="2021-02-22T14:52:42+08:00">2021-02-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/PHP/" itemprop="url" rel="index"><span itemprop="name">PHP</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2021/02/08/php-base-types/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/02/08/php-base-types/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-lines"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>6.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>最近巩固下自己的 php，故而整理了下 php 相关的技术点，不求大而全，只求能离 php 更近一点。<br>本文为<code>php基础</code>的开篇，只介绍类型基本信息及一些小技巧，不深入，后续专门写这几种类型的文章。</p>
+</blockquote>
+<h4 id="Basis-基本情况"><a href="#Basis-基本情况" class="headerlink" title="Basis 基本情况"></a>Basis 基本情况</h4><p>参考 <a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/language.types.intro.php" title="php手册 - 类型">php 手册 - 类型</a></p>
+<span id="more"></span>
+
+<h4 id="Boolean-布尔"><a href="#Boolean-布尔" class="headerlink" title="Boolean - 布尔"></a>Boolean - 布尔</h4><p>基本用于判断，也是最大的最简洁的使用。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="variable">$action</span> = <span class="number">2</span>;</span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>((<span class="variable">$action</span>) ? <span class="literal">true</span>: <span class="literal">false</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="转换"><a href="#转换" class="headerlink" title="转换"></a>转换</h5><p>你可以用 <code>(bool)</code> 或者 <code>(boolean)</code> 把一个值转换成 <code>boolean</code> 类型。当然大多数情况你不需要强制转换。</p>
+<blockquote>
+<p>当运算符，函数或者流程控制结构需要一个 boolean 参数时，该值会被自动转换。</p>
+</blockquote>
+<p>以下情况会转化成 <code>false</code> :</p>
+<ul>
+<li>布尔值 <code>FALSE</code> 本身</li>
+<li>整型值 <code>0</code>（零）</li>
+<li>浮点型值 <code>0.0</code>（零）</li>
+<li>空字符串<code>&quot;&quot;</code>，以及字符串 <code>&quot;0&quot;</code></li>
+<li>不包括任何元素的数组<code>array()</code>，<code>[]</code></li>
+<li>特殊类型 <code>null</code>（包括尚未赋值的变量<code>undefined</code>）</li>
+<li>从空标记生成的 <code>SimpleXML</code> 对象</li>
+</ul>
+<p>除开以上情况外，<strong><em>其他值都视为 <code>true</code></em></strong></p>
+<p>引用手册的示例：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>((<span class="keyword">bool</span>) <span class="string">&quot;&quot;</span>);        <span class="comment">// bool(false)</span></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>((<span class="keyword">bool</span>) <span class="number">1</span>);         <span class="comment">// bool(true)</span></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>((<span class="keyword">bool</span>) -<span class="number">2</span>);        <span class="comment">// bool(true)</span></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>((<span class="keyword">bool</span>) <span class="string">&quot;foo&quot;</span>);     <span class="comment">// bool(true)</span></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>((<span class="keyword">bool</span>) <span class="number">2.3e5</span>);     <span class="comment">// bool(true)</span></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>((<span class="keyword">bool</span>) <span class="keyword">array</span>(<span class="number">12</span>)); <span class="comment">// bool(true)</span></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>((<span class="keyword">bool</span>) <span class="keyword">array</span>());   <span class="comment">// bool(false)</span></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>((<span class="keyword">bool</span>) <span class="string">&quot;false&quot;</span>);   <span class="comment">// bool(true)</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Integer-整型"><a href="#Integer-整型" class="headerlink" title="Integer - 整型"></a>Integer - 整型</h4><p>是集合 <code>ℤ = &#123;..., -2, -1, 0, 1, 2, ...&#125;</code> 中的某个数。<br>可以使用十进制，十六进制，八进制或二进制（<code>php 5.4.0+</code>）表示，前面可以加上可选的符号（<code>-</code> 或者 <code>+</code>）。</p>
+<p>引用手册的表达示例:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="variable">$a</span> = <span class="number">1234</span>; <span class="comment">// 十进制数</span></span><br><span class="line">    <span class="variable">$a</span> = -<span class="number">123</span>; <span class="comment">// 负数</span></span><br><span class="line">    <span class="variable">$a</span> = <span class="number">0123</span>; <span class="comment">// 八进制数 (等于十进制 83),数字前必须加上 0（零）</span></span><br><span class="line">    <span class="variable">$a</span> = <span class="number">0x1A</span>; <span class="comment">// 十六进制数 (等于十进制 26),数字前必须加上 0x。</span></span><br><span class="line">    <span class="variable">$a</span> = <span class="number">0b11111111</span>; <span class="comment">// 二进制数字 (等于十进制 255),数字前必须加上 0b。</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="溢出"><a href="#溢出" class="headerlink" title="溢出"></a>溢出</h5><p>给定的一个数超出了 <code>integer</code> 的范围，将会被解释为 <code>float</code>。同样如果执行的运算结果超出了 <code>integer</code> 范围，也会返回 <code>float</code>。</p>
+<h4 id="String-字符串"><a href="#String-字符串" class="headerlink" title="String 字符串"></a>String 字符串</h4><p>由一系列的字符组成，其中每个字符等同于一个字节。详见<a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/language.types.string.php#language.types.string.details">字符串类型详解</a>。</p>
+<p>可以用<code>&quot;</code>或者<code>&#39;</code>来定义。</p>
+<blockquote>
+<p>如果想使用其它转义序列例如 <code>\r</code> 或者 <code>\n</code>，使用反斜线 <code>\</code> 来防止转义</p>
+</blockquote>
+<p>示例：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&#x27;this is a simple string&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 可以录入多行</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&#x27;You can also have embedded newlines in</span></span><br><span class="line"><span class="string">    strings this way as it is</span></span><br><span class="line"><span class="string">    okay to do&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 输出： Arnold once said: &quot;I&#x27;ll be back&quot;</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&#x27;Arnold once said: &quot;I\&#x27;ll be back&quot;&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 输出： You deleted C:\*.*?</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&#x27;You deleted C:\\*.*?&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 输出： You deleted C:\*.*?</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&#x27;You deleted C:\*.*?&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 输出： This will not expand: \n a newline</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&#x27;This will not expand: \n a newline&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 输出： Variables do not $expand $either</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&#x27;Variables do not $expand $either&#x27;</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="解析变量"><a href="#解析变量" class="headerlink" title="解析变量"></a>解析变量</h5><p>早双引号的定义下可以可以解析变量，数组和对象也可以解析。替代的方案 - 变量拼接</p>
+<blockquote>
+<p>在遇到数组对象的索引是<code>string</code>类型时，需要用到<code>&#123;&#125;</code>解析，如果找不到数组的索引或者找不到对象的属性 or 方法，不会解析。<br>如何不希望解析对象，数组，变量时，添加反引号 <code>\</code> 防止转义</p>
+</blockquote>
+<p>如：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">People</span> </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="variable">$john</span> = <span class="string">&quot;John Smith&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="variable">$b</span> = <span class="keyword">new</span> <span class="title class_">People</span>();</span><br><span class="line">    <span class="variable">$a</span> = [</span><br><span class="line">        <span class="number">1</span> =&gt; <span class="number">2</span>,</span><br><span class="line">        <span class="string">&quot;a&quot;</span> =&gt; <span class="number">3</span></span><br><span class="line">    ];</span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="string">&quot;is a <span class="subst">$a</span>[1], $&#123;a[&#x27;a&#x27;]&#125;, <span class="subst">$b</span>-&gt;john &quot;</span>);</span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="string">&quot;is a <span class="subst">$a</span>[&#x27;a&#x27;], <span class="subst">$b</span>-&gt;johns &quot;</span>); <span class="comment">// Won&#x27;t work</span></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="string">&quot;is a &quot;</span> . <span class="variable">$a</span>[<span class="string">&#x27;a&#x27;</span>]); <span class="comment">// 拼接变量</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Array-数组"><a href="#Array-数组" class="headerlink" title="Array 数组"></a>Array 数组</h4><p>是一个有序映射。映射是一种把 <code>values</code> 关联到 <code>keys</code> 的类型。</p>
+<h5 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h5><p>可以用 <code>array()</code> 语言结构或者 <code>[]</code> (<code>PHP 5.4.0+</code>) 来新建一个数组。它接受任意数量用逗号分隔的<code> 键（key） =&gt; 值（value）</code>对。</p>
+<p><code>key</code> 可以是 <code>integer</code> 或者 <code>string</code>。</p>
+<p><code>value</code> 可以是任意类型。</p>
+<p>此外 <code>key</code> 会有如下的强制转换：</p>
+<ul>
+<li>包含有合法整型值的字符串会被转换为整型。例如键名 <code>&quot;8&quot;</code> 实际会被储存为 <code>8</code>。但是 <code>&quot;08&quot;</code> 则不会强制转换，因为其不是一个合法的十进制数值。</li>
+<li>浮点数也会被转换为整型，意味着其小数部分会被舍去。例如键名 <code>8</code>.<code>7</code> 实际会被储存为 <code>8</code>。</li>
+<li>布尔值也会被转换成整型。即键名 <code>true</code> 实际会被储存为 <code>1</code> 而键名 <code>false</code> 会被储存为 <code>0</code>。</li>
+<li><code>Null</code> 会被转换为空字符串，即键名 <code>null</code> 实际会被储存为 <code>&quot;&quot;</code>。</li>
+</ul>
+<blockquote>
+<p>数组和对象不能被用为键名, 坚持这么做会导致警告：<code>Illegal offset type</code>。<br>如果在数组定义中多个单元都使用了同一个键名，则只使用了最后一个，之前的都被覆盖了。</p>
+</blockquote>
+<p>示例：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="variable">$array</span> = <span class="keyword">array</span>(</span><br><span class="line">        <span class="number">1</span>    =&gt; <span class="string">&quot;a&quot;</span>,</span><br><span class="line">        <span class="string">&quot;1&quot;</span>  =&gt; <span class="string">&quot;b&quot;</span>,</span><br><span class="line">        <span class="number">1.5</span>  =&gt; <span class="string">&quot;c&quot;</span>,</span><br><span class="line">        <span class="literal">true</span> =&gt; <span class="string">&quot;d&quot;</span>,</span><br><span class="line">    );</span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="variable">$array</span>);</span><br><span class="line">    <span class="comment">// will output</span></span><br><span class="line">    <span class="comment">// array(1) &#123;</span></span><br><span class="line">    <span class="comment">//    [1]=&gt;</span></span><br><span class="line">    <span class="comment">//    string(1) &quot;d&quot;</span></span><br><span class="line">    <span class="comment">// &#125;</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Object-对象"><a href="#Object-对象" class="headerlink" title="Object 对象"></a>Object 对象</h4><p>要创建一个新的对象 <code>object</code>，使用 <code>new</code> 语句实例化.</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">foo</span></span></span><br><span class="line"><span class="class">    </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="variable">$bar</span> = <span class="string">&#x27;bar&#x27;</span>;</span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">do_foo</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;Doing foo.&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="variable">$bar</span> = <span class="keyword">new</span> foo;</span><br><span class="line">    <span class="variable">$bar</span>-&gt;<span class="title function_ invoke__">do_foo</span>();</span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="variable">$bar</span>-&gt;bar);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="转化"><a href="#转化" class="headerlink" title="转化"></a>转化</h5><p>如果将一个对象转换成对象，它将不会有任何变化。<br>如果其它任何类型的值被转换成对象，将会创建一个内置类 <code>stdClass</code> 的实例。<br>如果该值为 <code>NULL</code>，则新的实例为空。<br><code>array</code> 转换成 <code>object</code> 将使键名成为属性名并具有相对应的值。</p>
+<blockquote>
+<p>注意：使用 PHP 7.2.0 之前的版本，数字键只能通过迭代访问。</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="variable">$obj</span> = (<span class="keyword">object</span>) <span class="keyword">array</span>(<span class="string">&#x27;1&#x27;</span> =&gt; <span class="string">&#x27;foo&#x27;</span>);</span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="keyword">isset</span>(<span class="variable">$obj</span>-&gt;&#123;<span class="string">&#x27;1&#x27;</span>&#125;)); <span class="comment">// PHP 7.2.0 后输出 &#x27;bool(true)&#x27;，之前版本会输出 &#x27;bool(false)&#x27;</span></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="title function_ invoke__">key</span>(<span class="variable">$obj</span>)); <span class="comment">// PHP 7.2.0 后输出 &#x27;string(1) &quot;1&quot;&#x27;，之前版本输出  &#x27;int(1)&#x27;</span></span><br><span class="line">    <span class="variable">$obj</span> = (<span class="keyword">object</span>) <span class="string">&#x27;ciao&#x27;</span>;</span><br><span class="line">    <span class="keyword">echo</span> <span class="variable">$obj</span>-&gt;scalar;  <span class="comment">// outputs &#x27;ciao&#x27;</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Resource-资源"><a href="#Resource-资源" class="headerlink" title="Resource 资源"></a>Resource 资源</h4><p>这个就不介绍了，参考<a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/language.types.resource.php" title="Resource 资源类型">Resource 资源类型</a>。</p>
+<h4 id="Null"><a href="#Null" class="headerlink" title="Null"></a>Null</h4><p>特殊的 <code>NULL</code> 值表示一个变量没有值。<code>NULL</code> 类型唯一可能的值就是 <code>NULL</code>。</p>
+<p>在下列情况下一个变量被认为是 <code>NULL</code>：</p>
+<ul>
+<li>被赋值为 <code>NULL</code>。</li>
+<li>尚未被赋值。</li>
+<li>被 <code>unset()</code>。</li>
+</ul>
+<h4 id="Callback-Callable-php-5-4-0"><a href="#Callback-Callable-php-5-4-0" class="headerlink" title="Callback / Callable php 5.4.0+"></a>Callback / Callable <code>php 5.4.0+</code></h4><p>一些函数如 <code>call_user_func()</code> 或 <code>usort()</code> 可以接受用户自定义的回调函数作为参数。回调函数不止可以是简单函数，还可以是对象的方法，包括静态类方法。</p>
+<p>示例：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="comment">// Our closure</span></span><br><span class="line">    <span class="variable">$double</span> = <span class="function"><span class="keyword">function</span>(<span class="params"><span class="variable">$a</span></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$a</span> * <span class="number">2</span>;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// This is our range of numbers</span></span><br><span class="line">    <span class="variable">$numbers</span> = <span class="title function_ invoke__">range</span>(<span class="number">1</span>, <span class="number">5</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Use the closure as a callback here to</span></span><br><span class="line">    <span class="comment">// double the size of each element in our</span></span><br><span class="line">    <span class="comment">// range</span></span><br><span class="line">    <span class="variable">$new_numbers</span> = <span class="title function_ invoke__">array_map</span>(<span class="variable">$double</span>, <span class="variable">$numbers</span>);</span><br><span class="line">    <span class="keyword">print</span> <span class="title function_ invoke__">implode</span>(<span class="string">&#x27; &#x27;</span>, <span class="variable">$new_numbers</span>);</span><br><span class="line">    <span class="comment">// will output</span></span><br><span class="line">    <span class="comment">// 2 4 6 8 10</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="类型转化"><a href="#类型转化" class="headerlink" title="类型转化"></a>类型转化</h4><p>以上就是<code>php类型</code>的基本信息。下面罗列些允许的强制类型转换：</p>
+<ul>
+<li><code>(int)</code>, <code>(integer)</code> - 转换为整形 <code>integer</code></li>
+<li><code>(bool)</code>, <code>(boolean)</code> - 转换为布尔类型 <code>boolean</code></li>
+<li><code>(float)</code>, <code>(double)</code>, <code>(real)</code> - 转换为浮点型 <code>float</code></li>
+<li><code>(string)</code> - 转换为字符串 <code>string</code></li>
+<li><code>(array)</code> - 转换为数组 <code>array</code></li>
+<li><code>(object)</code> - 转换为对象 <code>object</code></li>
+<li><code>(unset)</code> - 转换为 <code>NULL</code> <em><code>(PHP 5)</code></em></li>
+</ul>
+<h4 id="有效判断"><a href="#有效判断" class="headerlink" title="有效判断"></a>有效判断</h4><p>在<code>PHP</code>里面，我习惯用<code>empty</code>和<code>isset</code>作为判断依据，其中，</p>
+<ul>
+<li><code>isset</code> 判断是否定义</li>
+<li><code>empty</code> 判断是否有效，也有<code>isset</code>的作用</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="variable">$arr</span> = [<span class="string">&#x27;a&#x27;</span> =&gt; <span class="number">1</span>, <span class="string">&#x27;b&#x27;</span> =&gt; <span class="string">&#x27;c&#x27;</span>];</span><br><span class="line">    <span class="variable">$class</span> = <span class="keyword">new</span> <span class="built_in">stdClass</span>();</span><br><span class="line">    <span class="variable">$class</span>-&gt;a = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="keyword">isset</span>(<span class="variable">$arr</span>[<span class="string">&#x27;a&#x27;</span>])); <span class="comment">// true</span></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="keyword">isset</span>(<span class="variable">$arr</span>[<span class="string">&#x27;c&#x27;</span>])); <span class="comment">// false</span></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="keyword">isset</span>(<span class="variable">$class</span>-&gt;a)); <span class="comment">// true</span></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="keyword">isset</span>(<span class="variable">$class</span>-&gt;b)); <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="keyword">empty</span>(<span class="variable">$arr</span>[<span class="string">&#x27;a&#x27;</span>])); <span class="comment">// false</span></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="keyword">empty</span>(<span class="variable">$arr</span>[<span class="string">&#x27;c&#x27;</span>])); <span class="comment">// true</span></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="keyword">empty</span>(<span class="variable">$class</span>-&gt;a)); <span class="comment">// false</span></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="keyword">empty</span>(<span class="variable">$class</span>-&gt;b)); <span class="comment">// true</span></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="keyword">empty</span>(<span class="number">0</span>)); <span class="comment">// true</span></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="keyword">empty</span>(<span class="number">0.00</span>)); <span class="comment">// true</span></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="keyword">empty</span>(<span class="literal">false</span>)); <span class="comment">// true</span></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="keyword">empty</span>(<span class="string">&#x27;0&#x27;</span>)); <span class="comment">// true</span></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="keyword">empty</span>(<span class="string">&#x27;0.00&#x27;</span>)); <span class="comment">// false</span></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="keyword">empty</span>(<span class="literal">null</span>)); <span class="comment">// true</span></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="keyword">empty</span>(<span class="string">&#x27;&#x27;</span>)); <span class="comment">// true</span></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="keyword">empty</span>([])); <span class="comment">// true</span></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="keyword">empty</span>(<span class="keyword">new</span> <span class="built_in">stdClass</span>())); <span class="comment">// false</span></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="keyword">empty</span>(<span class="variable">$undefined</span>)); <span class="comment">// true</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>使用<code>empty</code>判断的时候一定要注意转化类型，比如字符串和数字</p>
+</blockquote>
+<p><strong>enjoy and happy coding!</strong></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>请我一杯咖啡吧！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="Alex 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="Alex 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/notes/" rel="tag"># notes</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/06/28/http-request/" rel="prev" title="浅谈前后端请求加密与签名">
+                  <i class="fa fa-angle-left"></i> 浅谈前后端请求加密与签名
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/02/08/php-base-string/" rel="next" title="PHP梳理之string">
+                  PHP梳理之string <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="user"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Alex</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">87k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:19</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"hulilang","count":true,"lazyload":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js" defer></script>
+
+</body>
+</html>
